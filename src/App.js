@@ -1,25 +1,35 @@
 import logo from './logo.svg';
 import './App.css';
+import firebase from "./firebase";
+import CreateTeam from "./createTeam";
+import Home from "./LogIn";
+import React from 'react';
+import ReactDOM from "react-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
 
-function App() {
+class App extends React.Component {
+
+
+ render(){
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Switch>
+
+        <Route path="/create-team">
+          <CreateTeam />
+        </Route>
+
+        <Route path="/">
+        <Home />
+        </Route>
+
+      </Switch>
     </div>
-  );
+  ); }
 }
 
 export default App;
