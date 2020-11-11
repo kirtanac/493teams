@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import firebase from "./firebase";
 import React from 'react';
@@ -8,7 +7,11 @@ class CreateTeam extends React.Component {
   constructor(props) {
    super(props);
    this.state = {
-    email: "v", fullname: "x"
+     teamName:"",
+     uniq1:"",
+     uniq2:"",
+     uniq3:"",
+     uniq4:""
    };
 
    this.updateInput = this.updateInput.bind(this);
@@ -32,13 +35,65 @@ class CreateTeam extends React.Component {
   db.settings({
     timestampsInSnapshots: true
   });
-  const userRef = db.collection("users").add({
-    fullname: this.state.fullname,
-    email: this.state.email
-  });
+  let tempName = this.state.teamName.split(' ').join('');
+  if (this.state.uniq4 === "") {
+    db.collection("teams").add({
+      teamName:tempName,
+      uniqname1:this.state.uniq1,
+      uniqname2:this.state.uniq2,
+      uniqname3:this.state.uniq3,
+      uniqname1Accepted:false,
+      uniqname2Accepted:false,
+      uniqname3Accepted:false,
+    });
+    db.collection("users/"+this.state.uniq1+"/Invitations").add({
+      teamName:tempName,
+      accepted:false
+    });
+    db.collection("users/"+this.state.uniq2+"/Invitations").add({
+      teamName:tempName,
+      accepted:false
+    });
+    db.collection("users/"+this.state.uniq3+"/Invitations").add({
+      teamName:tempName,
+      accepted:false
+    });
+  }
+  else {
+    db.collection("teams").add({
+      teamName:tempName,
+      uniqname1:this.state.uniq1,
+      uniqname2:this.state.uniq2,
+      uniqname3:this.state.uniq3,
+      uniqname4:this.state.uniq4,
+      uniqname1Accepted:false,
+      uniqname2Accepted:false,
+      uniqname3Accepted:false,
+      uniqname4Accepted:false,
+    });
+    db.collection("users/"+this.state.uniq1+"/Invitations").add({
+      teamName:tempName,
+      accepted:false
+    });
+    db.collection("users/"+this.state.uniq2+"/Invitations").add({
+      teamName:tempName,
+      accepted:false
+    });
+    db.collection("users/"+this.state.uniq3+"/Invitations").add({
+      teamName:tempName,
+      accepted:false
+    });
+    db.collection("users/"+this.state.uniq4+"/Invitations").add({
+      teamName:tempName,
+      accepted:false
+    });
+  }
   this.setState({
-    fullname: "",
-    email: ""
+    teamName:"",
+    uniq1:"",
+    uniq2:"",
+    uniq3:"",
+    uniq4:""
   });
 }
 
@@ -46,44 +101,75 @@ class CreateTeam extends React.Component {
   return (
     <div className="createteam">
       <header className="loggedInHeader">
+      <CardColumns>
+      <Card className="bg-light text-dark">
+        <Card.Body>Name: {this.state.teamName}</Card.Body>
+      </Card>
 
+      <Card className="bg-light text-dark">
+        <Card.Body>Email: {this.state.uniq1}</Card.Body>
+      </Card>
+      </CardColumns>
         <p>
-        Here's your form!!
+        Register your team
+
         </p>
-        <CardColumns>
-        <Card className="bg-light text-dark">
-          <Card.Body>Name: {this.state.fullname}</Card.Body>
-        </Card>
-
-        <Card className="bg-light text-dark">
-          <Card.Body>Email: {this.state.email}</Card.Body>
-        </Card>
-        </CardColumns>
-
+        <br/>
 
         <Form onSubmit={this.addUser}>
 
         <Form.Group controlId="fullname">
-        <Form.Label>Full name</Form.Label>
-    <Form.Control type="text"
-    name="fullname"
-    placeholder="Full name"
-    onChange={this.updateInput}
-    value={this.state.fullname} />
+        <Form.Label>Team name</Form.Label>
+    <Form.Control
+    type="text"
+      name="teamName"
+      placeholder="Your TeamName"
+      onChange={this.updateInput}
+      value={this.state.teamName} />
           </Form.Group>
 
 
-          <Form.Group controlId="fullname">
-          <Form.Label>Email</Form.Label>
-      <Form.Control type="email"
-      name="email"
-      placeholder="Email"
+          <Form.Group controlId="uniq1">
+          <Form.Label>Uniqname1</Form.Label>
+      <Form.Control
+      type="text"
+      name="uniq1"
+      placeholder="Your Uniqname"
       onChange={this.updateInput}
-      value={this.state.email} />
+      value={this.state.uniq1} />
             </Form.Group>
 
+        <Form.Group controlId="uniq1">
+        <Form.Label>Uniqname1</Form.Label>
+    <Form.Control
+    type="text"
+    name="uniq2"
+    placeholder="Uniqname 2"
+    onChange={this.updateInput}
+    value={this.state.uniq2}/>
+          </Form.Group>
 
+        <Form.Group controlId="uniq1">
+        <Form.Label>Uniqname1</Form.Label>
+    <Form.Control
+    type="text"
+      name="uniq3"
+      placeholder="Uniqname 3"
+      onChange={this.updateInput}
+      value={this.state.uniq3} />
+          </Form.Group>
 
+          <Form.Group controlId="uniq1">
+          <Form.Label>Uniqname1</Form.Label>
+          <Form.Control
+          type="text"
+          name="uniq4"
+          placeholder="Uniqname 4"
+          onChange={this.updateInput}
+          value={this.state.uniq4} />
+            </Form.Group>
+
+        <br/>
         <Button variant="primary" type="submit">Submit</Button>
       </Form>
       </header>
