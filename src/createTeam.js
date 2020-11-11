@@ -1,6 +1,7 @@
 import './App.css';
 import firebase from "./firebase";
 import React from 'react';
+import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl } from 'react-bootstrap';
 
 class CreateTeam extends React.Component {
   constructor(props) {
@@ -99,56 +100,78 @@ class CreateTeam extends React.Component {
  render(){
   return (
     <div className="createteam">
-      <header className="App-header">
+      <header className="loggedInHeader">
+      <CardColumns>
+      <Card className="bg-light text-dark">
+        <Card.Body>Name: {this.state.teamName}</Card.Body>
+      </Card>
 
+      <Card className="bg-light text-dark">
+        <Card.Body>Email: {this.state.uniq1}</Card.Body>
+      </Card>
+      </CardColumns>
         <p>
         Register your team
 
         </p>
         <br/>
-        <form onSubmit={this.addUser}>
-        <input
-          type="text"
-          name="teamName"
-          placeholder="Your TeamName"
-          onChange={this.updateInput}
-          value={this.state.teamName}
-        />
-        <br/>
-        <input
-          type="text"
-          name="uniq1"
-          placeholder="Your Uniqname"
-          onChange={this.updateInput}
-          value={this.state.uniq1}
-        />
-        <br/>
-        <input
-          type="text"
-          name="uniq2"
-          placeholder="Uniqname 2"
-          onChange={this.updateInput}
-          value={this.state.uniq2}
-        />
-        <br/>
-        <input
-          type="text"
-          name="uniq3"
-          placeholder="Uniqname 3"
-          onChange={this.updateInput}
-          value={this.state.uniq3}
-        />
-        <br/>
-        <input
+
+        <Form onSubmit={this.addUser}>
+
+        <Form.Group controlId="fullname">
+        <Form.Label>Team name</Form.Label>
+    <Form.Control
+    type="text"
+      name="teamName"
+      placeholder="Your TeamName"
+      onChange={this.updateInput}
+      value={this.state.teamName} />
+          </Form.Group>
+
+
+          <Form.Group controlId="uniq1">
+          <Form.Label>Uniqname1</Form.Label>
+      <Form.Control
+      type="text"
+      name="uniq1"
+      placeholder="Your Uniqname"
+      onChange={this.updateInput}
+      value={this.state.uniq1} />
+            </Form.Group>
+
+        <Form.Group controlId="uniq1">
+        <Form.Label>Uniqname1</Form.Label>
+    <Form.Control
+    type="text"
+    name="uniq2"
+    placeholder="Uniqname 2"
+    onChange={this.updateInput}
+    value={this.state.uniq2}/>
+          </Form.Group>
+
+        <Form.Group controlId="uniq1">
+        <Form.Label>Uniqname1</Form.Label>
+    <Form.Control
+    type="text"
+      name="uniq3"
+      placeholder="Uniqname 3"
+      onChange={this.updateInput}
+      value={this.state.uniq3} />
+          </Form.Group>
+
+          <Form.Group controlId="uniq1">
+          <Form.Label>Uniqname1</Form.Label>
+          <Form.Control
           type="text"
           name="uniq4"
           placeholder="Uniqname 4"
           onChange={this.updateInput}
-          value={this.state.uniq4}
-        />
+          value={this.state.uniq4} />
+            </Form.Group>
+
         <br/>
-        <button type="submit">Submit</button>
-      </form>
+        <Button variant="primary" type="submit">Submit</Button>
+      </Form>
       </header>
     </div>
   ); }
