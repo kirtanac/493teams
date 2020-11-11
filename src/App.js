@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import firebase from "./firebase";
 import CreateTeam from "./createTeam";
+import ViewTeam from "./viewTeam";
 import Home from "./LogIn";
 import React from 'react';
 import ReactDOM from "react-dom";
@@ -23,6 +24,9 @@ class App extends React.Component {
 
         <Route path="/create-team">
           <CreateTeam />
+        </Route>
+        <Route path="/view-team">
+          <ViewTeam />
         </Route>
 
         <Route path="/">
