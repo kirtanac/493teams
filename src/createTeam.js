@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import firebase from "./firebase";
 import React from 'react';
@@ -7,7 +6,11 @@ class CreateTeam extends React.Component {
   constructor(props) {
    super(props);
    this.state = {
-    email: "v", fullname: "x"
+     teamName:"",
+     uniq1:"",
+     uniq2:"",
+     uniq3:"",
+     uniq4:""
    };
 
    this.updateInput = this.updateInput.bind(this);
@@ -31,13 +34,37 @@ class CreateTeam extends React.Component {
   db.settings({
     timestampsInSnapshots: true
   });
-  const userRef = db.collection("users").add({
-    fullname: this.state.fullname,
-    email: this.state.email
-  });
+  let tempName = this.state.teamName.split(' ').join('');
+  if (this.state.uniq4 === "") {
+    db.collection("teams").add({
+      teamName:tempName,
+      uniqname1:this.state.uniq1,
+      uniqname2:this.state.uniq2,
+      uniqname3:this.state.uniq3,
+      uniqname1Accepted:false,
+      uniqname2Accepted:false,
+      uniqname3Accepted:false,
+    });
+  }
+  else {
+    db.collection("teams").add({
+      teamName:tempName,
+      uniqname1:this.state.uniq1,
+      uniqname2:this.state.uniq2,
+      uniqname3:this.state.uniq3,
+      uniqname4:this.state.uniq4,
+      uniqname1Accepted:false,
+      uniqname2Accepted:false,
+      uniqname3Accepted:false,
+      uniqname4Accepted:false,
+    });
+  }
   this.setState({
-    fullname: "",
-    email: ""
+    teamName:"",
+    uniq1:"",
+    uniq2:"",
+    uniq3:"",
+    uniq4:""
   });
 }
 
@@ -47,25 +74,46 @@ class CreateTeam extends React.Component {
       <header className="App-header">
 
         <p>
-        Here's your form!!1
+        Here's your form!!
           Name: {this.state.fullname}
             Email: {this.state.email}
         </p>
-        
+
         <form onSubmit={this.addUser}>
         <input
           type="text"
-          name="fullname"
-          placeholder="Full name"
+          name="teamName"
+          placeholder="Your TeamName"
           onChange={this.updateInput}
-          value={this.state.fullname}
+          value={this.state.teamName}
         />
         <input
-          type="email"
-          name="email"
-          placeholder="Email"
+          type="text"
+          name="uniq1"
+          placeholder="Your Uniqname"
           onChange={this.updateInput}
-          value={this.state.email}
+          value={this.state.uniq1}
+        />
+        <input
+          type="text"
+          name="uniq2"
+          placeholder="Uniqname 2"
+          onChange={this.updateInput}
+          value={this.state.uniq2}
+        />
+        <input
+          type="text"
+          name="uniq3"
+          placeholder="Uniqname 3"
+          onChange={this.updateInput}
+          value={this.state.uniq3}
+        />
+        <input
+          type="text"
+          name="uniq4"
+          placeholder="Uniqname 4"
+          onChange={this.updateInput}
+          value={this.state.uniq4}
         />
         <button type="submit">Submit</button>
       </form>
