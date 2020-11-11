@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import firebase from "./firebase";
 import React from 'react';
+import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl } from 'react-bootstrap';
 
 class CreateTeam extends React.Component {
   constructor(props) {
@@ -44,31 +45,47 @@ class CreateTeam extends React.Component {
  render(){
   return (
     <div className="createteam">
-      <header className="App-header">
+      <header className="loggedInHeader">
 
         <p>
-        Here's your form!!1
-          Name: {this.state.fullname}
-            Email: {this.state.email}
+        Here's your form!!
         </p>
-        
-        <form onSubmit={this.addUser}>
-        <input
-          type="text"
-          name="fullname"
-          placeholder="Full name"
-          onChange={this.updateInput}
-          value={this.state.fullname}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={this.updateInput}
-          value={this.state.email}
-        />
-        <button type="submit">Submit</button>
-      </form>
+        <CardColumns>
+        <Card className="bg-light text-dark">
+          <Card.Body>Name: {this.state.fullname}</Card.Body>
+        </Card>
+
+        <Card className="bg-light text-dark">
+          <Card.Body>Email: {this.state.email}</Card.Body>
+        </Card>
+        </CardColumns>
+
+
+        <Form onSubmit={this.addUser}>
+
+        <Form.Group controlId="fullname">
+        <Form.Label>Full name</Form.Label>
+    <Form.Control type="text"
+    name="fullname"
+    placeholder="Full name"
+    onChange={this.updateInput}
+    value={this.state.fullname} />
+          </Form.Group>
+
+
+          <Form.Group controlId="fullname">
+          <Form.Label>Email</Form.Label>
+      <Form.Control type="email"
+      name="email"
+      placeholder="Email"
+      onChange={this.updateInput}
+      value={this.state.email} />
+            </Form.Group>
+
+
+
+        <Button variant="primary" type="submit">Submit</Button>
+      </Form>
       </header>
     </div>
   ); }

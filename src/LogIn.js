@@ -9,6 +9,7 @@ import {
   Switch,
   Route, NavLink
 } from "react-router-dom";
+import {  Link,  Button } from 'react-bootstrap';
 
 class Home extends React.Component {
 
@@ -18,6 +19,7 @@ class Home extends React.Component {
     <div className="Home">
 
         <header className="App-header">
+      <h1>493 Teams </h1>
           <img src={logo} className="App-logo" alt="logo" />
           <p>
             Edit <code>src/App.js</code> and save to reload.
@@ -27,14 +29,7 @@ class Home extends React.Component {
   Create a Team!!
 </NavLink>
 
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+
 
         </header>
 
