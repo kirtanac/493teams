@@ -45,6 +45,18 @@ class CreateTeam extends React.Component {
       uniqname2Accepted:false,
       uniqname3Accepted:false,
     });
+    db.collection("users/"+this.state.uniq1+"/Invitations").add({
+      teamName:tempName,
+      accepted:false
+    });
+    db.collection("users/"+this.state.uniq2+"/Invitations").add({
+      teamName:tempName,
+      accepted:false
+    });
+    db.collection("users/"+this.state.uniq3+"/Invitations").add({
+      teamName:tempName,
+      accepted:false
+    });
   }
   else {
     db.collection("teams").add({
@@ -57,6 +69,22 @@ class CreateTeam extends React.Component {
       uniqname2Accepted:false,
       uniqname3Accepted:false,
       uniqname4Accepted:false,
+    });
+    db.collection("users/"+this.state.uniq1+"/Invitations").add({
+      teamName:tempName,
+      accepted:false
+    });
+    db.collection("users/"+this.state.uniq2+"/Invitations").add({
+      teamName:tempName,
+      accepted:false
+    });
+    db.collection("users/"+this.state.uniq3+"/Invitations").add({
+      teamName:tempName,
+      accepted:false
+    });
+    db.collection("users/"+this.state.uniq4+"/Invitations").add({
+      teamName:tempName,
+      accepted:false
     });
   }
   this.setState({
@@ -74,11 +102,10 @@ class CreateTeam extends React.Component {
       <header className="App-header">
 
         <p>
-        Here's your form!!
-          Name: {this.state.fullname}
-            Email: {this.state.email}
-        </p>
+        Register your team
 
+        </p>
+        <br/>
         <form onSubmit={this.addUser}>
         <input
           type="text"
@@ -87,6 +114,7 @@ class CreateTeam extends React.Component {
           onChange={this.updateInput}
           value={this.state.teamName}
         />
+        <br/>
         <input
           type="text"
           name="uniq1"
@@ -94,6 +122,7 @@ class CreateTeam extends React.Component {
           onChange={this.updateInput}
           value={this.state.uniq1}
         />
+        <br/>
         <input
           type="text"
           name="uniq2"
@@ -101,6 +130,7 @@ class CreateTeam extends React.Component {
           onChange={this.updateInput}
           value={this.state.uniq2}
         />
+        <br/>
         <input
           type="text"
           name="uniq3"
@@ -108,6 +138,7 @@ class CreateTeam extends React.Component {
           onChange={this.updateInput}
           value={this.state.uniq3}
         />
+        <br/>
         <input
           type="text"
           name="uniq4"
@@ -115,6 +146,7 @@ class CreateTeam extends React.Component {
           onChange={this.updateInput}
           value={this.state.uniq4}
         />
+        <br/>
         <button type="submit">Submit</button>
       </form>
       </header>
