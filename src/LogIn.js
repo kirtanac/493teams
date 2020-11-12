@@ -26,8 +26,11 @@ class Home extends React.Component {
 
           </p>
           <NavLink to="/create-team" activeClassName="hurray">
-  Create a Team!!
-</NavLink>
+            Create a Team!!
+          </NavLink>
+          <NavLink to="/view-team" activeClassName="hurray">
+            View your current Team
+          </NavLink>
 
 
 
