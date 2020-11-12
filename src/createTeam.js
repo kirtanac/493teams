@@ -3,6 +3,9 @@ import firebase from "./firebase";
 import React from 'react';
 import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom'
+
+//PAGE FOR CREATING A TEAM
+
 class CreateTeam extends React.Component {
   constructor(props) {
    super(props);
