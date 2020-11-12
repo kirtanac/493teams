@@ -2,7 +2,11 @@ import './App.css';
 import firebase from "./firebase";
 import React from 'react';
 import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl } from 'react-bootstrap';
-
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route, NavLink
+} from "react-router-dom";
 class ViewTeam extends React.Component {
   constructor(props) {
    super(props);
@@ -18,7 +22,8 @@ class ViewTeam extends React.Component {
    db.settings({
      timestampsInSnapshots: true
    });
-  db.collection("teams")
+   //hard coding in my uniqname to work on rendering
+  db.collection("teams").where("uniqname1", "==", "clantonm")
     .get()
     .then(querySnapshot => {
       const data = querySnapshot.docs.map(doc => doc.data());
@@ -51,13 +56,16 @@ viewTeam() {
   return (
     <div className="viewteam">
       <header className="loggedInHeader">
-
+      <h1>Your Current Team</h1>
 
         <p>
         {this.viewTeam()}
 
         </p>
         <br/>
+        <NavLink to="/" activeClassName="hurray">
+Homepage
+</NavLink>
 
       </header>
 

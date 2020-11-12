@@ -2,7 +2,7 @@ import './App.css';
 import firebase from "./firebase";
 import React from 'react';
 import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl } from 'react-bootstrap';
-
+import { Redirect } from 'react-router-dom'
 class CreateTeam extends React.Component {
   constructor(props) {
    super(props);
@@ -11,7 +11,8 @@ class CreateTeam extends React.Component {
      uniq1:"",
      uniq2:"",
      uniq3:"",
-     uniq4:""
+     uniq4:"",
+     redi:false
    };
 
    this.updateInput = this.updateInput.bind(this);
@@ -93,11 +94,16 @@ class CreateTeam extends React.Component {
     uniq1:"",
     uniq2:"",
     uniq3:"",
-    uniq4:""
+    uniq4:"",
+    redi:true
   });
+
 }
 
  render(){
+  if (this.state.redi == true) {
+    return <Redirect to='/view-team' />
+  }
   return (
     <div className="createteam">
       <header className="loggedInHeader">
@@ -110,11 +116,11 @@ class CreateTeam extends React.Component {
         <Card.Body>Email: {this.state.uniq1}</Card.Body>
       </Card>
       </CardColumns>
-        <p>
+        <h1>
         Register your team
 
-        </p>
-        <br/>
+        </h1>
+
 
         <Form onSubmit={this.addUser}>
 
