@@ -68,8 +68,11 @@ viewTeam() {
         </p>
         <br/>
         <NavLink to="/" activeClassName="hurray">
-Homepage
-</NavLink>
+          Homepage
+        </NavLink>
+        <NavLink to="/team-invites" activeClassName="hurray">
+          Team Invites
+        </NavLink>
 
       </header>
 

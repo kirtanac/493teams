@@ -4,6 +4,7 @@ import firebase from "./firebase";
 import CreateTeam from "./createTeam";
 import ViewTeam from "./viewTeam";
 import AdminSearch from "./adminSearch";
+import TeamInvites from "./teamInvitations";
 import AdminHome from "./adminHome";
 import Home from "./LogIn";
 import React from 'react';
@@ -22,10 +23,13 @@ class App extends React.Component {
  render(){
   return (
     <div className="App">
-      <Switch>
+      <Switch>s
 
         <Route path="/create-team">
           <CreateTeam />
+        </Route>
+        <Route path="/team-invites">
+          <TeamInvites />
         </Route>
         <Route path="/admin-search">
           <AdminSearch />
