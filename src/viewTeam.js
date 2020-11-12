@@ -7,6 +7,10 @@ import {
   Switch,
   Route, NavLink
 } from "react-router-dom";
+
+//VIEW THE CURRENT TEAM YOU ARE ON
+//currently hardcoded for my uniqname (clantonm)
+
 class ViewTeam extends React.Component {
   constructor(props) {
    super(props);
@@ -64,8 +68,11 @@ viewTeam() {
         </p>
         <br/>
         <NavLink to="/" activeClassName="hurray">
-Homepage
-</NavLink>
+          Homepage
+        </NavLink>
+        <NavLink to="/team-invites" activeClassName="hurray">
+          Team Invites
+        </NavLink>
 
       </header>
 

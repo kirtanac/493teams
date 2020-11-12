@@ -11,9 +11,7 @@ import {
 } from "react-router-dom";
 import {  Link,  Button } from 'react-bootstrap';
 
-// HOME PAGE!!!!!
-
-class Home extends React.Component {
+class AdminHome extends React.Component {
 
 
  render(){
@@ -27,15 +25,13 @@ class Home extends React.Component {
             Edit <code>src/App.js</code> and save to reload.
 
           </p>
-          <NavLink to="/create-team" activeClassName="hurray">
-            Create a Team!!
-          </NavLink>
-          <NavLink to="/view-team" activeClassName="hurray">
-            View your current Team
-          </NavLink>
-          <NavLink to="/admin-home" activeClassName="hurray">
-            Admin Home
-          </NavLink>
+        <h1>THIS IS WHAT THE HOME PAGE WILL LOOK LIKE FOR ADMINS</h1>
+        <NavLink to="/admin-search" activeClassName="hurray">
+          View Admin Search Page
+        </NavLink>
+        <NavLink to="/" activeClassName="hurray">
+          Back to Home
+        </NavLink>
 
 
         </header>
@@ -44,4 +40,4 @@ class Home extends React.Component {
   ); }
 }
 
-export default Home;
+export default AdminHome;

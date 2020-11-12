@@ -11,9 +11,7 @@ import {
 } from "react-router-dom";
 import {  Link,  Button } from 'react-bootstrap';
 
-// HOME PAGE!!!!!
-
-class Home extends React.Component {
+class TeamInvites extends React.Component {
 
 
  render(){
@@ -27,14 +25,12 @@ class Home extends React.Component {
             Edit <code>src/App.js</code> and save to reload.
 
           </p>
-          <NavLink to="/create-team" activeClassName="hurray">
-            Create a Team!!
-          </NavLink>
+          <h1>THIS IS THE TEAM INVITE PAGE</h1>
           <NavLink to="/view-team" activeClassName="hurray">
-            View your current Team
+            Back to viewing your team
           </NavLink>
-          <NavLink to="/admin-home" activeClassName="hurray">
-            Admin Home
+          <NavLink to="/" activeClassName="hurray">
+            Back to Home
           </NavLink>
 
 
@@ -44,4 +40,4 @@ class Home extends React.Component {
   ); }
 }
 
-export default Home;
+export default TeamInvites;
