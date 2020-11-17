@@ -12,7 +12,42 @@ import {
 import {  Link,  Button } from 'react-bootstrap';
 
 class TeamInvites extends React.Component {
+  constructor(props) {
+   super(props);
+   this.state = {
+     invitations:[]
+   }
+   this.viewInvitations = this.viewInvitations.bind(this);
 
+
+ }
+ componentDidMount() {
+   const db = firebase.firestore();
+   db.settings({
+     timestampsInSnapshots: true
+   });
+
+
+  db.collection("users/clantonm")
+    .get()
+    .then(querySnapshot => {
+      const data = querySnapshot.docs.map(doc => doc.data());
+      console.log(data);
+      this.setState({ invitations: data });
+    });
+}
+
+
+viewInvitations() {
+  let inc = 1;
+  const { invites } = this.state;
+  return invites.map((val) => (
+    <p>
+    <b key={++inc}>{val.teamName}</b>
+    <br/>
+    </p>
+  ))
+}
 
  render(){
   return (
@@ -26,6 +61,8 @@ class TeamInvites extends React.Component {
 
           </p>
           <h1>THIS IS THE TEAM INVITE PAGE</h1>
+          {this.viewInvitations()}
+          <br/>
           <NavLink to="/view-team" activeClassName="hurray">
             Back to viewing your team
           </NavLink>

@@ -5,23 +5,82 @@ import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl 
 import { Redirect } from 'react-router-dom'
 
 //PAGE FOR CREATING A TEAM
+let counter = 1;
 
 class CreateTeam extends React.Component {
   constructor(props) {
    super(props);
    this.state = {
      teamName:"",
+     redi:false,
      uniq1:"",
      uniq2:"",
      uniq3:"",
-     uniq4:"",
-     redi:false
+     uniq4:""
    };
 
    this.updateInput = this.updateInput.bind(this);
    this.handleSubmit = this.handleSubmit.bind(this);
    this.addUser = this.addUser.bind(this);
+   this.sendData = this.sendData.bind(this);
  }
+
+ //function to simplify sending the data so we don't have code repitition
+ sendData(number, tempName) {
+   const db = firebase.firestore();
+   db.settings({
+     timestampsInSnapshots: true
+   });
+   let numHolder;
+   switch(number) {
+     case 1:
+      numHolder = this.state.uniq1;
+     break;
+     case 2:
+      numHolder = this.state.uniq2;
+     break;
+     case 3:
+      numHolder = this.state.uniq3;
+     break;
+     case 4:
+      numHolder = this.state.uniq4;
+     break;
+  }
+  const valRef = db.collection("users").doc(numHolder);
+  const docFound = valRef.get().then(docFound => {
+    if (!docFound.exists) {
+      console.log("here")
+      let data = {
+        uniqname: numHolder,
+        invitations: [{
+          teamName:tempName,
+          accepted:false
+        }],
+        isAdmin:false,
+        numInvitations: 1,
+        onTeam:false,
+        teamID:-1
+      }
+      db.collection("users").doc(numHolder).set(data);
+    }
+    else {
+      console.log("PLEASE MAKE IT HERE")
+      let tempArray = docFound.data().invitations;
+      let newVal = docFound.data().numInvitations;
+      tempArray.push({
+        teamName:tempName,
+        accepted:false
+      });
+      console.log(tempArray);
+      db.collection("users").doc(numHolder).update({
+        invitations: tempArray,
+        numInvitations: newVal + 1
+      });
+    }
+  });
+ }
+
+
 
  updateInput(event){
    this.setState({
@@ -40,32 +99,30 @@ class CreateTeam extends React.Component {
     timestampsInSnapshots: true
   });
   let tempName = this.state.teamName.split(' ').join('');
+
+  //team of 3 information
   if (this.state.uniq4 === "") {
     db.collection("teams").add({
       teamName:tempName,
-      uniqname1:this.state.uniq1,
-      uniqname2:this.state.uniq2,
-      uniqname3:this.state.uniq3,
+      teamID:counter,
+      uniqname1:this.state.uniq[0],
+      uniqname2:this.state.uniq[1],
+      uniqname3:this.state.uniq[2],
       uniqname1Accepted:false,
       uniqname2Accepted:false,
       uniqname3Accepted:false,
     });
-    db.collection("users/"+this.state.uniq1+"/Invitations").add({
-      teamName:tempName,
-      accepted:false
-    });
-    db.collection("users/"+this.state.uniq2+"/Invitations").add({
-      teamName:tempName,
-      accepted:false
-    });
-    db.collection("users/"+this.state.uniq3+"/Invitations").add({
-      teamName:tempName,
-      accepted:false
-    });
+    counter += 1;
+    this.sendData(1, tempName);
+    this.sendData(2, tempName);
+    this.sendData(3, tempName);
+
   }
+  //team of 4 information
   else {
     db.collection("teams").add({
       teamName:tempName,
+      teamID:counter,
       uniqname1:this.state.uniq1,
       uniqname2:this.state.uniq2,
       uniqname3:this.state.uniq3,
@@ -75,23 +132,13 @@ class CreateTeam extends React.Component {
       uniqname3Accepted:false,
       uniqname4Accepted:false,
     });
-    db.collection("users/"+this.state.uniq1+"/Invitations").add({
-      teamName:tempName,
-      accepted:false
-    });
-    db.collection("users/"+this.state.uniq2+"/Invitations").add({
-      teamName:tempName,
-      accepted:false
-    });
-    db.collection("users/"+this.state.uniq3+"/Invitations").add({
-      teamName:tempName,
-      accepted:false
-    });
-    db.collection("users/"+this.state.uniq4+"/Invitations").add({
-      teamName:tempName,
-      accepted:false
-    });
+    counter += 1;
+    this.sendData(1, tempName);
+    this.sendData(2, tempName);
+    this.sendData(3, tempName);
+    this.sendData(4, tempName);
   }
+  //setting the state
   this.setState({
     teamName:"",
     uniq1:"",
@@ -118,6 +165,7 @@ class CreateTeam extends React.Component {
       <Card className="bg-light text-dark">
         <Card.Body>Email: {this.state.uniq1}</Card.Body>
       </Card>
+
       </CardColumns>
         <h1>
         Register your team
@@ -149,7 +197,7 @@ class CreateTeam extends React.Component {
             </Form.Group>
 
         <Form.Group controlId="uniq1">
-        <Form.Label>Uniqname1</Form.Label>
+        <Form.Label>Uniqname2</Form.Label>
     <Form.Control
     type="text"
     name="uniq2"
@@ -159,7 +207,7 @@ class CreateTeam extends React.Component {
           </Form.Group>
 
         <Form.Group controlId="uniq1">
-        <Form.Label>Uniqname1</Form.Label>
+        <Form.Label>Uniqname3</Form.Label>
     <Form.Control
     type="text"
       name="uniq3"
@@ -169,7 +217,7 @@ class CreateTeam extends React.Component {
           </Form.Group>
 
           <Form.Group controlId="uniq1">
-          <Form.Label>Uniqname1</Form.Label>
+          <Form.Label>Uniqname4</Form.Label>
           <Form.Control
           type="text"
           name="uniq4"
