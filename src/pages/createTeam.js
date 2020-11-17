@@ -26,7 +26,7 @@ class CreateTeam extends React.Component {
  }
 
  //function to simplify sending the data so we don't have code repitition
- sendData(number, tempName) {
+ sendData(number, tempName, totNum) {
    const db = firebase.firestore();
    db.settings({
      timestampsInSnapshots: true
@@ -49,28 +49,40 @@ class CreateTeam extends React.Component {
   const valRef = db.collection("users").doc(numHolder);
   const docFound = valRef.get().then(docFound => {
     if (!docFound.exists) {
-      console.log("here")
+      console.log([this.state.uniq1, this.state.uniq2, this.state.uniq3])
       let data = {
         uniqname: numHolder,
         invitations: [{
           teamName:tempName,
-          accepted:false
+          accepted:false,
+          teamMembers: [this.state.uniq1, this.state.uniq2, this.state.uniq3]
         }],
         isAdmin:false,
         numInvitations: 1,
         onTeam:false,
         teamID:-1
       }
+      if (this.state.uniq4 !== "") {
+        data["invitations"][0]["teamMembers"].push(this.state.uniq4);
+      }
+
+
       db.collection("users").doc(numHolder).set(data);
     }
     else {
-      console.log("PLEASE MAKE IT HERE")
+
       let tempArray = docFound.data().invitations;
       let newVal = docFound.data().numInvitations;
+
       tempArray.push({
         teamName:tempName,
-        accepted:false
+        accepted:false,
+        teamMembers: [this.state.uniq1, this.state.uniq2, this.state.uniq3]
       });
+      console.log([this.state.uniq1, this.state.uniq2, this.state.uniq3])
+      if (this.state.uniq4 !== "") {
+        tempArray[-1]["teamMembers"].push(this.state.uniq4);
+      }
       console.log(tempArray);
       db.collection("users").doc(numHolder).update({
         invitations: tempArray,
@@ -140,11 +152,6 @@ class CreateTeam extends React.Component {
   }
   //setting the state
   this.setState({
-    teamName:"",
-    uniq1:"",
-    uniq2:"",
-    uniq3:"",
-    uniq4:"",
     redi:true
   });
 
@@ -154,6 +161,7 @@ class CreateTeam extends React.Component {
   if (this.state.redi == true) {
     return <Redirect to='/view-team' />
   }
+  console.log(this.state);
   return (
     <div className="createteam">
       <header className="loggedInHeader">

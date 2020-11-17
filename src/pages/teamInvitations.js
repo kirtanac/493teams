@@ -28,25 +28,23 @@ class TeamInvites extends React.Component {
    });
 
 
-  db.collection("users/clantonm")
+  db.collection("users").doc("clantonm")
     .get()
     .then(querySnapshot => {
-      const data = querySnapshot.docs.map(doc => doc.data());
-      console.log(data);
-      this.setState({ invitations: data });
+      this.setState({ invitations: querySnapshot.data().invitations });
+      console.log(this.state.invitations);
     });
+
 }
 
 
 viewInvitations() {
-  let inc = 1;
-  const { invites } = this.state;
-  return invites.map((val) => (
-    <p>
-    <b key={++inc}>{val.teamName}</b>
-    <br/>
-    </p>
+
+  const { invites } = this.state.invitations;
+  return invites.map((val,index) => (
+    <h2 key={index}>{val.teamName}</h2>
   ))
+
 }
 
  render(){
