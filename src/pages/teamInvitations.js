@@ -1,6 +1,6 @@
-import logo from './logo.svg';
-import './App.css';
-import firebase from "./firebase";
+import logo from '../logo.svg';
+import '../App.css';
+import firebase from "../firebase";
 import CreateTeam from "./createTeam";
 import React from 'react';
 import ReactDOM from "react-dom";
@@ -11,7 +11,7 @@ import {
 } from "react-router-dom";
 import {  Link,  Button } from 'react-bootstrap';
 
-class AdminHome extends React.Component {
+class TeamInvites extends React.Component {
 
 
  render(){
@@ -25,13 +25,13 @@ class AdminHome extends React.Component {
             Edit <code>src/App.js</code> and save to reload.
 
           </p>
-        <h1>THIS IS WHAT THE HOME PAGE WILL LOOK LIKE FOR ADMINS</h1>
-        <NavLink to="/admin-search" activeClassName="hurray">
-          View Admin Search Page
-        </NavLink>
-        <NavLink to="/" activeClassName="hurray">
-          Back to Home
-        </NavLink>
+          <h1>THIS IS THE TEAM INVITE PAGE</h1>
+          <NavLink to="/view-team" activeClassName="hurray">
+            Back to viewing your team
+          </NavLink>
+          <NavLink to="/" activeClassName="hurray">
+            Back to Home
+          </NavLink>
 
 
         </header>
@@ -40,4 +40,4 @@ class AdminHome extends React.Component {
   ); }
 }
 
-export default AdminHome;
+export default TeamInvites;

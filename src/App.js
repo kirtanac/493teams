@@ -1,12 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
 import firebase from "./firebase";
-import CreateTeam from "./createTeam";
-import ViewTeam from "./viewTeam";
-import AdminSearch from "./adminSearch";
-import TeamInvites from "./teamInvitations";
-import AdminHome from "./adminHome";
-import Home from "./Home";
+import CreateTeam from "./pages/createTeam";
+import ViewTeam from "./pages/viewTeam";
+import AdminSearch from "./pages/adminSearch";
+import TeamInvites from "./pages/teamInvitations";
+import AdminHome from "./pages/adminHome";
+import Home from "./pages/Home";
 import React from 'react';
 import ReactDOM from "react-dom";
 import {
