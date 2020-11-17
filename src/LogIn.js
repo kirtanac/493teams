@@ -1,47 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
-import firebase from "./firebase";
-import CreateTeam from "./createTeam";
 import React from 'react';
-import ReactDOM from "react-dom";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route, NavLink
-} from "react-router-dom";
-import {  Link,  Button } from 'react-bootstrap';
+import ReactDOM from 'react-dom';
+import { GoogleLogin } from 'react-google-login';
 
-// HOME PAGE!!!!!
+const clientID = "658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com";
 
-class Home extends React.Component {
+class Login extends React.Component {
+   constructor(props) {
+    super(props);
+    this.state = {
+      loggedin: false
+    }
+     this.responseGoogle = this.responseGoogle.bind(this);
+  }
 
+const responseGoogle = (response) => {
+   console.log(response);
+  }
 
  render(){
   return (
-    <div className="Home">
+    <div className="googleButton">
 
-        <header className="App-header">
-      <h1>493 Teams </h1>
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-
-          </p>
-          <NavLink to="/create-team" activeClassName="hurray">
-            Create a Team!!
-          </NavLink>
-          <NavLink to="/view-team" activeClassName="hurray">
-            View your current Team
-          </NavLink>
-          <NavLink to="/admin-home" activeClassName="hurray">
-            Admin Home
-          </NavLink>
-
-
-        </header>
+    <GoogleLogin
+      clientId={clientID}
+      buttonText="Login"
+      onSuccess={responseGoogle}
+      onFailure={responseGoogle}
+      cookiePolicy={'single_host_origin'}
+    />
 
     </div>
   ); }
 }
 
-export default Home;
+export default Login;

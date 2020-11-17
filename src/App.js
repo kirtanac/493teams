@@ -6,7 +6,7 @@ import ViewTeam from "./viewTeam";
 import AdminSearch from "./adminSearch";
 import TeamInvites from "./teamInvitations";
 import AdminHome from "./adminHome";
-import Home from "./LogIn";
+import Home from "./Home";
 import React from 'react';
 import ReactDOM from "react-dom";
 import {
