@@ -7,6 +7,7 @@ import AdminSearch from "./pages/adminSearch";
 import TeamInvites from "./pages/teamInvitations";
 import AdminHome from "./pages/adminHome";
 import Home from "./pages/Home";
+import Login from "./components/login"
 import React from 'react';
 import ReactDOM from "react-dom";
 import {
@@ -23,6 +24,8 @@ class App extends React.Component {
  render(){
   return (
     <div className="App">
+      <Login />
+
       <Switch>s
 
         <Route path="/create-team">
