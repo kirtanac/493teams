@@ -26,28 +26,37 @@ class ViewTeam extends React.Component {
    db.settings({
      timestampsInSnapshots: true
    });
-  db.collection("users").doc("clantonm")
+   //hard coding in my uniqname to work on rendering
+  db.collection("teams").where("uniqname1", "==", "clantonm")
     .get()
     .then(querySnapshot => {
-      console.log(querySnapshot.data())
-      const data1 = querySnapshot.data().invitations;
-      this.setState({ invitations: data1});
-      console.log("set state");
-      console.log("finished query");
+      const data = querySnapshot.docs.map(doc => doc.data());
+      console.log(data);
+      this.setState({ teams: data });
     });
-
 }
-viewInvitations(){
-  const { invites } = this.state;
-  let invList = [];
-  console.log("I AM TRYING MY BEST")
-    invList = invites.map((invite) =>
-      <h2>{invite.teamName}</h2>
-    );
+viewTeam() {
+  let inc = 1;
+  const { teams } = this.state;
+  return teams.map((val) => (
+    <p>
+    <b key={++inc}>{val.teamName}</b>
+    <br/>
+    {val.uniqname1}
+    <br/>
+    {val.uniqname2}
+    <br/>
+    {val.uniqname3}
+    <br/>
+    {val.uniqname4}
+    <br/>
+    </p>
+  ))
 }
 
 
  render(){
+   const { teams } = this.state;
   return (
     <div className="viewteam">
       <header className="loggedInHeader">
