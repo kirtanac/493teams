@@ -1,6 +1,7 @@
 import logo from '../logo.svg';
 import '../App.css';
 import firebase from "../firebase";
+import Invitation from "../components/invitation"
 import React from 'react';
 import {
   BrowserRouter as Router,
@@ -13,10 +14,10 @@ class TeamInvites extends React.Component {
   constructor(props) {
    super(props);
    this.state = {
-     invitations:[],
+     numInv:0,
      dataLoaded:false
    }
-   this.viewInvitations = this.viewInvitations.bind(this);
+   this.renderInvitations = this.renderInvitations.bind(this);
  }
  componentDidMount() {
    const db = firebase.firestore();
@@ -26,24 +27,12 @@ class TeamInvites extends React.Component {
   db.collection("users").doc("clantonm")
     .get()
     .then(querySnapshot => {
-      console.log("set state");
-      this.setState({ invitations: querySnapshot.data().invitations, dataLoaded:true});
-      console.log("set state3");
-      console.log("finished query");
+      this.setState({ numInv: querySnapshot.data().numInvitations});
     });
 
 }
-viewInvitations(){
-  if (this.state.dataLoaded === false) {
-    return <h2>Loading...</h2>
-  }
-  const { invites } = this.state;
-  let invList = [];
-  console.log("I AM TRYING MY BEST")
-  console.log(invList);
-  invList = invites.map((invite) =>
-    <h2>{invite.teamName}</h2>
-  );
+
+renderInvitations(){
 }
 
  render(){
@@ -51,14 +40,8 @@ viewInvitations(){
     <div className="Home">
 
         <header className="App-header">
-      <h1>493 Teams </h1>
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-
-          </p>
-          <h1>THIS IS THE TEAM INVITE PAGE</h1>
-          <p>{this.viewInvitations()}</p>
+      <h1>493 Team Invitations </h1>
+          {Array.from(Array(this.state.numInv)).map((x, index) => <Invitation invNum={index} />)}
           <br/>
           <NavLink to="/view-team" activeClassName="hurray">
             Back to viewing your team
