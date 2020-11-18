@@ -33,6 +33,9 @@ class TeamInvites extends React.Component {
 }
 
 renderInvitations(){
+  let renderedChildren = Array.from(Array(this.state.numInv)).map((x, index) => <Invitation invNum={index} />);
+  console.log(renderedChildren);
+  return renderedChildren;
 }
 
  render(){
@@ -41,7 +44,7 @@ renderInvitations(){
 
         <header className="App-header">
       <h1>493 Team Invitations </h1>
-          {Array.from(Array(this.state.numInv)).map((x, index) => <Invitation invNum={index} />)}
+          {this.renderInvitations()}
           <br/>
           <NavLink to="/view-team" activeClassName="hurray">
             Back to viewing your team
