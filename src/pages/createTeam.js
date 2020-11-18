@@ -2,7 +2,7 @@ import '../App.css';
 import firebase from "../firebase";
 import React from 'react';
 import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl } from 'react-bootstrap';
-import { Redirect } from 'react-router-dom'
+import { Redirect, NavLink} from 'react-router-dom'
 
 //PAGE FOR CREATING A TEAM
 let counter = 1;
@@ -158,7 +158,7 @@ class CreateTeam extends React.Component {
 }
 
  render(){
-  if (this.state.redi == true) {
+  if (this.state.redi === true) {
     return <Redirect to='/view-team' />
   }
   console.log(this.state);
@@ -175,6 +175,9 @@ class CreateTeam extends React.Component {
       </Card>
 
       </CardColumns>
+      <NavLink to="/team-invites" activeClassName="hurray">
+        Team Invites
+      </NavLink>
         <h1>
         Register your team
 
