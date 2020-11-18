@@ -79,11 +79,9 @@ class CreateTeam extends React.Component {
         accepted:false,
         teamMembers: [this.state.uniq1, this.state.uniq2, this.state.uniq3]
       });
-      console.log([this.state.uniq1, this.state.uniq2, this.state.uniq3])
       if (this.state.uniq4 !== "") {
         tempArray[tempArray.length - 1]["teamMembers"].push(this.state.uniq4);
       }
-      console.log(tempArray);
       db.collection("users").doc(numHolder).update({
         invitations: tempArray,
         numInvitations: newVal + 1
