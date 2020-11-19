@@ -173,7 +173,7 @@ handleSecondHide() {
 
         <Form.Group controlId="fullname">
         <Form.Label>Team name</Form.Label>
-    <Form.Control required
+    <Form.Control requireds
     type="text"
       name="teamName"
       placeholder="Your TeamName"
