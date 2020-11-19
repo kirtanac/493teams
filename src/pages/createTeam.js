@@ -17,7 +17,8 @@ class CreateTeam extends React.Component {
      uniq2:"",
      uniq3:"",
      uniq4:"",
-     show:false
+     show:false,
+     show2:false
    };
 
    this.updateInput = this.updateInput.bind(this);
@@ -26,6 +27,8 @@ class CreateTeam extends React.Component {
    this.sendData = this.sendData.bind(this);
    this.handleShow = this.handleShow.bind(this);
    this.handleHide = this.handleHide.bind(this);
+   this.handleSecondHide = this.handleSecondHide.bind(this);
+
  }
 
  //function to simplify sending the data so we don't have code repitition
@@ -152,9 +155,7 @@ class CreateTeam extends React.Component {
     this.sendData(4, tempName);
   }
   //setting the state
-  this.setState({
-    redi:true
-  });
+  this.setState({ show2: true});
 
 }
 handleShow(event) {
@@ -165,7 +166,12 @@ handleShow(event) {
 handleHide() {
   this.setState({ show: false});
 }
-
+handleSecondHide() {
+  this.setState({
+    redi:true,
+    show2: false
+  });
+}
  render(){
   if (this.state.redi === true) {
     return <Redirect to='/view-team' />
@@ -184,7 +190,7 @@ handleHide() {
 
         <Form.Group controlId="fullname">
         <Form.Label>Team name</Form.Label>
-    <Form.Control
+    <Form.Control required
     type="text"
       name="teamName"
       placeholder="Your TeamName"
@@ -194,8 +200,8 @@ handleHide() {
 
 
           <Form.Group controlId="uniq1">
-          <Form.Label>Uniqname1</Form.Label>
-      <Form.Control
+          <Form.Label>Your Uniqname</Form.Label>
+      <Form.Control required
       type="text"
       name="uniq1"
       placeholder="Your Uniqname"
@@ -205,7 +211,7 @@ handleHide() {
 
         <Form.Group controlId="uniq1">
         <Form.Label>Uniqname2</Form.Label>
-    <Form.Control
+    <Form.Control required
     type="text"
     name="uniq2"
     placeholder="Uniqname 2"
@@ -215,7 +221,7 @@ handleHide() {
 
         <Form.Group controlId="uniq1">
         <Form.Label>Uniqname3</Form.Label>
-    <Form.Control
+    <Form.Control required
     type="text"
       name="uniq3"
       placeholder="Uniqname 3"
@@ -239,6 +245,8 @@ handleHide() {
       <NavLink to="/team-invites" activeClassName="hurray">
         Team Invites
       </NavLink>
+
+
       <Modal show={this.state.show} onHide={this.handleHide}>
         <Modal.Header closeButton>
           <Modal.Title>Do you want to create this team?</Modal.Title>
@@ -255,6 +263,23 @@ handleHide() {
             Cancel
           </Button>
           <Button variant="success" onClick={this.addUser}>
+            Create Team
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal show={this.state.show2} onHide={this.handleHide}>
+        <Modal.Header closeButton>
+          <Modal.Title>Success!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h2>Please ask these team members to log into 493teams and accept this team invitation:</h2>
+          <p>{this.state.uniq1}</p>
+          <p>{this.state.uniq2}</p>
+          <p>{this.state.uniq3}</p>
+          <p>{this.state.uniq4}</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="success" onClick={this.handleSecondHide}>
             Create Team
           </Button>
         </Modal.Footer>
