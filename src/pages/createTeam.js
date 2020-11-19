@@ -55,24 +55,14 @@ class CreateTeam extends React.Component {
   const valRef = db.collection("users").doc(numHolder);
   const docFound = valRef.get().then(docFound => {
     if (!docFound.exists) {
-      console.log([this.state.uniq1, this.state.uniq2, this.state.uniq3])
       let data = {
         uniqname: numHolder,
-        invitations: [{
-          teamName:tempName,
-          accepted:false,
-          teamMembers: [this.state.uniq1, this.state.uniq2, this.state.uniq3]
-        }],
+        invitations: [tempName],
         isAdmin:false,
         numInvitations: 1,
         onTeam:false,
         teamName:""
       }
-      if (this.state.uniq4 !== "") {
-        data["invitations"][0]["teamMembers"].push(this.state.uniq4);
-      }
-
-
       db.collection("users").doc(numHolder).set(data);
     }
     else {
@@ -80,14 +70,7 @@ class CreateTeam extends React.Component {
       let tempArray = docFound.data().invitations;
       let newVal = docFound.data().numInvitations;
 
-      tempArray.push({
-        teamName:tempName,
-        accepted:false,
-        teamMembers: [this.state.uniq1, this.state.uniq2, this.state.uniq3]
-      });
-      if (this.state.uniq4 !== "") {
-        tempArray[tempArray.length - 1]["teamMembers"].push(this.state.uniq4);
-      }
+      tempArray.push(tempName);
       db.collection("users").doc(numHolder).update({
         invitations: tempArray,
         numInvitations: newVal + 1
