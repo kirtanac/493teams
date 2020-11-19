@@ -1,7 +1,7 @@
 import '../App.css';
 import firebase from "../firebase";
 import React from 'react';
-import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl } from 'react-bootstrap';
+import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl, Modal } from 'react-bootstrap';
 import { Redirect, NavLink} from 'react-router-dom'
 
 //PAGE FOR CREATING A TEAM
@@ -16,13 +16,16 @@ class CreateTeam extends React.Component {
      uniq1:"",
      uniq2:"",
      uniq3:"",
-     uniq4:""
+     uniq4:"",
+     show:false
    };
 
    this.updateInput = this.updateInput.bind(this);
    this.handleSubmit = this.handleSubmit.bind(this);
    this.addUser = this.addUser.bind(this);
    this.sendData = this.sendData.bind(this);
+   this.handleShow = this.handleShow.bind(this);
+   this.handleHide = this.handleHide.bind(this);
  }
 
  //function to simplify sending the data so we don't have code repitition
@@ -60,7 +63,7 @@ class CreateTeam extends React.Component {
         isAdmin:false,
         numInvitations: 1,
         onTeam:false,
-        teamID:-1
+        teamName:""
       }
       if (this.state.uniq4 !== "") {
         data["invitations"][0]["teamMembers"].push(this.state.uniq4);
@@ -112,7 +115,7 @@ class CreateTeam extends React.Component {
 
   //team of 3 information
   if (this.state.uniq4 === "") {
-    db.collection("teams").add({
+    db.collection("teams").doc(tempName).set({
       teamName:tempName,
       teamID:counter,
       uniqname1:this.state.uniq[0],
@@ -130,7 +133,7 @@ class CreateTeam extends React.Component {
   }
   //team of 4 information
   else {
-    db.collection("teams").add({
+    db.collection("teams").doc(tempName).set({
       teamName:tempName,
       teamID:counter,
       uniqname1:this.state.uniq1,
@@ -154,6 +157,14 @@ class CreateTeam extends React.Component {
   });
 
 }
+handleShow(event) {
+  event.preventDefault();
+  console.log("made it here");
+  this.setState({ show: true});
+}
+handleHide() {
+  this.setState({ show: false});
+}
 
  render(){
   if (this.state.redi === true) {
@@ -163,26 +174,13 @@ class CreateTeam extends React.Component {
   return (
     <div className="createteam">
       <header className="loggedInHeader">
-      <CardColumns>
-      <Card className="bg-light text-dark">
-        <Card.Body>Name: {this.state.teamName}</Card.Body>
-      </Card>
-
-      <Card className="bg-light text-dark">
-        <Card.Body>Email: {this.state.uniq1}</Card.Body>
-      </Card>
-
-      </CardColumns>
-      <NavLink to="/team-invites" activeClassName="hurray">
-        Team Invites
-      </NavLink>
         <h1>
         Register your team
 
         </h1>
 
 
-        <Form onSubmit={this.addUser}>
+        <Form onSubmit={this.handleShow}>
 
         <Form.Group controlId="fullname">
         <Form.Label>Team name</Form.Label>
@@ -238,6 +236,29 @@ class CreateTeam extends React.Component {
         <br/>
         <Button variant="primary" type="submit">Submit</Button>
       </Form>
+      <NavLink to="/team-invites" activeClassName="hurray">
+        Team Invites
+      </NavLink>
+      <Modal show={this.state.show} onHide={this.handleHide}>
+        <Modal.Header closeButton>
+          <Modal.Title>Do you want to create this team?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h2>{this.state.teamName}</h2>
+          <p>{this.state.uniq1}</p>
+          <p>{this.state.uniq2}</p>
+          <p>{this.state.uniq3}</p>
+          <p>{this.state.uniq4}</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={this.handleHide}>
+            Cancel
+          </Button>
+          <Button variant="success" onClick={this.addUser}>
+            Create Team
+          </Button>
+        </Modal.Footer>
+      </Modal>
       </header>
     </div>
   ); }

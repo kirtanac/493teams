@@ -6,7 +6,7 @@ import React from 'react';
 import {
   BrowserRouter as Router,
   Switch,
-  Route, NavLink
+  Route, NavLink, Redirect
 } from "react-router-dom";
 import {  Link,  Button } from 'react-bootstrap';
 
@@ -15,7 +15,8 @@ class TeamInvites extends React.Component {
    super(props);
    this.state = {
      numInv:0,
-     dataLoaded:false
+     dataLoaded:false,
+     onTeam: false
    }
    this.renderInvitations = this.renderInvitations.bind(this);
  }
@@ -24,10 +25,13 @@ class TeamInvites extends React.Component {
    db.settings({
      timestampsInSnapshots: true
    });
-  db.collection("users").doc("clantonm")
+  db.collection("users").doc("kirtana")
     .get()
     .then(querySnapshot => {
-      this.setState({ numInv: querySnapshot.data().numInvitations});
+      this.setState({
+        numInv: querySnapshot.data().numInvitations,
+        onTeam: querySnapshot.data().onTeam
+      });
     });
 
 }
@@ -39,11 +43,15 @@ renderInvitations(){
 }
 
  render(){
+   if(this.state.onTeam === true) {
+     return <Redirect to='/view-team' />
+   }
   return (
     <div className="Home">
 
         <header className="App-header">
       <h1>493 Team Invitations </h1>
+      <h2>You have ({this.state.numInv}) invitations</h2>
           {this.renderInvitations()}
           <br/>
           <NavLink to="/view-team" activeClassName="hurray">

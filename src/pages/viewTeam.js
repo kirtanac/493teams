@@ -31,7 +31,7 @@ class ViewTeam extends React.Component {
     .get()
     .then(querySnapshot => {
       const data = querySnapshot.docs.map(doc => doc.data());
-      console.log(data);
+      //console.log(data);
       this.setState({ teams: data });
     });
 }
@@ -42,13 +42,13 @@ viewTeam() {
     <p>
     <b key={++inc}>{val.teamName}</b>
     <br/>
-    {val.uniqname1}
+    {val.uniqname1}{' '}{val.uniqname1Accepted ? 'accepted' : 'pending'}
     <br/>
-    {val.uniqname2}
+    {val.uniqname2}{' '}{val.uniqname2Accepted ? 'accepted' : 'pending'}
     <br/>
-    {val.uniqname3}
+    {val.uniqname3}{' '}{val.uniqname3Accepted ? 'accepted' : 'pending'}
     <br/>
-    {val.uniqname4}
+    {val.uniqname4}{' '}{val.uniqname4Accepted ? 'accepted' : 'pending'}
     <br/>
     </p>
   ))
