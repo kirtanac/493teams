@@ -9,9 +9,10 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import { createBrowserHistory } from "history";
 
 ReactDOM.render(
-    <Router>
+    <Router >
     <App />
   </Router>,
   document.getElementById('root')

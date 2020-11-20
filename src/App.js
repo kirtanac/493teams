@@ -13,8 +13,10 @@ import ReactDOM from "react-dom";
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  Link
 } from "react-router-dom";
+
 
 //central app file that posesses all the routes
 
@@ -24,11 +26,11 @@ class App extends React.Component {
  render(){
   return (
     <div className="App">
-      <Login />
 
-      <Switch>s
 
-        <Route path="/create-team">
+      <Switch>
+
+        <Route path="/create-team" component={CreateTeam}>
           <CreateTeam />
         </Route>
         <Route path="/team-invites">

@@ -14,8 +14,14 @@ import {
 class ViewTeam extends React.Component {
   constructor(props) {
    super(props);
+   console.log("props", props);
+   // if(props.location){
+   //   console.log("check out view team", props.location.aboutProps)
+   // }
+
    this.state = {
-     teams:[]
+     teams:[],
+     userdata: props.location
    }
    this.viewTeam = this.viewTeam.bind(this);
 
@@ -26,6 +32,7 @@ class ViewTeam extends React.Component {
    db.settings({
      timestampsInSnapshots: true
    });
+   console.log("state", this.state.userdata)
    //hard coding in my uniqname to work on rendering
   db.collection("teams").where("uniqname1", "==", "clantonm")
     .get()
