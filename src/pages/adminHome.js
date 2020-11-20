@@ -7,7 +7,7 @@ import ReactDOM from "react-dom";
 import {
   BrowserRouter as Router,
   Switch,
-  Route, NavLink
+  Route, NavLink, Redirect
 } from "react-router-dom";
 import {  Link,  Button } from 'react-bootstrap';
 
@@ -15,6 +15,9 @@ class AdminHome extends React.Component {
 
 
  render(){
+   if(!localStorage.getItem('uniqname')){
+     return <Redirect to='/' />
+   }
   return (
     <div className="Home">
 

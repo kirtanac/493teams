@@ -18,7 +18,9 @@ class CreateTeam extends React.Component {
      uniq3:"",
      uniq4:"",
      show:false,
-     show2:false
+     show2:false,
+     uniqname: localStorage.getItem('uniqname'),
+     onTeam: false,
    };
 
    this.updateInput = this.updateInput.bind(this);
@@ -163,6 +165,9 @@ handleSecondHide() {
   if (this.state.redi === true) {
     return <Redirect to='/view-team' />
   }
+  if(!localStorage.getItem('uniqname')){
+    return <Redirect to='/' />
+  }
   console.log(this.state);
   return (
     <div className="createteam">
@@ -171,7 +176,6 @@ handleSecondHide() {
         Register your team
 
         </h1>
-
 
         <Form onSubmit={this.handleShow}>
 

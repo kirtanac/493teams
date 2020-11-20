@@ -30,7 +30,7 @@ class App extends React.Component {
 
       <Switch>
 
-        <Route path="/create-team" component={CreateTeam}>
+        <Route path="/create-team">
           <CreateTeam />
         </Route>
         <Route path="/team-invites">

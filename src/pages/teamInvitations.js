@@ -46,6 +46,9 @@ renderInvitations(){
    if(this.state.onTeam === true) {
      return <Redirect to='/view-team' />
    }
+   if(!localStorage.getItem('uniqname')){
+     return <Redirect to='/' />
+   }
   return (
     <div className="Home">
 

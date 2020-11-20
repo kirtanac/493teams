@@ -7,7 +7,7 @@ import ReactDOM from "react-dom";
 import {
   BrowserRouter as Router,
   Switch,
-  Route, NavLink
+  Route, NavLink, Redirect
 } from "react-router-dom";
 import Login from "../components/login"
 import {  Link,  Button } from 'react-bootstrap';
@@ -27,12 +27,14 @@ class Home extends React.Component {
  handleLogin(log_data){
       this.setState({data: log_data})
       console.log(log_data);
+
       if ('user-type' in log_data){
+        localStorage.setItem('uniqname', log_data['uniqname']);
         console.log("handle login got this")
         this.setState({
           loggedin: true,
           data: {usertype: log_data['user-type'],
-          response: log_data['response'],
+          uniqname: log_data['uniqname'],
           accessToken: log_data['accessToken']}
         });
       }
@@ -53,46 +55,16 @@ class Home extends React.Component {
    </div> );
  } else if(this.state.loggedin && this.state.data.usertype === 'admin'){
         return (
-      <div className="Home">
-
-          <header className="App-header">
-        <h1>Admin </h1>
-        <NavLink to="/admin-home" activeClassName="hurray">
-          Admin Home
-        </NavLink>
-
-          </header>
-
-      </div>
+      <Redirect to="/admin-home" />
     ); }
     else if(this.state.loggedin && this.state.data.usertype === 'no team'){
        return (
-     <div className="Home">
-
-         <header className="App-header">
-       <h1>493 Teams </h1>
-
-           <NavLink to={{pathname: "/create-team", aboutProps: this.state.data}} activeClassName="hurray">
-             Create a Team!!
-           </NavLink>
-
-
-         </header>
-
-     </div>
+         <Redirect to="/create-team" />
    );
 
  }else if(this.state.loggedin && this.state.data.usertype === 'team'){
        return (
-     <div className="Home">
-         <header className="App-header">
-       <h1>On Teams </h1>
-       <NavLink to={{pathname: "/view-team", yo: "thehells" }} activeClassName="hurray">
-         View your Team
-       </NavLink>
-
-         </header>
-     </div>
+          <Redirect to="/view-team" />
    );
  }
 

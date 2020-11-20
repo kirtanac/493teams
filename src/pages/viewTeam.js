@@ -5,7 +5,7 @@ import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl 
 import {
   BrowserRouter as Router,
   Switch,
-  Route, NavLink
+  Route, NavLink, Redirect
 } from "react-router-dom";
 
 //VIEW THE CURRENT TEAM YOU ARE ON
@@ -21,7 +21,10 @@ class ViewTeam extends React.Component {
 
    this.state = {
      teams:[],
-     userdata: props.location
+     userdata: props.location,
+     uniqname: localStorage.getItem('uniqname'),
+     teamName: '',
+     onTeam: true,
    }
    this.viewTeam = this.viewTeam.bind(this);
 
@@ -32,16 +35,33 @@ class ViewTeam extends React.Component {
    db.settings({
      timestampsInSnapshots: true
    });
-   console.log("state", this.state.userdata)
+
+   console.log("state", this.state.uniqname)
+   db.collection("users").doc(this.state.uniqname)
+     .get()
+     .then(querySnapshot => {
+       if(!querySnapshot.data().onTeam){
+         console.log("NOT on a team!")
+         this.setState({
+           onTeam: false
+         })
+         // TODO : redirect
+       }
+       let teamName = querySnapshot.data().teamName;
+       this.setState({ teamName: teamName});
    //hard coding in my uniqname to work on rendering
-  db.collection("teams").where("uniqname1", "==", "clantonm")
+  db.collection("teams").where("teamName", "==", teamName)
     .get()
     .then(querySnapshot => {
       const data = querySnapshot.docs.map(doc => doc.data());
       //console.log(data);
       this.setState({ teams: data });
+      console.log(data)
     });
+});
 }
+
+
 viewTeam() {
   let inc = 1;
   const { teams } = this.state;
@@ -63,6 +83,17 @@ viewTeam() {
 
 
  render(){
+   if(!this.state.uniqname){
+     return(
+       <Redirect to="/" />
+     );
+   }
+
+   if(!this.state.onTeam){
+     return(
+       <Redirect to="/create-team" />
+     );
+   }
    const { teams } = this.state;
   return (
     <div className="viewteam">

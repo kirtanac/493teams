@@ -55,7 +55,7 @@ class Login extends React.Component {
         }else{
           status = 'no team'
         }
-        this.props.callback({'status': 'success', 'type': 'login', 'user-type': status, 'response': email, 'accessToken': this.state.accessToken});
+        this.props.callback({'status': 'success', 'type': 'login', 'user-type': status, 'uniqname': uniqname, 'accessToken': this.state.accessToken});
       });
    }
  }
@@ -65,6 +65,7 @@ class Login extends React.Component {
     isLoggedIn: false,
      accessToken: ''
    }));
+   localStorage.clear();
    this.props.callback({'status': 'success', 'type': 'logout'});
  }
 
