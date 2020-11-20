@@ -30,7 +30,7 @@ class Invite extends React.Component {
      timestampsInSnapshots: true
    });
    //hardcoding in kirtana for functionality purposes
-  db.collection("users").doc("kirtana")
+  db.collection("users").doc(localStorage.getItem('uniqname'))
     .get()
     .then(querySnapshot => {
       let specInv = querySnapshot.data().invitations[this.props.invNum];
@@ -100,7 +100,6 @@ acceptedTeam() {
     timestampsInSnapshots: true
   });
   //update team info in database
-  //find which one equals 'kirtana'
   let user1 = this.state.teamMems[0];
   let user2 = this.state.teamMems[1];
   let user3 = this.state.teamMems[2];
@@ -109,7 +108,8 @@ acceptedTeam() {
     user4 = this.state.teamMems[3];
   }
 
-    let userString = "kirtana";
+    let userString = localStorage.getItem('uniqname');
+    console.log(userString);
     switch(userString) {
       case user1:
         db.collection("teams").doc(this.state.invitation).update({
@@ -134,7 +134,7 @@ acceptedTeam() {
 
     };
 
-  db.collection("users").doc("kirtana").update({
+  db.collection("users").doc(localStorage.getItem('uniqname')).update({
     onTeam:true,
     teamName:this.state.invitation
   }).then(() => {

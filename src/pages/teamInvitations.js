@@ -25,7 +25,7 @@ class TeamInvites extends React.Component {
    db.settings({
      timestampsInSnapshots: true
    });
-  db.collection("users").doc("kirtana")
+  db.collection("users").doc(localStorage.getItem('uniqname'))
     .get()
     .then(querySnapshot => {
       this.setState({
