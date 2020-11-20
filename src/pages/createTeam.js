@@ -38,9 +38,13 @@ class CreateTeam extends React.Component {
      timestampsInSnapshots: true
    });
    let numHolder;
+   let onTeam1 = false;
+   let teamName1 = ""
    switch(number) {
      case 1:
       numHolder = this.state.uniq1;
+      onTeam1 = true;
+      teamName1 = tempName;
      break;
      case 2:
       numHolder = this.state.uniq2;
@@ -60,8 +64,8 @@ class CreateTeam extends React.Component {
         invitations: [tempName],
         isAdmin:false,
         numInvitations: 1,
-        onTeam:false,
-        teamName:""
+        onTeam:onTeam1,
+        teamName:teamName1
       }
       db.collection("users").doc(numHolder).set(data);
     }
