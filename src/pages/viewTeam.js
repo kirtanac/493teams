@@ -1,7 +1,7 @@
 import '../App.css';
 import firebase from "../firebase";
 import React from 'react';
-import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl } from 'react-bootstrap';
+import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl, Table } from 'react-bootstrap';
 import {
   BrowserRouter as Router,
   Switch,
@@ -67,18 +67,32 @@ viewTeam() {
   let inc = 1;
   const { teams } = this.state;
   return teams.map((val) => (
-    <p>
-    <b key={++inc}>{val.teamName}</b>
-    <br/>
-    {val.uniqname1}{' '}{val.uniqname1Accepted ? 'accepted' : 'pending'}
-    <br/>
-    {val.uniqname2}{' '}{val.uniqname2Accepted ? 'accepted' : 'pending'}
-    <br/>
-    {val.uniqname3}{' '}{val.uniqname3Accepted ? 'accepted' : 'pending'}
-    <br/>
-    {val.uniqname4}{' '}{val.uniqname4Accepted ? 'accepted' : 'pending'}
-    <br/>
-    </p>
+    <Table striped bordered>
+    <thead>
+    <tr>
+      <th>Uniqname</th>
+      <th>Invite Status</th>
+    </tr>
+  </thead>
+    <tbody>
+    <tr>
+     <td>{val.uniqname1}</td>
+     <td>{val.uniqname1Accepted ? 'accepted' : 'pending'}</td>
+   </tr>
+    <tr>
+     <td>{val.uniqname2}</td>
+     <td>{val.uniqname2Accepted ? 'accepted' : 'pending'}</td>
+   </tr>
+   <tr>
+    <td>{val.uniqname3}</td>
+    <td>{val.uniqname3Accepted ? 'accepted' : 'pending'}</td>
+  </tr>
+  <tr>
+   <td>{val.uniqname4}</td>
+   <td>{val.uniqname4Accepted ? 'accepted' : 'pending'}</td>
+ </tr>
+ </tbody>
+ </Table>
   ))
 }
 
@@ -117,7 +131,8 @@ viewTeam() {
 </Navbar>
 
       <header className="loggedInHeader">
-      <h1>Your Current Team</h1>
+      <div className="body">
+      <h1 className="title">Your Current Team</h1>
 
         <p>
         {this.viewTeam()}
@@ -125,7 +140,7 @@ viewTeam() {
         </p>
         <br/>
 
-
+        </div>
       </header>
 
     </div>

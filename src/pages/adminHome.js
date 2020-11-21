@@ -30,7 +30,7 @@ class AdminHome extends React.Component {
   return (
     <div className="Home">
     <Navbar bg="light" expand="lg">
-  <Navbar.Brand href="/admin-home">EECS 493 Teams</Navbar.Brand>
+  <Navbar.Brand href="/admin-home">EECS 493 Teams (Admin)</Navbar.Brand>
   <Navbar.Toggle aria-controls="basic-navbar-nav" />
   <Navbar.Collapse id="basic-navbar-nav">
     <Nav className="mr-auto">
@@ -45,11 +45,12 @@ class AdminHome extends React.Component {
   </Navbar.Collapse>
 </Navbar>
         <header className="App-header">
+        <div className="body">
       <h1>493 Teams Admin View</h1>
 
         <h1>Coming Soon</h1>
 
-
+        </div>
         </header>
 
     </div>

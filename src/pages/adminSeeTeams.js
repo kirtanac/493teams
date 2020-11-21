@@ -30,7 +30,7 @@ render(){
   return (
     <div className="admin-see-teams">
     <Navbar bg="light" expand="lg">
-  <Navbar.Brand href="#home">EECS 493 Teams</Navbar.Brand>
+  <Navbar.Brand href="#home">EECS 493 Teams (Admin)</Navbar.Brand>
   <Navbar.Toggle aria-controls="basic-navbar-nav" />
   <Navbar.Collapse id="basic-navbar-nav">
     <Nav className="mr-auto">
@@ -46,9 +46,9 @@ render(){
 </Navbar>
 
       <header className="loggedInHeader">
+      <div className="body">
       <h1>Coming Soon</h1>
-
-
+      </div>
       </header>
 
     </div>

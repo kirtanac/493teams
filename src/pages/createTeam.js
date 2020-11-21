@@ -188,6 +188,7 @@ handleSecondHide() {
   </Navbar.Collapse>
 </Navbar>
       <header className="loggedInHeader">
+      <div className="body">
         <h1>
         Register your team
 
@@ -288,6 +289,7 @@ handleSecondHide() {
           </Button>
         </Modal.Footer>
       </Modal>
+      </div>
       </header>
     </div>
   ); }

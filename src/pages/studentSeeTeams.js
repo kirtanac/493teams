@@ -64,9 +64,10 @@ render(){
 }
 
       <header className="loggedInHeader">
+      <div className="body">
       <h1>Coming Soon</h1>
 
-
+      </div>
       </header>
 
     </div>

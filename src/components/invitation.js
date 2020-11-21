@@ -6,7 +6,7 @@ import {
   Switch,
   Route, NavLink, Redirect
 } from "react-router-dom";
-import {  Link,  Button, Modal } from 'react-bootstrap';
+import {  Link,  Button, Modal, Card } from 'react-bootstrap';
 
 
 class Invite extends React.Component {
@@ -30,7 +30,7 @@ class Invite extends React.Component {
      timestampsInSnapshots: true
    });
    //hardcoding in kirtana for functionality purposes
-  db.collection("users").doc("kirtana")
+  db.collection("users").doc(localStorage.getItem('uniqname'))
     .get()
     .then(querySnapshot => {
       let specInv = querySnapshot.data().invitations[this.props.invNum];
@@ -75,12 +75,15 @@ viewInvitation(){
     //go in and retrieve the team members from the team page
     //use that for the teammember names
     let invList = (
-      <Fragment>
-      <b>{this.state.invitation}</b>
-      <br />
-      {this.state.teamMems.join(', ')}
-      <br/>
-      </Fragment>
+      <Card >
+  <Card.Body>
+    <Card.Title>{this.state.invitation}</Card.Title>
+    <Card.Text>
+    {this.state.teamMems.join(', ')}
+    </Card.Text>
+      <Button variant="success" onClick={this.handleShow}>Join Team</Button>
+  </Card.Body>
+  </Card>
     );
     return invList;
   }
@@ -100,7 +103,6 @@ acceptedTeam() {
     timestampsInSnapshots: true
   });
   //update team info in database
-  //find which one equals 'kirtana'
   let user1 = this.state.teamMems[0];
   let user2 = this.state.teamMems[1];
   let user3 = this.state.teamMems[2];
@@ -109,7 +111,8 @@ acceptedTeam() {
     user4 = this.state.teamMems[3];
   }
 
-    let userString = "kirtana";
+    let userString = localStorage.getItem('uniqname');
+    console.log(userString);
     switch(userString) {
       case user1:
         db.collection("teams").doc(this.state.invitation).update({
@@ -134,7 +137,7 @@ acceptedTeam() {
 
     };
 
-  db.collection("users").doc("kirtana").update({
+  db.collection("users").doc(localStorage.getItem('uniqname')).update({
     onTeam:true,
     teamName:this.state.invitation
   }).then(() => {
@@ -144,17 +147,25 @@ acceptedTeam() {
 }
  render(){
    if (this.state.accepted === true) {
+     localStorage.setItem('user-type', 'team')
      return <Redirect to='/view-team' />
    }
+   // removed: <Button variant="success" onClick={this.handleShow}>Join Team</Button>{' '}
   return (
     <div className="Invite">
       {this.viewInvitation()}
-      <Button variant="success" onClick={this.handleShow}>Join Team</Button>{' '}
+
       <Modal show={this.state.show} onHide={this.handleHide}>
         <Modal.Header closeButton>
           <Modal.Title>Do you want to accept this team Invitation?</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{this.viewInvitation()}</Modal.Body>
+        <Modal.Body>
+        <h2>{this.state.invitation}</h2>
+        <p>
+        {this.state.teamMems.join(', ')}
+        </p>
+
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={this.handleHide}>
             Cancel

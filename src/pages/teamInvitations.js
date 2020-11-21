@@ -28,7 +28,7 @@ class TeamInvites extends React.Component {
    db.settings({
      timestampsInSnapshots: true
    });
-  db.collection("users").doc("kirtana")
+  db.collection("users").doc(localStorage.getItem('uniqname'))
     .get()
     .then(querySnapshot => {
       this.setState({
@@ -71,11 +71,12 @@ renderInvitations(){
 </Navbar>
 
         <header className="App-header">
+        <div className="body">
       <h1>493 Team Invitations </h1>
       <h2>You have ({this.state.numInv}) invitations</h2>
           {this.renderInvitations()}
           <br/>
-
+          </div>
         </header>
 
     </div>
