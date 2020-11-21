@@ -6,6 +6,7 @@ import ViewTeam from "./pages/viewTeam";
 import AdminSearch from "./pages/adminSearch";
 import TeamInvites from "./pages/teamInvitations";
 import AdminHome from "./pages/adminHome";
+import StudentSeeTeams from "./pages/studentSeeTeams";
 import Home from "./pages/Home";
 import Login from "./components/login"
 import React from 'react';
@@ -44,6 +45,9 @@ class App extends React.Component {
         </Route>
         <Route path="/view-team">
           <ViewTeam />
+        </Route>
+        <Route path="/see-teams">
+          <StudentSeeTeams />
         </Route>
 
         <Route path="/">

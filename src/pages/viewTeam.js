@@ -23,6 +23,7 @@ class ViewTeam extends React.Component {
      teams:[],
      userdata: props.location,
      uniqname: localStorage.getItem('uniqname'),
+     usertype: localStorage.getItem('user-type'),
      teamName: '',
      onTeam: true,
    }
@@ -94,9 +95,27 @@ viewTeam() {
        <Redirect to="/create-team" />
      );
    }
+
+   console.log(this.state.usertype);
+
    const { teams } = this.state;
   return (
     <div className="viewteam">
+    <Navbar bg="light" expand="lg">
+  <Navbar.Brand href="#home">EECS 493 Teams</Navbar.Brand>
+  <Navbar.Toggle aria-controls="basic-navbar-nav" />
+  <Navbar.Collapse id="basic-navbar-nav">
+    <Nav className="mr-auto">
+    <Nav.Link href="/view-team">My Team</Nav.Link>
+      <Nav.Link href="/see-teams">All Teams</Nav.Link>
+    </Nav>
+    <Nav>
+      <Nav.Link  className="mr-sm-2" href="/">Logout</Nav.Link>
+    </Nav>
+
+  </Navbar.Collapse>
+</Navbar>
+
       <header className="loggedInHeader">
       <h1>Your Current Team</h1>
 
@@ -105,12 +124,7 @@ viewTeam() {
 
         </p>
         <br/>
-        <NavLink to="/" activeClassName="hurray">
-          Homepage
-        </NavLink>
-        <NavLink to="/team-invites" activeClassName="hurray">
-          Team Invites
-        </NavLink>
+
 
       </header>
 

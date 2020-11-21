@@ -9,10 +9,19 @@ import {
   Switch,
   Route, NavLink, Redirect
 } from "react-router-dom";
-import {  Link,  Button } from 'react-bootstrap';
+import {  Link,  Button, Navbar, Nav } from 'react-bootstrap';
 
 class AdminSearch extends React.Component {
+  constructor(props) {
+   super(props);
+   this.state = {
 
+     uniqname: localStorage.getItem('uniqname'),
+     usertype: localStorage.getItem('user-type'),
+     onTeam: false,
+   };
+
+ }
 
  render(){
    if(!localStorage.getItem('uniqname')){
@@ -20,24 +29,28 @@ class AdminSearch extends React.Component {
    }
   return (
     <div className="Home">
+    <Navbar bg="light" expand="lg">
+  <Navbar.Brand href="/admin-home">EECS 493 Teams</Navbar.Brand>
+  <Navbar.Toggle aria-controls="basic-navbar-nav" />
+  <Navbar.Collapse id="basic-navbar-nav">
+    <Nav className="mr-auto">
 
-        <header className="App-header">
-      <h1>493 Teams </h1>
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
+      <Nav.Link href="/admin-home">Home</Nav.Link>
+      <Nav.Link href="/admin-search">Search</Nav.Link>
+    </Nav>
+    <Nav>
+      <Nav.Link  className="mr-sm-2" href="/">Logout</Nav.Link>
+    </Nav>
 
-          </p>
-          <h1>THIS IS WHAT THE SEARCH PAGE WILL LOOK LIKE FOR ADMINS</h1>
-          <NavLink to="/admin-home" activeClassName="hurray">
-            Back to Admin Home
-          </NavLink>
-          <NavLink to="/" activeClassName="hurray">
-            Back to Home
-          </NavLink>
+  </Navbar.Collapse>
+</Navbar>
+<header className="App-header">
+<h1>493 Teams Admin Search</h1>
+
+<h1>Coming Soon</h1>
 
 
-        </header>
+</header>
 
     </div>
   ); }

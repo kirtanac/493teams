@@ -18,19 +18,24 @@ class Home extends React.Component {
   constructor(props) {
    super(props);
    this.state = {
+     uniqname: localStorage.getItem('uniqname'),
+     usertype: localStorage.getItem('user-type'),
      loggedin: false,
      data: {}
    }
+
    this.handleLogin = this.handleLogin.bind(this);
  }
 
  handleLogin(log_data){
       this.setState({data: log_data})
-      console.log(log_data);
+
 
       if ('user-type' in log_data){
         localStorage.setItem('uniqname', log_data['uniqname']);
-        console.log("handle login got this")
+        localStorage.setItem('user-type', log_data['user-type']);
+        console.log("setting user-type to: ", localStorage.getItem('user-type'))
+
         this.setState({
           loggedin: true,
           data: {usertype: log_data['user-type'],
@@ -49,6 +54,7 @@ class Home extends React.Component {
 
          <header className="App-header">
        <h1>493 Teams </h1>
+       <i>Sign in to view your team</i>
        <Login callback={this.handleLogin} />
        </header>
 

@@ -20,6 +20,7 @@ class CreateTeam extends React.Component {
      show:false,
      show2:false,
      uniqname: localStorage.getItem('uniqname'),
+     usertype: localStorage.getItem('user-type'),
      onTeam: false,
    };
 
@@ -171,6 +172,21 @@ handleSecondHide() {
   console.log(this.state);
   return (
     <div className="createteam">
+    <Navbar bg="light" expand="lg">
+  <Navbar.Brand href="#home">EECS 493 Teams</Navbar.Brand>
+  <Navbar.Toggle aria-controls="basic-navbar-nav" />
+  <Navbar.Collapse id="basic-navbar-nav">
+    <Nav className="mr-auto">
+    <Nav.Link href="/create-team">Create Team</Nav.Link>
+    <Nav.Link href="/team-invites">Team Invitations</Nav.Link>
+      <Nav.Link href="/see-teams">Registered Teams</Nav.Link>
+    </Nav>
+    <Nav>
+      <Nav.Link  className="mr-sm-2" href="/">Logout</Nav.Link>
+    </Nav>
+
+  </Navbar.Collapse>
+</Navbar>
       <header className="loggedInHeader">
         <h1>
         Register your team
@@ -233,9 +249,6 @@ handleSecondHide() {
         <br/>
         <Button variant="primary" type="submit">Submit</Button>
       </Form>
-      <NavLink to="/team-invites" activeClassName="hurray">
-        Team Invites
-      </NavLink>
 
 
       <Modal show={this.state.show} onHide={this.handleHide}>
