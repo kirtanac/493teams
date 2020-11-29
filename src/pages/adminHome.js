@@ -31,16 +31,14 @@ class AdminHome extends React.Component {
  }
 
  updateInput(event){
+
    this.setState({
      [event.target.name]: event.target.value
    });
-   console.log("updated")
+
  }
 
  handleSearch(event) {
-   //find out if user is on a team first
-   //or just pull up teamname if they are searching by teammname
-   //if they arent then we can set the state and just redirect
    event.preventDefault();
    console.log(this.state)
    const db = firebase.firestore();
@@ -49,20 +47,19 @@ class AdminHome extends React.Component {
    });
    console.log(this.state.searchType)
    if (this.state.searchType === "Teamname") {
-     //need to first strip out all spaces
      let tempName = this.state.searchVal.split(' ').join('');
      this.setState({searched:true, foundTeam:true, teamName: tempName});
    }
   else {
-    //searching by user so use the user table to either return nothing or the teamnname
     db.collection("users").doc(this.state.searchVal)
       .get()
       .then(querySnapshot => {
+        console.log(querySnapshot.data())
         if(querySnapshot.data().onTeam === false) {
           this.setState({searched:true, foundTeam: false});
         }
         else {
-          this.setState({searched:true, foundTeam: false, teamName: querySnapshot.data().teamName});
+          this.setState({searched:true, foundTeam: true, teamName: querySnapshot.data().teamName});
         }
       });
   }
@@ -74,7 +71,6 @@ class AdminHome extends React.Component {
      return <Redirect to='/' />
    }
    if(this.state.searched === true) {
-     console.log("hi bleep")
      localStorage.setItem('teamSearch', this.state.teamName);
      localStorage.setItem('userOnTeam', this.state.foundTeam);
      return <Redirect to= "/admin-search" />
@@ -102,12 +98,12 @@ class AdminHome extends React.Component {
               value={this.state.searchType}
               name="searchType"
               onChange={this.updateInput} custom>
+                <option value="default">Search by...</option>
                 <option value="Teamname">Teamname</option>
                 <option value="Uniqname">Uniqname</option>
               </Form.Control>
               <Form.Control required type="text"
               name="searchVal"
-
               value={this.state.searchVal}
               onChange={this.updateInput}
               placeholder="Search by teamname or uniqname of team member"

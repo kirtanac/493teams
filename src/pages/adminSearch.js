@@ -33,19 +33,18 @@ componentDidMount() {
     timestampsInSnapshots: true
   });
   console.log(this.state)
-  if (this.state.assigned === true) {
-    console.log(localStorage)
+
+    console.log("MADE IT HERE")
     db.collection("teams").doc(this.state.team)
       .get()
       .then(querySnapshot => {
-        const data = []
         console.log(querySnapshot.data())
+        let data = []
         data.push(querySnapshot.data());
-        //console.log(data);
-        this.setState({ teams: data , dataLoaded:true});
-        console.log(data)
+        this.setState({ teams: data});
+        this.setState({ dataLoaded:true });
       });
-  }
+
 
 }
 
@@ -53,37 +52,42 @@ componentDidMount() {
 
 viewTeam() {
   let inc = 1;
-  const { teams } = this.state.teams;
-  console.log("CURRENTLY HERE WE ARE " + this.state.teams)
   if (this.state.dataLoaded === true) {
-    return teams.map((val) => (
-        <Table striped bordered>
-        <thead>
-        <tr>
-          <th>Uniqname</th>
-          <th>Invite Status</th>
-        </tr>
+    const teams = this.state.teams[0];
+    console.log(this.state.teams)
+    if (this.state.assigned === "false") {
+      return <h2> This user is not on a team </h2>
+    }
+    console.log("made it here")
+    let teamList = (
+      <Table striped bordered className="w-25">
+      <thead>
+      <tr>
+        <th>Uniqname</th>
+        <th>Status</th>
+      </tr>
       </thead>
-        <tbody>
-        <tr>
-         <td>{val.uniqname1}</td>
-         <td>{val.uniqname1Accepted ? 'accepted' : 'pending'}</td>
-       </tr>
-        <tr>
-         <td>{val.uniqname2}</td>
-         <td>{val.uniqname2Accepted ? 'accepted' : 'pending'}</td>
-       </tr>
-       <tr>
-        <td>{val.uniqname3}</td>
-        <td>{val.uniqname3Accepted ? 'accepted' : 'pending'}</td>
+      <tbody>
+      <tr>
+       <td>{teams.uniqname1}</td>
+       <td>{teams.uniqname1Accepted ? 'accepted' : 'pending'}</td>
       </tr>
       <tr>
-       <td>{val.uniqname4}</td>
-       <td>{val.uniqname4Accepted ? 'accepted' : 'pending'}</td>
+       <td>{teams.uniqname2}</td>
+       <td>{teams.uniqname2Accepted ? 'accepted' : 'pending'}</td>
+      </tr>
+      <tr>
+        <td>{teams.uniqname3}</td>
+        <td>{teams.uniqname3Accepted ? 'accepted' : 'pending'}</td>
+      </tr>
+      <tr>
+       <td>{teams.uniqname4}</td>
+       <td>{teams.uniqname4Accepted ? 'accepted' : 'pending'}</td>
      </tr>
      </tbody>
      </Table>
-  ))
+    )
+    return teamList
   }
   else {
     return <p>Loading...</p>
@@ -114,8 +118,8 @@ viewTeam() {
 <header className="App-header">
 <div className="body">
 <h1>493 Teams Admin Search</h1>
-
-  {this.state.assigned ?  this.viewTeam() : <p> User is not on a team </p> }
+<br />
+  {this.viewTeam()}
 
 </div>
 </header>
