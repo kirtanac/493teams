@@ -54,7 +54,13 @@
   font-size: calc(10px + 2vmin);
 
 }
-
+.search-bar {
+  justify-content: center;
+}
+.download-buttons {
+  justify-content: center;
+  margin:55px;
+}
 .App-link {
   color: #61dafb;
 }
