@@ -70,15 +70,11 @@ updateInput(event){
   this.setState({
     [event.target.name]: event.target.value
   });}
-
-
 handleShow(event) {
   event.preventDefault();
   console.log("made it here");
   this.setState({ show1: true});
 }
-
-
 handleHide() {
   this.setState({ show1: false});
 }
@@ -87,14 +83,16 @@ handleShow2(event) {
   console.log("made it here");
   this.setState({ show2: true});
 }
-
-
 handleHide2() {
   this.setState({ show2: false});
 }
 
+
+
 pushData(event) {
   event.preventDefault();
+  //ok update team info in the team doc, if new uniqname added/changed then need to remove team
+  //from user, then send new invite to new teammember 
   this.setState({ doneEditing: true});
 }
 deleteTeam(event) {
