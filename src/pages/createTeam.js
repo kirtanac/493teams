@@ -5,7 +5,7 @@ import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl,
 import { Redirect, NavLink} from 'react-router-dom'
 
 //PAGE FOR CREATING A TEAM
-let counter = 1;
+
 
 class CreateTeam extends React.Component {
   constructor(props) {
@@ -110,15 +110,14 @@ class CreateTeam extends React.Component {
   if (this.state.uniq4 === "") {
     db.collection("teams").doc(tempName).set({
       teamName:tempName,
-      teamID:counter,
       uniqname1:this.state.uniq[0],
       uniqname2:this.state.uniq[1],
       uniqname3:this.state.uniq[2],
+      uniqname4:"",
       uniqname1Accepted:false,
       uniqname2Accepted:false,
       uniqname3Accepted:false,
     });
-    counter += 1;
     this.sendData(1, tempName);
     this.sendData(2, tempName);
     this.sendData(3, tempName);
@@ -128,7 +127,6 @@ class CreateTeam extends React.Component {
   else {
     db.collection("teams").doc(tempName).set({
       teamName:tempName,
-      teamID:counter,
       uniqname1:this.state.uniq1,
       uniqname2:this.state.uniq2,
       uniqname3:this.state.uniq3,
@@ -138,7 +136,6 @@ class CreateTeam extends React.Component {
       uniqname3Accepted:false,
       uniqname4Accepted:false,
     });
-    counter += 1;
     this.sendData(1, tempName);
     this.sendData(2, tempName);
     this.sendData(3, tempName);
