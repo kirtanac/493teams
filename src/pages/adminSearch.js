@@ -23,8 +23,11 @@ class AdminSearch extends React.Component {
      team: localStorage.getItem('teamSearch'),
      assigned: localStorage.getItem('userOnTeam'),
      teams: [],
-     dataLoaded:false
+     dataLoaded:false,
+     editing:false
    };
+   this.viewTeam = this.viewTeam.bind(this);
+   this.editTeam = this.editTeam.bind(this);
 
  }
 componentDidMount() {
@@ -93,10 +96,21 @@ viewTeam() {
     return <p>Loading...</p>
   }
 }
+editTeam(event){
+  event.preventDefault();
+  localStorage.setItem("uniq1", this.state.teams[0].uniqname1)
+  localStorage.setItem("uniq2", this.state.teams[0].uniqname2)
+  localStorage.setItem("uniq3", this.state.teams[0].uniqname3)
+  localStorage.setItem("uniq4", this.state.teams[0].uniqname4)
+  this.setState({ editing:true });
+}
 
  render(){
    if(!localStorage.getItem('uniqname')){
      return <Redirect to='/' />
+   }
+   if(this.state.editing === true){
+     return <Redirect to="/admin-edit" />
    }
   return (
     <div className="Home">
@@ -120,7 +134,7 @@ viewTeam() {
 <h1>493 Teams Admin Search</h1>
 <br />
   {this.viewTeam()}
-
+  <Button onClick={this.editTeam}>Edit Team</Button>
 </div>
 </header>
 
