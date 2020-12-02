@@ -43,19 +43,27 @@ const dbFunctions = {
       });
   },
 
-  userOnTeam: function(user) {
-    const db = firebase.firestore();
+  userStatus: function(user) {
     db.settings({
       timestampsInSnapshots: true
     });
     db.collection("users").doc(user)
-      .get()
-      .then(querySnapshot => {
-        if (querySnapshot.data().onTeam === true) {
-        return true;
+    .get()
+    .then(querySnapshot => {
+      if (querySnapshot.empty) {
+        return "not on roster";
+      }
+      if (querySnapshot.data().isAdmin) {
+        return "admin";
+      }
+      if (querySnapshot.data().onTeam) {
+        return "team";
+      }
+      else {
+        return "unassigned";
       }
     });
-    return false;
+
   }
 
 

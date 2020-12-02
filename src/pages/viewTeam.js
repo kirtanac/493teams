@@ -1,5 +1,6 @@
 import '../App.css';
 import firebase from "../firebase";
+import dbFunctions from "../helpers"
 import React from 'react';
 import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl, Table } from 'react-bootstrap';
 import {
@@ -15,9 +16,6 @@ class ViewTeam extends React.Component {
   constructor(props) {
    super(props);
    console.log("props", props);
-   // if(props.location){
-   //   console.log("check out view team", props.location.aboutProps)
-   // }
 
    this.state = {
      teams:[],
@@ -34,39 +32,20 @@ class ViewTeam extends React.Component {
 
 
  }
- componentDidMount() {
-   console.log(localStorage.getItem('user-type'));
-   if(this.state.onTeam) {
-   const db = firebase.firestore();
-   db.settings({
-     timestampsInSnapshots: true
-   });
 
-   console.log("state", this.state.uniqname)
-   db.collection("users").doc(this.state.uniqname)
-     .get()
-     .then(querySnapshot => {
-       if(!querySnapshot.data().onTeam){
-         console.log("NOT on a team!")
-         this.setState({
-           onTeam: false
-         })
-         // TODO : redirect
-       }
-       let teamName = querySnapshot.data().teamName;
-       this.setState({ teamName: teamName});
-       //hard coding in my uniqname to work on rendering
-       db.collection("teams").doc(this.state.teamName)
-         .get()
-         .then(querySnapshot => {
-           console.log(querySnapshot.data())
-           let data = []
-           data.push(querySnapshot.data());
-           this.setState({ teams: data});
-           this.setState({ dataLoaded:true });
-         });
-       });
-     }
+ componentDidMount() {
+    console.log(localStorage.getItem('user-type'));
+    if(this.state.onTeam) {
+      const db = firebase.firestore();
+      db.settings({
+        timestampsInSnapshots: true
+      });
+      console.log("state", this.state.uniqname)
+      let data = dbFunctions.getTeamFromUser(this.state.uniqname);
+      this.setState({ teams: data});
+      this.setState({ dataLoaded:true });
+
+    }
 }
 
 

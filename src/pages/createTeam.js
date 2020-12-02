@@ -1,11 +1,11 @@
 import '../App.css';
 import firebase from "../firebase";
+import dbFunctions from "../helpers"
 import React from 'react';
 import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl, Modal } from 'react-bootstrap';
 import { Redirect, NavLink} from 'react-router-dom'
 
 //PAGE FOR CREATING A TEAM
-
 
 class CreateTeam extends React.Component {
   constructor(props) {
@@ -97,7 +97,6 @@ class CreateTeam extends React.Component {
    alert('A name was submitted: ' + this.state.value);
    event.preventDefault();
  }
-
  addTeam(event){
   event.preventDefault();
   const db = firebase.firestore();
@@ -161,6 +160,8 @@ handleSecondHide() {
     show2: false
   });
 }
+
+
  render(){
   if (this.state.redi === true || this.state.usertype === 'team') {
     return <Redirect to='/view-team' />

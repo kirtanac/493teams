@@ -1,5 +1,6 @@
 import '../App.css';
 import firebase from "../firebase";
+import dbFunctions from "../helpers"
 import React, { Fragment } from 'react';
 import {
   BrowserRouter as Router,
@@ -24,49 +25,37 @@ class Invite extends React.Component {
    this.handleHide = this.handleHide.bind(this);
    this.acceptedTeam = this.acceptedTeam.bind(this);
  }
+
  componentDidMount() {
    const db = firebase.firestore();
    db.settings({
      timestampsInSnapshots: true
    });
    //hardcoding in kirtana for functionality purposes
-  db.collection("users").doc(localStorage.getItem('uniqname'))
-    .get()
-    .then(querySnapshot => {
-      let specInv = querySnapshot.data().invitations[this.props.invNum];
+  let userInfo = dbFunctions.getUserInfo(localStorage.getItem('uniqname'));
+  let specInv = userInfo.invitations[this.props.invNum];
+  this.setState({ invitation: specInv});
+  let teamInfo = dbFunctions.getTeamInfo(this.state.invitation);
+  let tempArray = [];
+  let user1, user2, user3, user4;
+  user1 = teamInfo.uniqname1;
+  user2 = teamInfo.uniqname2;
+  user3 = teamInfo.uniqname3;
+  tempArray.push(user1);
+  tempArray.push(user2);
+  tempArray.push(user3);
+  try{
+    user4 = teamInfo.uniqname4;
+    tempArray.push(user4);
 
-      this.setState({ invitation: specInv});
-      db.collection("teams").doc(this.state.invitation)
-        .get()
-        .then(querySnapshot => {
-          console.log("got user data")
-          let tempArray = [];
-          let user1;
-          let user2;
-          let user3;
-          let user4;
-          user1 = querySnapshot.data().uniqname1;
-          user2 = querySnapshot.data().uniqname2;
-          user3 = querySnapshot.data().uniqname3;
-          tempArray.push(user1);
-          tempArray.push(user2);
-          tempArray.push(user3);
-
-          try{
-            user4 = querySnapshot.data().uniqname4;
-            tempArray.push(user4);
-
-          } catch(error) {
-            console.log(error)
-          }
-          console.log(tempArray);
-          this.setState({ teamMems: tempArray});
-          this.setState({dataLoaded: true});
-        });
-    });
-
-
+  } catch(error) {
+    console.log(error)
+  }
+  this.setState({ teamMems: tempArray});
+  this.setState({dataLoaded: true});
 }
+
+
 viewInvitation(){
   if (this.state.dataLoaded === false) {
     return <h2>Loading...</h2>
@@ -97,6 +86,7 @@ handleHide() {
   this.setState({ show: false});
 }
 
+//FIX ME
 acceptedTeam() {
   const db = firebase.firestore();
   db.settings({
@@ -110,7 +100,6 @@ acceptedTeam() {
   if (this.state.teamMems.length === 4) {
     user4 = this.state.teamMems[3];
   }
-
     let userString = localStorage.getItem('uniqname');
     console.log(userString);
     switch(userString) {
@@ -136,7 +125,6 @@ acceptedTeam() {
       break;
 
     };
-
   db.collection("users").doc(localStorage.getItem('uniqname')).update({
     onTeam:true,
     teamName:this.state.invitation
@@ -145,6 +133,8 @@ acceptedTeam() {
   });
 
 }
+
+
  render(){
    if (this.state.accepted === true) {
      localStorage.setItem('user-type', 'team')

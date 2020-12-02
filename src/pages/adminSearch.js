@@ -1,6 +1,7 @@
 import logo from '../logo.svg';
 import '../App.css';
 import firebase from "../firebase";
+import dbFunctions from "../helpers"
 import CreateTeam from "./createTeam";
 import React from 'react';
 import ReactDOM from "react-dom";

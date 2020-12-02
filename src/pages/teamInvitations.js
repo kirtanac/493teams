@@ -1,6 +1,7 @@
 import logo from '../logo.svg';
 import '../App.css';
 import firebase from "../firebase";
+import dbFunctions from "../helpers";
 import Invitation from "../components/invitation"
 import React from 'react';
 import {
@@ -28,14 +29,11 @@ class TeamInvites extends React.Component {
    db.settings({
      timestampsInSnapshots: true
    });
-  db.collection("users").doc(localStorage.getItem('uniqname'))
-    .get()
-    .then(querySnapshot => {
-      this.setState({
-        numInv: querySnapshot.data().numInvitations,
-        onTeam: querySnapshot.data().onTeam
-      });
-    });
+  let userInfo = dbFunctions.getUserInfo(this.state.uniqname);
+  this.setState({
+    numInv: userInfo.numInvitations,
+    onTeam: userInfo.onTeam
+  });
 
 }
 
