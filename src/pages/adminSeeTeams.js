@@ -30,12 +30,18 @@ render(){
   return (
     <div className="admin-see-teams">
     <Navbar bg="light" expand="lg">
-  <Navbar.Brand href="#home">EECS 493 Teams (Admin)</Navbar.Brand>
+    <Navbar.Brand href="/admin-home">
+      <img
+        src="./EECS493-admin.png"
+        height="30"
+        className="d-inline-block align-top"
+        alt="EECS 493 Teams logo"
+      />
+    </Navbar.Brand>
   <Navbar.Toggle aria-controls="basic-navbar-nav" />
   <Navbar.Collapse id="basic-navbar-nav">
     <Nav className="mr-auto">
-    <Nav.Link href="/view-team">My Team</Nav.Link>
-      <Nav.Link href="/see-teams">All Teams</Nav.Link>
+    <Nav.Link href="/admin-home">Home</Nav.Link>
 
     </Nav>
   <Nav>
@@ -47,8 +53,10 @@ render(){
 
       <header className="loggedInHeader">
       <div className="body">
-      <h1>Coming Soon</h1>
+      <h1 className="title">Coming Soon</h1>
+      <div className="body-content">
       </div>
+        </div>
       </header>
 
     </div>

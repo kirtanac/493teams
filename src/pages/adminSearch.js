@@ -54,6 +54,7 @@ componentDidMount() {
 
 
 viewTeam() {
+  let inc = 1;
   if (this.state.dataLoaded === true) {
     const teams = this.state.teams[0];
     console.log(this.state.teams)
@@ -64,9 +65,6 @@ viewTeam() {
     let teamList = (
       <Table striped bordered className="w-25">
       <thead>
-      <tr>
-        <th colSpan="2">{teams.teamName}</th>
-      </tr>
       <tr>
         <th>Uniqname</th>
         <th>Status</th>
@@ -117,13 +115,18 @@ editTeam(event){
   return (
     <div className="Home">
     <Navbar bg="light" expand="lg">
-  <Navbar.Brand href="/admin-home">EECS 493 Teams (Admin)</Navbar.Brand>
+    <Navbar.Brand href="/admin-home">
+      <img
+        src="./EECS493-admin.png"
+        height="30"
+        className="d-inline-block align-top"
+        alt="EECS 493 Teams logo"
+      />
+    </Navbar.Brand>
   <Navbar.Toggle aria-controls="basic-navbar-nav" />
   <Navbar.Collapse id="basic-navbar-nav">
     <Nav className="mr-auto">
-
-      <Nav.Link href="/admin-home">Home</Nav.Link>
-      <Nav.Link href="/admin-search">Search</Nav.Link>
+    <Nav.Link href="/admin-home">Home</Nav.Link>
     </Nav>
     <Nav>
       <Nav.Link  className="mr-sm-2" href="/">Logout</Nav.Link>
@@ -133,10 +136,12 @@ editTeam(event){
 </Navbar>
 <header className="App-header">
 <div className="body">
-<h1>493 Teams Admin Search</h1>
+<h1 className="title">493 Teams Admin Search</h1>
+<div className="body-content">
 <br />
   {this.viewTeam()}
   <Button onClick={this.editTeam}>Edit Team</Button>
+</div>
 </div>
 </header>
 

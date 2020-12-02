@@ -55,7 +55,14 @@ renderInvitations(){
   return (
     <div className="Home">
     <Navbar bg="light" expand="lg">
-  <Navbar.Brand href="#home">EECS 493 Teams</Navbar.Brand>
+    <Navbar.Brand href="/create-team">
+      <img
+        src="/EECS493_landscape.png"
+        height="30"
+        className="d-inline-block align-top"
+        alt="EECS 493 Teams logo"
+      />
+    </Navbar.Brand>
   <Navbar.Toggle aria-controls="basic-navbar-nav" />
   <Navbar.Collapse id="basic-navbar-nav">
     <Nav className="mr-auto">
@@ -72,11 +79,13 @@ renderInvitations(){
 
         <header className="App-header">
         <div className="body">
-      <h1>493 Team Invitations </h1>
+      <h1 className="title">493 Team Invitations </h1>
+      <div className="body-content">
       <h2>You have ({this.state.numInv}) invitations</h2>
           {this.renderInvitations()}
           <br/>
           </div>
+              </div>
         </header>
 
     </div>

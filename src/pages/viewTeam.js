@@ -131,12 +131,19 @@ viewTeam() {
   return (
     <div className="viewteam">
     <Navbar bg="light" expand="lg">
-  <Navbar.Brand href="#home">EECS 493 Teams</Navbar.Brand>
-  <Navbar.Toggle aria-controls="basic-navbar-nav" />
-  <Navbar.Collapse id="basic-navbar-nav">
-    <Nav className="mr-auto">
-    <Nav.Link href="/view-team">My Team</Nav.Link>
-      <Nav.Link href="/see-teams">All Teams</Nav.Link>
+    <Navbar.Brand href="/view-team">
+      <img
+        src="/EECS493_landscape.png"
+        height="30"
+        className="d-inline-block align-top"
+        alt="EECS 493 Teams logo"
+      />
+    </Navbar.Brand>
+    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+    <Navbar.Collapse id="basic-navbar-nav">
+      <Nav className="mr-auto">
+      <Nav.Link href="/view-team">My Team</Nav.Link>
+        <Nav.Link href="/see-teams">All Teams</Nav.Link>
     </Nav>
     <Nav>
       <Nav.Link  className="mr-sm-2" href="/">Logout</Nav.Link>
@@ -146,15 +153,16 @@ viewTeam() {
 </Navbar>
 
       <header className="loggedInHeader">
+
       <div className="body">
       <h1 className="title">Your Current Team</h1>
-
+        <div className="body-content">
         <p>
         {this.viewTeam()}
 
         </p>
         <br/>
-
+  </div>
         </div>
       </header>
 

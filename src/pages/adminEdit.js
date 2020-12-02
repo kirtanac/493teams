@@ -192,16 +192,22 @@ deleteTeam(event) {
    if (this.state.dataLoaded === false) {
      return <h1> Loading ... </h1>
    }
+
   return (
     <div className="Home">
       <Navbar bg="light" expand="lg">
-        <Navbar.Brand href="/admin-home">EECS 493 Teams (Admin)</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
-
-            <Nav.Link href="/admin-home">Home</Nav.Link>
-            <Nav.Link href="/admin-search">Search</Nav.Link>
+      <Navbar.Brand href="/admin-home">
+        <img
+          src="./EECS493-admin.png"
+          height="30"
+          className="d-inline-block align-top"
+          alt="EECS 493 Teams logo"
+        />
+      </Navbar.Brand>
+    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+    <Navbar.Collapse id="basic-navbar-nav">
+      <Nav className="mr-auto">
+      <Nav.Link href="/admin-home">Home</Nav.Link>
           </Nav>
           <Nav>
             <Nav.Link  className="mr-sm-2" href="/">Logout</Nav.Link>
@@ -210,7 +216,8 @@ deleteTeam(event) {
       </Navbar>
       <header className="App-header">
         <div className="body">
-          <h1>Edit Team</h1>
+          <h1 className="title">Edit Team</h1>
+          <div className="body-content">
           <br />
 
           <Form onSubmit={this.handleShow}>
@@ -265,6 +272,7 @@ deleteTeam(event) {
             <Button variant="success" type="submit">Save Changes</Button>
           </Form>
         </div>
+            </div>
       </header>
       <Modal show={this.state.show1} onHide={this.handleHide}>
         <Modal.Header closeButton>
@@ -309,6 +317,7 @@ deleteTeam(event) {
         </Modal.Footer>
       </Modal>
     </div>
+
   ); }
 }
 

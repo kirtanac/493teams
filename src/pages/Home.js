@@ -1,5 +1,6 @@
 import logo from '../logo.svg';
 import '../App.css';
+import '../custom.scss';
 import firebase from "../firebase";
 import CreateTeam from "./createTeam";
 import React from 'react';
@@ -10,7 +11,7 @@ import {
   Route, NavLink, Redirect
 } from "react-router-dom";
 import Login from "../components/login"
-import {  Link,  Button } from 'react-bootstrap';
+import {  Link,  Button, Image, CardGroup , Card, Container, Row} from 'react-bootstrap';
 
 // HOME PAGE!!!!!
 
@@ -53,9 +54,44 @@ class Home extends React.Component {
      <div className="Home">
 
          <header className="App-header">
-       <h1>493 Teams </h1>
-       <i>Sign in to view your team</i>
-       <Login callback={this.handleLogin} />
+         <Image src="./EECS493_landscape.png" fluid />
+         <Row  >
+         <i className="mr-2">Sign in to view your team</i>
+         <Login className="loginButton ml-2" callback={this.handleLogin} />
+         </Row>
+
+         <CardGroup className=" instructions justify-content-md-center mb-10 w-75">
+     <Card bg="info" className="cardclass" >
+       <Card.Body>
+         <Card.Title>Step 1</Card.Title>
+         <Card.Text>
+           Find a group of 4 students who have similar interests as you on the <a>Class Team-Finding Google Sheet.</a>
+         </Card.Text>
+       </Card.Body>
+
+     </Card>
+     <Card bg="primary"  className="cardclass">
+
+       <Card.Body>
+         <Card.Title>Step 2</Card.Title>
+         <Card.Text>
+            Log into EECS 493 Teams. Have 1 team member create the team, then have all other team members log in to accept the invitation.
+         </Card.Text>
+       </Card.Body>
+
+     </Card>
+     <Card bg="success" className="cardclass">
+
+       <Card.Body>
+         <Card.Title>Step 3</Card.Title>
+         <Card.Text>
+            Continue using EECS 493 Teams to see your team members' progress!
+         </Card.Text>
+       </Card.Body>
+
+     </Card>
+   </CardGroup>
+
        </header>
 
    </div> );
