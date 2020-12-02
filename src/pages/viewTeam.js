@@ -26,6 +26,7 @@ class ViewTeam extends React.Component {
      usertype: localStorage.getItem('user-type'),
      teamName: '',
      onTeam: true,
+     dataLoaded:false
    }
    this.viewTeam = this.viewTeam.bind(this);
 
@@ -50,50 +51,64 @@ class ViewTeam extends React.Component {
        }
        let teamName = querySnapshot.data().teamName;
        this.setState({ teamName: teamName});
-   //hard coding in my uniqname to work on rendering
-  db.collection("teams").where("teamName", "==", teamName)
-    .get()
-    .then(querySnapshot => {
-      const data = querySnapshot.docs.map(doc => doc.data());
-      //console.log(data);
-      this.setState({ teams: data });
-      console.log(data)
-    });
-});
+       //hard coding in my uniqname to work on rendering
+       db.collection("teams").doc(this.state.teamName)
+         .get()
+         .then(querySnapshot => {
+           console.log(querySnapshot.data())
+           let data = []
+           data.push(querySnapshot.data());
+           this.setState({ teams: data});
+           this.setState({ dataLoaded:true });
+         });
+       });
 }
 
 
 viewTeam() {
-  let inc = 1;
-  const { teams } = this.state;
-  return teams.map((val) => (
-    <Table striped bordered>
-    <thead>
-    <tr>
-      <th>Uniqname</th>
-      <th>Invite Status</th>
-    </tr>
-  </thead>
-    <tbody>
-    <tr>
-     <td>{val.uniqname1}</td>
-     <td>{val.uniqname1Accepted ? 'accepted' : 'pending'}</td>
-   </tr>
-    <tr>
-     <td>{val.uniqname2}</td>
-     <td>{val.uniqname2Accepted ? 'accepted' : 'pending'}</td>
-   </tr>
-   <tr>
-    <td>{val.uniqname3}</td>
-    <td>{val.uniqname3Accepted ? 'accepted' : 'pending'}</td>
-  </tr>
-  <tr>
-   <td>{val.uniqname4}</td>
-   <td>{val.uniqname4Accepted ? 'accepted' : 'pending'}</td>
- </tr>
- </tbody>
- </Table>
-  ))
+  if (this.state.dataLoaded === true) {
+    const teams = this.state.teams[0];
+    console.log(this.state.teams)
+    if (this.state.assigned === "false") {
+      return <h2> This user is not on a team </h2>
+    }
+    console.log("made it here")
+    let teamList = (
+      <Table striped bordered className="w-25">
+      <thead>
+      <tr>
+        <th colSpan="2">{teams.teamName}</th>
+      </tr>
+      <tr>
+        <th>Uniqname</th>
+        <th>Status</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+       <td>{teams.uniqname1}</td>
+       <td>{teams.uniqname1Accepted ? 'accepted' : 'pending'}</td>
+      </tr>
+      <tr>
+       <td>{teams.uniqname2}</td>
+       <td>{teams.uniqname2Accepted ? 'accepted' : 'pending'}</td>
+      </tr>
+      <tr>
+        <td>{teams.uniqname3}</td>
+        <td>{teams.uniqname3Accepted ? 'accepted' : 'pending'}</td>
+      </tr>
+      <tr>
+       <td>{teams.uniqname4}</td>
+       <td>{teams.uniqname4Accepted ? 'accepted' : 'pending'}</td>
+     </tr>
+     </tbody>
+     </Table>
+    )
+    return teamList
+  }
+  else {
+    return <p>Loading...</p>
+  }
 }
 
 

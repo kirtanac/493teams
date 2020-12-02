@@ -54,7 +54,6 @@ componentDidMount() {
 
 
 viewTeam() {
-  let inc = 1;
   if (this.state.dataLoaded === true) {
     const teams = this.state.teams[0];
     console.log(this.state.teams)
@@ -65,6 +64,9 @@ viewTeam() {
     let teamList = (
       <Table striped bordered className="w-25">
       <thead>
+      <tr>
+        <th colSpan="2">{teams.teamName}</th>
+      </tr>
       <tr>
         <th>Uniqname</th>
         <th>Status</th>

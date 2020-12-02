@@ -40,6 +40,7 @@ class AdminEdit extends React.Component {
    this.pushData = this.pushData.bind(this);
    this.deleteTeam = this.deleteTeam.bind(this);
    this.updateInput = this.updateInput.bind(this);
+   //this.isValidForm = this.isValidForm.bind(this);
 
  }
 
@@ -72,6 +73,10 @@ updateInput(event){
   });}
 handleShow(event) {
   event.preventDefault();
+  //if (this.isValidForm === false) {
+  ////  alert("[specify uniqname] is already on a team");
+    //return;
+  //}
   console.log("made it here");
   this.setState({ show1: true});
 }
@@ -87,20 +92,90 @@ handleHide2() {
   this.setState({ show2: false});
 }
 
-
+// isValidForm() {
+//   //check to make sure new users are not on a team already
+//   const db = firebase.firestore();
+//   db.settings({
+//     timestampsInSnapshots: true
+//   });
+//   if (this.state.uniq1 !== localStorage.getItem('uniq1')) {
+//     db.collection("users").doc(this.state.uniq1)
+//       .get()
+//       .then(querySnapshot => {
+//         if (querySnapshot.data().onTeam === true) {
+//           return false;
+//         }
+//       });
+//   }
+//   if (this.state.uniq2 !== localStorage.getItem('uniq2')) {
+//     db.collection("users").doc(this.state.uniq2)
+//       .get()
+//       .then(querySnapshot => {
+//         if (querySnapshot.data().onTeam === true) {
+//           return false;
+//         }
+//       })
+//   }
+//   if (this.state.uniq3 !== localStorage.getItem('uniq3')) {
+//     db.collection("users").doc(this.state.uniq3)
+//       .get()
+//       .then(querySnapshot => {
+//         if (querySnapshot.data().onTeam === true) {
+//           return false;
+//         }
+//       })
+//   }
+//   if (this.state.uniq4 !== localStorage.getItem('uniq4')) {
+//     db.collection("users").doc(this.state.uniq4)
+//       .get()
+//       .then(querySnapshot => {
+//         if (querySnapshot.data().onTeam === true) {
+//           return false;
+//         }
+//       })
+//   }
+//   return true;
+// }
 
 pushData(event) {
   event.preventDefault();
   //ok update team info in the team doc, if new uniqname added/changed then need to remove team
-  //from user, then send new invite to new teammember 
+  //from user, then send new invite to new teammember (if they changed the name, if they switched it to blank then just leave it blank)
+  const db = firebase.firestore();
+  db.settings({
+    timestampsInSnapshots: true
+  });
+  // if (this.state.teamName !== localStorage.getItem('teamSearch')) {
+  //
+  // }
+  // if (this.state.uniq1 !== localStorage.getItem('uniq1')) {
+  //
+  // }
+  // if (this.state.uniq2 !== localStorage.getItem('uniq2')) {
+  //
+  // }
+  // if (this.state.uniq3 !== localStorage.getItem('uniq3')) {
+  //
+  // }
+  // if (this.state.uniq4 !== localStorage.getItem('uniq4')) {
+  //
+  // }
   this.setState({ doneEditing: true});
 }
 deleteTeam(event) {
   event.preventDefault();
+  //we already have all the uniqnames in local storage, so we need to go mark them all as not being on a team and reset invitations
+  //if user is not on this team but is on a team then do nothing
+  const db = firebase.firestore();
+  db.settings({
+    timestampsInSnapshots: true
+  });
+
   this.setState({ doneEditing: true});
 }
 
  render(){
+
    if (this.state.doneEditing === true) {
      localStorage.removeItem("uniq1");
      localStorage.removeItem("uniq2");
@@ -135,8 +210,8 @@ deleteTeam(event) {
       </Navbar>
       <header className="App-header">
         <div className="body">
-          <h1 >Edit Team</h1>
-
+          <h1>Edit Team</h1>
+          <br />
 
           <Form onSubmit={this.handleShow}>
             <Button variant="danger" onClick={this.handleShow2}>Delete Team</Button>
