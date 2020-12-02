@@ -46,12 +46,17 @@ renderInvitations(){
 }
 
  render(){
-   if(this.state.onTeam === true) {
-     return <Redirect to='/view-team' />
-   }
+
    if(!localStorage.getItem('uniqname')){
      return <Redirect to='/' />
    }
+   if (this.state.usertype === 'team') {
+     return <Redirect to='/view-team' />
+   }
+   if (this.state.usertype === 'admin') {
+     return <Redirect to='/admin-home' />
+   }
+
   return (
     <div className="Home">
     <Navbar bg="light" expand="lg">

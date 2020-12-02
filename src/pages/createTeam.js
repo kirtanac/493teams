@@ -26,7 +26,7 @@ class CreateTeam extends React.Component {
 
    this.updateInput = this.updateInput.bind(this);
    this.handleSubmit = this.handleSubmit.bind(this);
-   this.addUser = this.addUser.bind(this);
+   this.addTeam = this.addTeam.bind(this);
    this.sendData = this.sendData.bind(this);
    this.handleShow = this.handleShow.bind(this);
    this.handleHide = this.handleHide.bind(this);
@@ -98,7 +98,7 @@ class CreateTeam extends React.Component {
    event.preventDefault();
  }
 
- addUser(event){
+ addTeam(event){
   event.preventDefault();
   const db = firebase.firestore();
   db.settings({
@@ -118,6 +118,7 @@ class CreateTeam extends React.Component {
       uniqname2Accepted:false,
       uniqname3Accepted:false,
     });
+        //TODO: check to see if uniqnames already have teams, are valid uniqnames, are in class
     this.sendData(1, tempName);
     this.sendData(2, tempName);
     this.sendData(3, tempName);
@@ -136,6 +137,7 @@ class CreateTeam extends React.Component {
       uniqname3Accepted:false,
       uniqname4Accepted:false,
     });
+    //TODO: check to see if uniqnames already have teams, are valid uniqnames, are in class
     this.sendData(1, tempName);
     this.sendData(2, tempName);
     this.sendData(3, tempName);
@@ -143,8 +145,8 @@ class CreateTeam extends React.Component {
   }
   //setting the state
   this.setState({ show2: true});
-
 }
+
 handleShow(event) {
   event.preventDefault();
   console.log("made it here");
@@ -160,8 +162,11 @@ handleSecondHide() {
   });
 }
  render(){
-  if (this.state.redi === true) {
+  if (this.state.redi === true || this.state.usertype === 'team') {
     return <Redirect to='/view-team' />
+  }
+  if (this.state.usertype === 'admin') {
+    return <Redirect to='/admin-home' />
   }
   if(!localStorage.getItem('uniqname')){
     return <Redirect to='/' />
@@ -198,27 +203,27 @@ handleSecondHide() {
 
         </h1>
 <div className="body-content">
-        <Form onSubmit={this.handleShow}>
+        <Form className="text-left" onSubmit={this.handleShow}>
 
         <Form.Group controlId="fullname">
         <Form.Label>Team name</Form.Label>
     <Form.Control required
     type="text"
       name="teamName"
-      placeholder="Your TeamName"
+      placeholder=""
       onChange={this.updateInput}
       value={this.state.teamName} />
           </Form.Group>
 
 
           <Form.Group controlId="uniq1">
-          <Form.Label>Your Uniqname</Form.Label>
+          <Form.Label>Uniqname 1</Form.Label>
       <Form.Control required
       type="text"
       name="uniq1"
-      placeholder="Your Uniqname"
-      onChange={this.updateInput}
-      value={this.state.uniq1} />
+      placeholder={this.state.uniqname}
+      defaultValue={this.state.uniqname}
+       />
             </Form.Group>
 
         <Form.Group controlId="uniq1">
@@ -226,7 +231,7 @@ handleSecondHide() {
     <Form.Control required
     type="text"
     name="uniq2"
-    placeholder="Uniqname 2"
+    placeholder=""
     onChange={this.updateInput}
     value={this.state.uniq2}/>
           </Form.Group>
@@ -236,17 +241,17 @@ handleSecondHide() {
     <Form.Control required
     type="text"
       name="uniq3"
-      placeholder="Uniqname 3"
+      placeholder=""
       onChange={this.updateInput}
       value={this.state.uniq3} />
           </Form.Group>
 
-          <Form.Group controlId="uniq1">
-          <Form.Label>Uniqname4</Form.Label>
+          <Form.Group controlId="uniq1" >
+          <Form.Label >Uniqname4</Form.Label>
           <Form.Control
           type="text"
           name="uniq4"
-          placeholder="Uniqname 4"
+          placeholder=""
           onChange={this.updateInput}
           value={this.state.uniq4} />
             </Form.Group>
@@ -271,7 +276,7 @@ handleSecondHide() {
           <Button variant="secondary" onClick={this.handleHide}>
             Cancel
           </Button>
-          <Button variant="success" onClick={this.addUser}>
+          <Button variant="success" onClick={this.addTeam}>
             Create Team
           </Button>
         </Modal.Footer>

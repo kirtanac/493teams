@@ -25,14 +25,18 @@ class ViewTeam extends React.Component {
      uniqname: localStorage.getItem('uniqname'),
      usertype: localStorage.getItem('user-type'),
      teamName: '',
-     onTeam: true,
+     onTeam: localStorage.getItem('user-type') === 'team',
      dataLoaded:false
    }
+
+
    this.viewTeam = this.viewTeam.bind(this);
 
 
  }
  componentDidMount() {
+   console.log(localStorage.getItem('user-type'));
+   if(this.state.onTeam) {
    const db = firebase.firestore();
    db.settings({
      timestampsInSnapshots: true
@@ -62,16 +66,14 @@ class ViewTeam extends React.Component {
            this.setState({ dataLoaded:true });
          });
        });
+     }
 }
 
 
 viewTeam() {
-  if (this.state.dataLoaded === true) {
+  if (this.state.dataLoaded === true && this.state.onTeam) {
     const teams = this.state.teams[0];
     console.log(this.state.teams)
-    if (this.state.assigned === "false") {
-      return <h2> This user is not on a team </h2>
-    }
     console.log("made it here")
     let teamList = (
       <Table striped bordered className="w-25">
@@ -105,6 +107,7 @@ viewTeam() {
      </Table>
     )
     return teamList
+
   }
   else {
     return <p>Loading...</p>

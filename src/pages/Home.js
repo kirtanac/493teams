@@ -99,7 +99,7 @@ class Home extends React.Component {
         return (
       <Redirect to="/admin-home" />
     ); }
-    else if(this.state.loggedin && this.state.data.usertype === 'no team'){
+    else if(this.state.loggedin && this.state.data.usertype === 'unassigned'){
        return (
          <Redirect to="/create-team" />
    );

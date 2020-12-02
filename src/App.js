@@ -8,6 +8,7 @@ import AdminEdit from "./pages/adminEdit";
 import TeamInvites from "./pages/teamInvitations";
 import AdminHome from "./pages/adminHome";
 import StudentSeeTeams from "./pages/studentSeeTeams";
+import AdminSeeTeams from "./pages/adminSeeTeams";
 import Home from "./pages/Home";
 import Login from "./components/login"
 import React from 'react';
@@ -29,7 +30,6 @@ class App extends React.Component {
   return (
     <div className="App">
 
-
       <Switch>
 
         <Route path="/create-team">
@@ -38,14 +38,11 @@ class App extends React.Component {
         <Route path="/team-invites">
           <TeamInvites />
         </Route>
-        <Route path="/admin-search">
-          <AdminSearch />
-        </Route>
-        <Route path="/admin-edit">
-          <AdminEdit />
-        </Route>
         <Route path="/admin-home">
           <AdminHome />
+        </Route>
+        <Route path="/admin-view">
+          <AdminSeeTeams />
         </Route>
         <Route path="/view-team">
           <ViewTeam />
@@ -53,7 +50,6 @@ class App extends React.Component {
         <Route path="/see-teams">
           <StudentSeeTeams />
         </Route>
-
         <Route path="/">
         <Home />
         </Route>

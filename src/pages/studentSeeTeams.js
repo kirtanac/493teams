@@ -23,6 +23,13 @@ class StudentSeeTeams extends React.Component {
    }
  }
 render(){
+  if(!localStorage.getItem('uniqname')){
+    return <Redirect to='/' />
+  }
+  
+  if (this.state.usertype === 'admin') {
+    return <Redirect to='/admin-home' />
+  }
   // conditionally render navbar based on whether they're on a team or not
   // <Navbar.Brand href="/view-team">EECS 493 Teams</Navbar.Brand>
   const onTeam = (this.state.usertype==='team');

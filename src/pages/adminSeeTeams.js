@@ -27,6 +27,17 @@ class AdminSeeTeams extends React.Component {
    // }
  }
 render(){
+  if(!localStorage.getItem('uniqname')){
+    return <Redirect to='/' />
+  }
+
+  if (this.state.usertype === 'team') {
+    return <Redirect to='/view-team' />
+  }
+  if (this.state.usertype === 'unassigned') {
+    return <Redirect to='/create-team' />
+  }
+
   return (
     <div className="admin-see-teams">
     <Navbar bg="light" expand="lg">
@@ -42,7 +53,7 @@ render(){
   <Navbar.Collapse id="basic-navbar-nav">
     <Nav className="mr-auto">
     <Nav.Link href="/admin-home">Home</Nav.Link>
-
+    <Nav.Link href="/admin-view">Teams</Nav.Link>
     </Nav>
   <Nav>
     <Nav.Link  className="mr-sm-2" href="/">Logout</Nav.Link>

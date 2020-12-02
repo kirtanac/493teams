@@ -53,7 +53,7 @@ class Login extends React.Component {
         }else if(querySnapshot.data().onTeam){
           status = 'team'
         }else{
-          status = 'no team'
+          status = 'unassigned'
         }
         this.props.callback({'status': 'success', 'type': 'login', 'user-type': status, 'uniqname': uniqname, 'accessToken': this.state.accessToken});
       });
