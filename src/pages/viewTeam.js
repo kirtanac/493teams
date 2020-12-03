@@ -24,9 +24,10 @@ class ViewTeam extends React.Component {
      usertype: sessionStorage.getItem('user-type'),
      teamName: '',
      onTeam: sessionStorage.getItem('user-type') === 'team',
-     dataLoaded:false
+     dataLoaded:false,
+     edited:false
    }
-
+   this.editDesc = this.editDesc.bind(this);
 
  }
 
@@ -53,6 +54,22 @@ class ViewTeam extends React.Component {
 
       //let data = await dbFunctions.getTeamFromUser(this.state.uniqname);
     }
+}
+
+editDesc(event) {
+  event.preventDefault();
+  var newVal = prompt("What do you want to change your project description to?")
+  const db = firebase.firestore();
+  db.settings({
+    timestampsInSnapshots: true
+  });
+  db.collection("teams").doc(this.state.teams.teamName).update({
+    description:newVal
+
+  });
+  let tempHolder = this.state.teams;
+  tempHolder.description = newVal
+  this.setState({ teams: tempHolder});
 }
 
  render(){
@@ -103,35 +120,47 @@ class ViewTeam extends React.Component {
         <div className="body-content">
         <p>
         {this.state.dataLoaded  ?
-          <Table striped bordered className="w-25">
-          <thead>
-          <tr>
-            <th colSpan="2">{this.state.teams.teamName}</th>
-          </tr>
-          <tr>
-            <th>Uniqname</th>
-            <th>Status</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-           <td>{this.state.teams.uniqname1}</td>
-           <td>{this.state.teams.uniqname1Accepted ? 'accepted' : 'pending'}</td>
-          </tr>
-          <tr>
-           <td>{this.state.teams.uniqname2}</td>
-           <td>{this.state.teams.uniqname2Accepted ? 'accepted' : 'pending'}</td>
-          </tr>
-          <tr>
-            <td>{this.state.teams.uniqname3}</td>
-            <td>{this.state.teams.uniqname3Accepted ? 'accepted' : 'pending'}</td>
-          </tr>
-          <tr>
-           <td>{this.state.teams.uniqname4}</td>
-           <td>{this.state.teams.uniqname4Accepted ? 'accepted' : 'pending'}</td>
-         </tr>
-         </tbody>
-         </Table> :
+          <React.Fragment>
+          <div className="container">
+          <div id="team_info" className="row">
+            <div id="info_table" className="col-xs-6">
+              <Table striped bordered className="w-25">
+              <thead>
+              <tr>
+                <th colSpan="2">{this.state.teams.teamName}</th>
+              </tr>
+              <tr>
+                <th>Uniqname</th>
+                <th>Status</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+               <td>{this.state.teams.uniqname1}</td>
+               <td>{this.state.teams.uniqname1Accepted ? 'accepted' : 'pending'}</td>
+              </tr>
+              <tr>
+               <td>{this.state.teams.uniqname2}</td>
+               <td>{this.state.teams.uniqname2Accepted ? 'accepted' : 'pending'}</td>
+              </tr>
+              <tr>
+                <td>{this.state.teams.uniqname3}</td>
+                <td>{this.state.teams.uniqname3Accepted ? 'accepted' : 'pending'}</td>
+              </tr>
+              <tr>
+               <td>{this.state.teams.uniqname4}</td>
+               <td>{this.state.teams.uniqname4Accepted ? 'accepted' : 'pending'}</td>
+              </tr>
+              </tbody>
+              </Table>
+            </div>
+            <div id="second_div" className="col-xs-6 w-75">
+              <span><h2 id="desc_name">Description </h2> <Button variant="outline-danger" size="sm" onClick={this.editDesc}>Edit</Button></span>
+              <p>{this.state.teams.description}</p>
+            </div>
+          </div>
+          </div>
+          </React.Fragment> :
        <i>Loading...</i>}
 </p>
 
