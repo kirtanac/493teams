@@ -129,12 +129,12 @@ class AdminHome extends React.Component {
      return <Redirect to='/create-team' />
    }
 
-   if(this.state.searched === true) {
-      teamVal = this.state.teamName;
-     sessionStorage.setItem('teamSearch', this.state.teamName);
-     sessionStorage.setItem('userOnTeam', this.state.foundTeam);
-     return <Redirect to= "/admin-search" />
-   }
+   // if(this.state.searched === true) {
+   //    teamVal = this.state.teamName;
+   //   sessionStorage.setItem('teamSearch', this.state.teamName);
+   //   sessionStorage.setItem('userOnTeam', this.state.foundTeam);
+   //   return <Redirect to= "/admin-search" />
+   // }
    const teamsDownload = JSON.stringify(this.state.teams);
   return (
     <div className="Home">
