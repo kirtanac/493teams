@@ -139,6 +139,7 @@ acceptedTeam() {
  render(){
    if (this.state.accepted === true) {
      sessionStorage.setItem('user-type', 'team')
+     console.log("moving from invitation to view-team");
      return <Redirect to='/view-team' />
    }
    // removed: <Button variant="success" onClick={this.handleShow}>Join Team</Button>{' '}

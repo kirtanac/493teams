@@ -184,10 +184,12 @@ deleteTeam(event) {
      sessionStorage.removeItem("uniq4");
      sessionStorage.removeItem('teamSearch');
      sessionStorage.removeItem('userOnTeam');
+     console.log("redirecting to adminhome");
      return <Redirect to='/admin-home' />
 
    }
    if(!sessionStorage.getItem('uniqname')){
+     console.log("redirecting from edit admin to uniqname");
      return <Redirect to='/' />
    }
    if (this.state.dataLoaded === false) {
