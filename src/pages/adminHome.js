@@ -107,12 +107,7 @@ class AdminHome extends React.Component {
      return <Redirect to='/create-team' />
    }
 
-   if(this.state.searched === true) {
-      teamVal = this.state.teamName;
-     sessionStorage.setItem('teamSearch', this.state.teamName);
-     sessionStorage.setItem('userOnTeam', this.state.foundTeam);
-     return <Redirect to= "/admin-search" />
-   }
+
   return (
     <div className="Home">
       <Navbar bg="light" expand="lg">
