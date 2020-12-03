@@ -31,24 +31,28 @@ class AdminSearch extends React.Component {
    this.editTeam = this.editTeam.bind(this);
 
  }
-componentDidMount() {
+
+
+async componentDidMount() {
   const db = firebase.firestore();
   db.settings({
     timestampsInSnapshots: true
   });
-  console.log(this.state)
+  await dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
+     this.setState({ usertype: data.usertype });
+     localStorage.setItem('user-type', data.usertype);
+     console.log("user data updated: ", data);
+     });
 
-    console.log("MADE IT HERE")
-    db.collection("teams").doc(this.state.team)
-      .get()
-      .then(querySnapshot => {
-        console.log(querySnapshot.data())
-        let data = []
-        data.push(querySnapshot.data());
-        this.setState({ teams: data});
-        this.setState({ dataLoaded:true });
-      });
-
+  await db.collection("teams").doc(this.state.team)
+    .get()
+    .then(querySnapshot => {
+      console.log(querySnapshot.data())
+      let data = []
+      data.push(querySnapshot.data());
+      this.setState({ teams: data});
+      this.setState({ dataLoaded:true });
+    });
 
 }
 

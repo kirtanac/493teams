@@ -31,6 +31,21 @@ class AdminHome extends React.Component {
 
  }
 
+ async componentDidMount() {
+   const db = firebase.firestore();
+   db.settings({
+     timestampsInSnapshots: true
+   });
+   await dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
+      this.setState({ usertype: data.usertype });
+      localStorage.setItem('user-type', data.usertype);
+      console.log("user data updated: ", data);
+      });
+
+
+ }
+
+
  updateInput(event){
 
    this.setState({

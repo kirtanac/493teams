@@ -13,7 +13,7 @@ class CreateTeam extends React.Component {
    this.state = {
      teamName:"",
      redi:false,
-     uniq1:"",
+     uniq1:localStorage.getItem('uniqname'),
      uniq2:"",
      uniq3:"",
      uniq4:"",
@@ -34,8 +34,17 @@ class CreateTeam extends React.Component {
 
  }
 
+ async componentDidMount(){
+   await dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
+
+   this.setState({ usertype: data.usertype, onTeam: (data.usertype === 'team')});
+   localStorage.setItem('user-type', data.usertype);
+   console.log("user data updated: ", data);
+   });
+
+ }
  //function to simplify sending the data so we don't have code repitition
- sendData(number, tempName, totNum) {
+ async sendData(number, tempName, totNum) {
    const db = firebase.firestore();
    db.settings({
      timestampsInSnapshots: true
@@ -60,7 +69,7 @@ class CreateTeam extends React.Component {
      break;
   }
   const valRef = db.collection("users").doc(numHolder);
-  const docFound = valRef.get().then(docFound => {
+  const docFound = await valRef.get().then(docFound => {
     if (!docFound.exists) {
       let data = {
         uniqname: numHolder,
@@ -73,6 +82,12 @@ class CreateTeam extends React.Component {
       db.collection("users").doc(numHolder).set(data);
     }
     else {
+       dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
+
+      this.setState({ usertype: data.usertype, onTeam: (data.usertype === 'team')});
+      localStorage.setItem('user-type', data.usertype);
+      console.log("user data updated: ", data);
+      });
 
       let tempArray = docFound.data().invitations;
       let newVal = docFound.data().numInvitations;
@@ -80,7 +95,8 @@ class CreateTeam extends React.Component {
       tempArray.push(tempName);
       db.collection("users").doc(numHolder).update({
         invitations: tempArray,
-        numInvitations: newVal + 1
+        numInvitations: newVal + 1,
+        onTeam:onTeam1
       });
     }
   });
@@ -163,7 +179,7 @@ handleSecondHide() {
 
 
  render(){
-  if (this.state.redi === true || this.state.usertype === 'team') {
+  if (this.state.redi === true || localStorage.getItem('user-type') === 'team' || this.state.onTeam){
     return <Redirect to='/view-team' />
   }
   if (this.state.usertype === 'admin') {

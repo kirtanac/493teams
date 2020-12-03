@@ -26,16 +26,17 @@ class Invite extends React.Component {
    this.acceptedTeam = this.acceptedTeam.bind(this);
  }
 
- componentDidMount() {
+ async componentDidMount() {
    const db = firebase.firestore();
    db.settings({
      timestampsInSnapshots: true
    });
    //hardcoding in kirtana for functionality purposes
-  let userInfo = dbFunctions.getUserInfo(localStorage.getItem('uniqname'));
-  let specInv = userInfo.invitations[this.props.invNum];
+  let userInfo = await dbFunctions.getUserInfo(localStorage.getItem('uniqname'));
+  let specInv = await userInfo.invitations[this.props.invNum];
+  console.log("loading invitation at: ", userInfo);
   this.setState({ invitation: specInv});
-  let teamInfo = dbFunctions.getTeamInfo(this.state.invitation);
+  let teamInfo = await dbFunctions.getTeamInfo(this.state.invitation);
   let tempArray = [];
   let user1, user2, user3, user4;
   user1 = teamInfo.uniqname1;

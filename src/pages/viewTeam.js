@@ -28,71 +28,32 @@ class ViewTeam extends React.Component {
    }
 
 
-   this.viewTeam = this.viewTeam.bind(this);
-
-
  }
 
- componentDidMount() {
-    console.log(localStorage.getItem('user-type'));
-    if(this.state.onTeam) {
+ async componentDidMount() {
+
+    await dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
+
+    this.setState({ usertype: data.usertype, onTeam: (data.usertype === 'team')});
+    localStorage.setItem('user-type', data.usertype);
+    console.log("user data updated: ", data);
+    });
+
+    if(localStorage.getItem('user-type') === 'team' ) {
       const db = firebase.firestore();
       db.settings({
         timestampsInSnapshots: true
       });
       console.log("state", this.state.uniqname)
-      let data = dbFunctions.getTeamFromUser(this.state.uniqname);
-      this.setState({ teams: data});
-      this.setState({ dataLoaded:true });
+      await dbFunctions.getTeamFromUser(this.state.uniqname).then((data) =>{
+      this.setState({ teams: data,
+      dataLoaded:true});
+      console.log("team data loaded: ", data);
+      });
 
+      //let data = await dbFunctions.getTeamFromUser(this.state.uniqname);
     }
 }
-
-
-viewTeam() {
-  if (this.state.dataLoaded === true && this.state.onTeam) {
-    const teams = this.state.teams[0];
-    console.log(this.state.teams)
-    console.log("made it here")
-    let teamList = (
-      <Table striped bordered className="w-25">
-      <thead>
-      <tr>
-        <th colSpan="2">{teams.teamName}</th>
-      </tr>
-      <tr>
-        <th>Uniqname</th>
-        <th>Status</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-       <td>{teams.uniqname1}</td>
-       <td>{teams.uniqname1Accepted ? 'accepted' : 'pending'}</td>
-      </tr>
-      <tr>
-       <td>{teams.uniqname2}</td>
-       <td>{teams.uniqname2Accepted ? 'accepted' : 'pending'}</td>
-      </tr>
-      <tr>
-        <td>{teams.uniqname3}</td>
-        <td>{teams.uniqname3Accepted ? 'accepted' : 'pending'}</td>
-      </tr>
-      <tr>
-       <td>{teams.uniqname4}</td>
-       <td>{teams.uniqname4Accepted ? 'accepted' : 'pending'}</td>
-     </tr>
-     </tbody>
-     </Table>
-    )
-    return teamList
-
-  }
-  else {
-    return <p>Loading...</p>
-  }
-}
-
 
  render(){
    if(!this.state.uniqname){
@@ -102,14 +63,15 @@ viewTeam() {
    }
 
    if(!this.state.onTeam){
+
      return(
        <Redirect to="/create-team" />
      );
    }
 
    console.log(this.state.usertype);
-
-   const { teams } = this.state;
+  const isLoaded = (this.state.dataLoaded === true && this.state.onTeam);
+  console.log("loaded: ", isLoaded);
   return (
     <div className="viewteam">
     <Navbar bg="light" expand="lg">
@@ -140,9 +102,40 @@ viewTeam() {
       <h1 className="title">Your Current Team</h1>
         <div className="body-content">
         <p>
-        {this.viewTeam()}
+        {this.state.dataLoaded  ?
+          <Table striped bordered className="w-25">
+          <thead>
+          <tr>
+            <th colSpan="2">{this.state.teams.teamName}</th>
+          </tr>
+          <tr>
+            <th>Uniqname</th>
+            <th>Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+           <td>{this.state.teams.uniqname1}</td>
+           <td>{this.state.teams.uniqname1Accepted ? 'accepted' : 'pending'}</td>
+          </tr>
+          <tr>
+           <td>{this.state.teams.uniqname2}</td>
+           <td>{this.state.teams.uniqname2Accepted ? 'accepted' : 'pending'}</td>
+          </tr>
+          <tr>
+            <td>{this.state.teams.uniqname3}</td>
+            <td>{this.state.teams.uniqname3Accepted ? 'accepted' : 'pending'}</td>
+          </tr>
+          <tr>
+           <td>{this.state.teams.uniqname4}</td>
+           <td>{this.state.teams.uniqname4Accepted ? 'accepted' : 'pending'}</td>
+         </tr>
+         </tbody>
+         </Table> :
+       <i>Loading...</i>}
+</p>
 
-        </p>
+
         <br/>
   </div>
         </div>

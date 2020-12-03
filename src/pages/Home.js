@@ -28,6 +28,8 @@ class Home extends React.Component {
    this.handleLogin = this.handleLogin.bind(this);
  }
 
+
+
  handleLogin(log_data){
       this.setState({data: log_data})
 

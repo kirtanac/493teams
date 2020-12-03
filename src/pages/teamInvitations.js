@@ -24,15 +24,26 @@ class TeamInvites extends React.Component {
    this.renderInvitations = this.renderInvitations.bind(this);
  }
 
- componentDidMount() {
+async componentDidMount() {
+   console.log("uniqname", this.state.uniqname);
    const db = firebase.firestore();
    db.settings({
      timestampsInSnapshots: true
    });
-  let userInfo = dbFunctions.getUserInfo(this.state.uniqname);
-  this.setState({
-    numInv: userInfo.numInvitations,
-    onTeam: userInfo.onTeam
+
+
+  await dbFunctions.getUserInfo(this.state.uniqname).then(result => {
+      console.log("result",result);
+      localStorage.setItem('user-type', result.usertype);
+    this.setState({
+      usertype: result.usertype,
+      onTeam: (result.usertype === 'team'),
+      numInv: result.numInvitations,
+      onTeam: result.onTeam
+    });
+    if(result.onTeam){
+      localStorage.setItem('user-type', 'team');
+    }
   });
 
 }

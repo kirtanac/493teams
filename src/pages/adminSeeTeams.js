@@ -1,5 +1,6 @@
 import '../App.css';
 import firebase from "../firebase";
+import dbFunctions from "../helpers"
 import React from 'react';
 import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl } from 'react-bootstrap';
 import {
@@ -22,10 +23,21 @@ class AdminSeeTeams extends React.Component {
      dataLoaded:false,
      onTeam: false
    }
+ }
+
+   async componentDidMount(){
+     await dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
+
+     this.setState({ usertype: data.usertype, onTeam: (data.usertype === 'team')});
+     localStorage.setItem('user-type', data.usertype);
+     console.log("user data updated: ", data);
+     });
+
+   }
    // if(props.location){
    //   console.log("check out view team", props.location.aboutProps)
    // }
- }
+
 render(){
   if(!localStorage.getItem('uniqname')){
     return <Redirect to='/' />

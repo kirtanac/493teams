@@ -1,53 +1,90 @@
+import firebase from 'firebase';
 const dbFunctions = {
-  getUserInfo: function(user){
-    const db = firebase.firestore();
-    db.settings({
+   getUserInfo: async function(user){
+     console.log("in getUserInfo", user);
+     let data;
+    const db = await firebase.firestore();
+      db.settings({
       timestampsInSnapshots: true
     });
-    db.collection("users").doc(user)
-      .get()
+     await db.collection("users").doc(user).get()
       .then(querySnapshot => {
-        return querySnapshot.data();
+        console.log("returned ", querySnapshot)
+        let status;
+        if(querySnapshot.data().isAdmin){
+          status = 'admin';
+        }else if(querySnapshot.data().onTeam){
+          status = 'team';
+        }else{
+          status = 'unassigned';
+        }
+        data = querySnapshot.data();
+        data['usertype'] = status;
+      }).catch(err => {
+        console.log("error!");
+        data = "error"
       });
+
+      return data;
+
   },
 
-  getTeamInfo: function(teamName) {
+  getTeamInfo: async function(teamName) {
+    let data;
     const db = firebase.firestore();
     db.settings({
       timestampsInSnapshots: true
     });
-    db.collection("teams").doc(teamName)
+  await db.collection("teams").doc(teamName)
       .get()
       .then(querySnapshot => {
-        return querySnapshot.data();
+        console.log("returned ", querySnapshot)
+        data = querySnapshot.data();
+      }).catch(err => {
+        console.log("error!");
+        data = "error"
       });
+      return data;
   },
 
-  getTeamFromUser: function(user) {
+  getTeamFromUser:  async function(user) {
     const db = firebase.firestore();
+    let onTeam;
+    let teamName;
+    let data;
     db.settings({
       timestampsInSnapshots: true
     });
-    db.collection("users").doc(user)
+  await db.collection("users").doc(user)
       .get()
       .then(querySnapshot => {
         if (querySnapshot.data().onTeam === false) {
-          return "User not on team";
-        }
-        let teamName = querySnapshot.data().teamName;
-        db.collection("teams").doc(teamName)
-          .get()
-          .then(querySnapshot => {
-            return querySnapshot.data();
-          });
+          onTeam = false;
+        }else{
+          onTeam = true;
+          teamName=querySnapshot.data().teamName;
+          }
       });
+    if(onTeam){
+      await db.collection("teams").doc(teamName)
+        .get()
+        .then(querySnapshot => {
+          data = querySnapshot.data();
+          console.log("data in helpers: ", data)
+        });
+      }else{
+        data="not on team";
+      }
+      console.log("returned ", data)
+      return data;
   },
 
-  userStatus: function(user) {
+  userStatus:  async function(user) {
+    const db = firebase.firestore();
     db.settings({
       timestampsInSnapshots: true
     });
-    db.collection("users").doc(user)
+  await  db.collection("users").doc(user)
     .get()
     .then(querySnapshot => {
       if (querySnapshot.empty) {
@@ -65,7 +102,6 @@ const dbFunctions = {
     });
 
   }
-
 
 }
 
