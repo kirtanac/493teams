@@ -12,7 +12,8 @@ import {
   Route, NavLink, Redirect
 } from "react-router-dom";
 import {  Link,  Button, Navbar, Nav, Form, FormControl } from 'react-bootstrap';
-
+import { CsvDownload } from "react-json-to-csv"
+import { CSVLink } from "react-csv";
 class AdminHome extends React.Component {
   constructor(props) {
    super(props);
@@ -25,7 +26,11 @@ class AdminHome extends React.Component {
      searchVal:"",
      searchType:"",
      foundTeam: false,
-     teamName:""
+     teamName:"",
+     teams: [],
+     teamsLoaded: false,
+     users: [],
+     usersLoaded: false
    };
    this.handleSearch = this.handleSearch.bind(this);
    this.updateInput = this.updateInput.bind(this);
@@ -43,6 +48,23 @@ class AdminHome extends React.Component {
       console.log("user data updated: ", data);
       });
 
+   let teams_in = [];
+   await db.collection("teams").get().then(querySnapshot => {
+      querySnapshot.docs.forEach(doc => {
+      teams_in.push(doc.data());
+    });
+     this.setState({ teams: teams_in, teamsLoaded: true });
+     console.log("teams loaded: ", teams_in);
+   })
+
+   let users_in = [];
+   await db.collection("users").get().then(querySnapshot => {
+      querySnapshot.docs.forEach(doc => {
+      users_in.push(doc.data());
+    });
+     this.setState({ users: users_in, usersLoaded: true });
+     console.log("users_in loaded: ", users_in);
+   })
 
  }
 
@@ -113,6 +135,7 @@ class AdminHome extends React.Component {
      sessionStorage.setItem('userOnTeam', this.state.foundTeam);
      return <Redirect to= "/admin-search" />
    }
+   const teamsDownload = JSON.stringify(this.state.teams);
   return (
     <div className="Home">
       <Navbar bg="light" expand="lg">
@@ -161,14 +184,24 @@ class AdminHome extends React.Component {
           {this.state.searched ? <AdminSearch team={this.state.teamName} onTeam={this.state.foundTeam} /> :
 
           <div className="w-100">
+          {this.state.teamsLoaded &&   <CSVLink
+      data={this.state.teams}
+      filename={"teams.csv"}
+      className="download-buttons btn btn-outline-secondary btn-lg"
+  target="_blank">
+    Download teams.csv
+    </CSVLink>     }
+
+    {this.state.usersLoaded &&   <CSVLink
+data={this.state.users}
+filename={"users.csv"}
+className="download-buttons btn btn-outline-secondary btn-lg"
+target="_blank">
+Download users.csv
+</CSVLink>     }
+
             <Button variant="outline-secondary" size="lg">
-              Download teams.csv
-            </Button>
-            <Button className="download-buttons" variant="outline-secondary" size="lg">
-              Download users.csv
-            </Button>
-            <Button variant="outline-secondary" size="lg">
-              Download unssigned.csv
+              Download unassigned.csv
             </Button>
           </div>
         }

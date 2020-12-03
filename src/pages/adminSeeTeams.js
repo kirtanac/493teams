@@ -2,12 +2,13 @@ import '../App.css';
 import firebase from "../firebase";
 import dbFunctions from "../helpers"
 import React from 'react';
-import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl, Table } from 'react-bootstrap';
+import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl, Table, Row } from 'react-bootstrap';
 import {
   BrowserRouter as Router,
   Switch,
   Route, NavLink, Redirect
 } from "react-router-dom";
+import { CSVLink } from "react-csv";
 
 //VIEW THE CURRENT TEAM YOU ARE ON
 //currently hardcoded for my uniqname (clantonm)
@@ -23,7 +24,9 @@ class AdminSeeTeams extends React.Component {
      dataLoaded:false,
      onTeam: false,
      teamsLoaded: false,
-     teams: []
+     teams: [],
+     users: [],
+     usersLoaded: false
    }
  }
 
@@ -46,6 +49,15 @@ class AdminSeeTeams extends React.Component {
       });
        this.setState({ teams: teams_in, teamsLoaded: true });
        console.log("teams loaded: ", teams_in);
+     })
+
+     let users_in = [];
+     await db.collection("users").get().then(querySnapshot => {
+        querySnapshot.docs.forEach(doc => {
+        users_in.push(doc.data());
+      });
+       this.setState({ users: users_in, usersLoaded: true });
+       console.log("users_in loaded: ", users_in);
      })
 
    }
@@ -94,12 +106,31 @@ render(){
   </Navbar.Collapse>
 </Navbar>
 
-
 {this.state.teamsLoaded ?
   <header className="loggedInHeader">
   <div className="body">
+  <Row>
   <h1 className="title">Registered Teams</h1>
+  <CSVLink
+  data={this.state.teams}
+  filename={"teams.csv"}
+  className="download-buttons btn btn-outline-secondary btn-lg"
+  target="_blank">
+  Download teams.csv
+  </CSVLink>
+
+  {this.state.usersLoaded &&   <CSVLink
+  data={this.state.users}
+  filename={"users.csv"}
+  className="download-buttons btn btn-outline-secondary btn-lg"
+  target="_blank">
+  Download users.csv
+  </CSVLink>     }
+  </Row>
+
   <div className="body-content">
+
+
   <Table className="seeTeams" responsive="sm" bordered hover striped>
   <thead>
 
