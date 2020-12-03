@@ -19,8 +19,8 @@ class Home extends React.Component {
   constructor(props) {
    super(props);
    this.state = {
-     uniqname: localStorage.getItem('uniqname'),
-     usertype: localStorage.getItem('user-type'),
+     uniqname: sessionStorage.getItem('uniqname'),
+     usertype: sessionStorage.getItem('user-type'),
      loggedin: false,
      data: {}
    }
@@ -35,9 +35,9 @@ class Home extends React.Component {
 
 
       if ('user-type' in log_data){
-        localStorage.setItem('uniqname', log_data['uniqname']);
-        localStorage.setItem('user-type', log_data['user-type']);
-        console.log("setting user-type to: ", localStorage.getItem('user-type'))
+        sessionStorage.setItem('uniqname', log_data['uniqname']);
+        sessionStorage.setItem('user-type', log_data['user-type']);
+        console.log("setting user-type to: ", sessionStorage.getItem('user-type'))
 
         this.setState({
           loggedin: true,

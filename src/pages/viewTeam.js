@@ -20,10 +20,10 @@ class ViewTeam extends React.Component {
    this.state = {
      teams:[],
      userdata: props.location,
-     uniqname: localStorage.getItem('uniqname'),
-     usertype: localStorage.getItem('user-type'),
+     uniqname: sessionStorage.getItem('uniqname'),
+     usertype: sessionStorage.getItem('user-type'),
      teamName: '',
-     onTeam: localStorage.getItem('user-type') === 'team',
+     onTeam: sessionStorage.getItem('user-type') === 'team',
      dataLoaded:false
    }
 
@@ -35,11 +35,11 @@ class ViewTeam extends React.Component {
     await dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
 
     this.setState({ usertype: data.usertype, onTeam: (data.usertype === 'team')});
-    localStorage.setItem('user-type', data.usertype);
+    sessionStorage.setItem('user-type', data.usertype);
     console.log("user data updated: ", data);
     });
 
-    if(localStorage.getItem('user-type') === 'team' ) {
+    if(sessionStorage.getItem('user-type') === 'team' ) {
       const db = firebase.firestore();
       db.settings({
         timestampsInSnapshots: true

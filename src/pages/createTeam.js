@@ -13,14 +13,15 @@ class CreateTeam extends React.Component {
    this.state = {
      teamName:"",
      redi:false,
-     uniq1:localStorage.getItem('uniqname'),
+     uniq1:sessionStorage.getItem('uniqname'),
      uniq2:"",
      uniq3:"",
      uniq4:"",
+     description:"",
      show:false,
      show2:false,
-     uniqname: localStorage.getItem('uniqname'),
-     usertype: localStorage.getItem('user-type'),
+     uniqname: sessionStorage.getItem('uniqname'),
+     usertype: sessionStorage.getItem('user-type'),
      onTeam: false,
    };
 
@@ -38,7 +39,7 @@ class CreateTeam extends React.Component {
    await dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
 
    this.setState({ usertype: data.usertype, onTeam: (data.usertype === 'team')});
-   localStorage.setItem('user-type', data.usertype);
+   sessionStorage.setItem('user-type', data.usertype);
    console.log("user data updated: ", data);
    });
 
@@ -85,7 +86,7 @@ class CreateTeam extends React.Component {
        dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
 
       this.setState({ usertype: data.usertype, onTeam: (data.usertype === 'team')});
-      localStorage.setItem('user-type', data.usertype);
+      sessionStorage.setItem('user-type', data.usertype);
       console.log("user data updated: ", data);
       });
 
@@ -132,6 +133,7 @@ class CreateTeam extends React.Component {
       uniqname1Accepted:false,
       uniqname2Accepted:false,
       uniqname3Accepted:false,
+      description:this.state.description
     });
         //TODO: check to see if uniqnames already have teams, are valid uniqnames, are in class
     this.sendData(1, tempName);
@@ -151,6 +153,7 @@ class CreateTeam extends React.Component {
       uniqname2Accepted:false,
       uniqname3Accepted:false,
       uniqname4Accepted:false,
+      description:this.state.description
     });
     //TODO: check to see if uniqnames already have teams, are valid uniqnames, are in class
     this.sendData(1, tempName);
@@ -179,13 +182,13 @@ handleSecondHide() {
 
 
  render(){
-  if (this.state.redi === true || localStorage.getItem('user-type') === 'team' || this.state.onTeam){
+  if (this.state.redi === true || sessionStorage.getItem('user-type') === 'team' || this.state.onTeam){
     return <Redirect to='/view-team' />
   }
   if (this.state.usertype === 'admin') {
     return <Redirect to='/admin-home' />
   }
-  if(!localStorage.getItem('uniqname')){
+  if(!sessionStorage.getItem('uniqname')){
     return <Redirect to='/' />
   }
   console.log(this.state);
@@ -223,7 +226,7 @@ handleSecondHide() {
         <Form className="text-left" onSubmit={this.handleShow}>
 
         <Form.Group controlId="fullname">
-        <Form.Label>Team name</Form.Label>
+        <Form.Label>Team name*</Form.Label>
     <Form.Control required
     type="text"
       name="teamName"
@@ -234,8 +237,8 @@ handleSecondHide() {
 
 
           <Form.Group controlId="uniq1">
-          <Form.Label>Uniqname 1</Form.Label>
-      <Form.Control required
+          <Form.Label>Uniqname 1*</Form.Label>
+      <Form.Control disabled
       type="text"
       name="uniq1"
       placeholder={this.state.uniqname}
@@ -244,7 +247,7 @@ handleSecondHide() {
             </Form.Group>
 
         <Form.Group controlId="uniq1">
-        <Form.Label>Uniqname2</Form.Label>
+        <Form.Label>Uniqname 2*</Form.Label>
     <Form.Control required
     type="text"
     name="uniq2"
@@ -254,7 +257,7 @@ handleSecondHide() {
           </Form.Group>
 
         <Form.Group controlId="uniq1">
-        <Form.Label>Uniqname3</Form.Label>
+        <Form.Label>Uniqname 3*</Form.Label>
     <Form.Control required
     type="text"
       name="uniq3"
@@ -264,7 +267,7 @@ handleSecondHide() {
           </Form.Group>
 
           <Form.Group controlId="uniq1" >
-          <Form.Label >Uniqname4</Form.Label>
+          <Form.Label >Uniqname 4*</Form.Label>
           <Form.Control
           type="text"
           name="uniq4"
@@ -272,6 +275,20 @@ handleSecondHide() {
           onChange={this.updateInput}
           value={this.state.uniq4} />
             </Form.Group>
+
+        <Form.Group controlId="uniq1" >
+        <Form.Label >Project Description</Form.Label>
+        <Form.Control
+        type="textarea"
+        size="lg"
+        name="description"
+        placeholder=""
+        onChange={this.updateInput}
+        value={this.state.description} />
+        <Form.Text id="passwordHelpBlock" muted>
+    You can do this later too!
+  </Form.Text>
+          </Form.Group>
 
         <br/>
         <Button variant="primary" type="submit">Submit</Button>

@@ -16,8 +16,8 @@ class TeamInvites extends React.Component {
    super(props);
    this.state = {
      numInv:0,
-     uniqname: localStorage.getItem('uniqname'),
-     usertype: localStorage.getItem('user-type'),
+     uniqname: sessionStorage.getItem('uniqname'),
+     usertype: sessionStorage.getItem('user-type'),
      dataLoaded:false,
      onTeam: false
    }
@@ -34,7 +34,7 @@ async componentDidMount() {
 
   await dbFunctions.getUserInfo(this.state.uniqname).then(result => {
       console.log("result",result);
-      localStorage.setItem('user-type', result.usertype);
+      sessionStorage.setItem('user-type', result.usertype);
     this.setState({
       usertype: result.usertype,
       onTeam: (result.usertype === 'team'),
@@ -42,7 +42,7 @@ async componentDidMount() {
       onTeam: result.onTeam
     });
     if(result.onTeam){
-      localStorage.setItem('user-type', 'team');
+      sessionStorage.setItem('user-type', 'team');
     }
   });
 
@@ -56,7 +56,7 @@ renderInvitations(){
 
  render(){
 
-   if(!localStorage.getItem('uniqname')){
+   if(!sessionStorage.getItem('uniqname')){
      return <Redirect to='/' />
    }
    if (this.state.usertype === 'team') {

@@ -17,8 +17,8 @@ class AdminHome extends React.Component {
    super(props);
    this.state = {
 
-     uniqname: localStorage.getItem('uniqname'),
-     usertype: localStorage.getItem('user-type'),
+     uniqname: sessionStorage.getItem('uniqname'),
+     usertype: sessionStorage.getItem('user-type'),
      onTeam: false,
      searched:false,
      searchVal:"",
@@ -38,7 +38,7 @@ class AdminHome extends React.Component {
    });
    await dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
       this.setState({ usertype: data.usertype });
-      localStorage.setItem('user-type', data.usertype);
+      sessionStorage.setItem('user-type', data.usertype);
       console.log("user data updated: ", data);
       });
 
@@ -83,7 +83,7 @@ class AdminHome extends React.Component {
  }
 
  render(){
-   if(!localStorage.getItem('uniqname')){
+   if(!sessionStorage.getItem('uniqname')){
      return <Redirect to='/' />
    }
 
@@ -95,8 +95,8 @@ class AdminHome extends React.Component {
    }
 
    if(this.state.searched === true) {
-     localStorage.setItem('teamSearch', this.state.teamName);
-     localStorage.setItem('userOnTeam', this.state.foundTeam);
+     sessionStorage.setItem('teamSearch', this.state.teamName);
+     sessionStorage.setItem('userOnTeam', this.state.foundTeam);
      return <Redirect to= "/admin-search" />
    }
   return (

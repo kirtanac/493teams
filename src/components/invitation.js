@@ -32,7 +32,7 @@ class Invite extends React.Component {
      timestampsInSnapshots: true
    });
    //hardcoding in kirtana for functionality purposes
-  let userInfo = await dbFunctions.getUserInfo(localStorage.getItem('uniqname'));
+  let userInfo = await dbFunctions.getUserInfo(sessionStorage.getItem('uniqname'));
   let specInv = await userInfo.invitations[this.props.invNum];
   console.log("loading invitation at: ", userInfo);
   this.setState({ invitation: specInv});
@@ -101,7 +101,7 @@ acceptedTeam() {
   if (this.state.teamMems.length === 4) {
     user4 = this.state.teamMems[3];
   }
-    let userString = localStorage.getItem('uniqname');
+    let userString = sessionStorage.getItem('uniqname');
     console.log(userString);
     switch(userString) {
       case user1:
@@ -126,7 +126,7 @@ acceptedTeam() {
       break;
 
     };
-  db.collection("users").doc(localStorage.getItem('uniqname')).update({
+  db.collection("users").doc(sessionStorage.getItem('uniqname')).update({
     onTeam:true,
     teamName:this.state.invitation
   }).then(() => {
@@ -138,7 +138,7 @@ acceptedTeam() {
 
  render(){
    if (this.state.accepted === true) {
-     localStorage.setItem('user-type', 'team')
+     sessionStorage.setItem('user-type', 'team')
      return <Redirect to='/view-team' />
    }
    // removed: <Button variant="success" onClick={this.handleShow}>Join Team</Button>{' '}

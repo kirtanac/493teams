@@ -65,7 +65,7 @@ class Login extends React.Component {
     isLoggedIn: false,
      accessToken: ''
    }));
-   localStorage.clear();
+   sessionStorage.clear();
    this.props.callback({'status': 'success', 'type': 'logout'});
  }
 

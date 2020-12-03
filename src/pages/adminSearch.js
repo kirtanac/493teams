@@ -18,11 +18,11 @@ class AdminSearch extends React.Component {
 
    this.state = {
 
-     uniqname: localStorage.getItem('uniqname'),
-     usertype: localStorage.getItem('user-type'),
+     uniqname: sessionStorage.getItem('uniqname'),
+     usertype: sessionStorage.getItem('user-type'),
      onTeam: false,
-     team: localStorage.getItem('teamSearch'),
-     assigned: localStorage.getItem('userOnTeam'),
+     team: sessionStorage.getItem('teamSearch'),
+     assigned: sessionStorage.getItem('userOnTeam'),
      teams: [],
      dataLoaded:false,
      editing:false
@@ -40,7 +40,7 @@ async componentDidMount() {
   });
   await dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
      this.setState({ usertype: data.usertype });
-     localStorage.setItem('user-type', data.usertype);
+     sessionStorage.setItem('user-type', data.usertype);
      console.log("user data updated: ", data);
      });
 
@@ -103,15 +103,15 @@ viewTeam() {
 }
 editTeam(event){
   event.preventDefault();
-  localStorage.setItem("uniq1", this.state.teams[0].uniqname1)
-  localStorage.setItem("uniq2", this.state.teams[0].uniqname2)
-  localStorage.setItem("uniq3", this.state.teams[0].uniqname3)
-  localStorage.setItem("uniq4", this.state.teams[0].uniqname4)
+  sessionStorage.setItem("uniq1", this.state.teams[0].uniqname1)
+  sessionStorage.setItem("uniq2", this.state.teams[0].uniqname2)
+  sessionStorage.setItem("uniq3", this.state.teams[0].uniqname3)
+  sessionStorage.setItem("uniq4", this.state.teams[0].uniqname4)
   this.setState({ editing:true });
 }
 
  render(){
-   if(!localStorage.getItem('uniqname')){
+   if(!sessionStorage.getItem('uniqname')){
      return <Redirect to='/' />
    }
    if(this.state.editing === true){

@@ -18,20 +18,29 @@ class AdminSeeTeams extends React.Component {
    console.log("props", props);
    this.state = {
      numInv:0,
-     uniqname: localStorage.getItem('uniqname'),
-     usertype: localStorage.getItem('user-type'),
+     uniqname: sessionStorage.getItem('uniqname'),
+     usertype: sessionStorage.getItem('user-type'),
      dataLoaded:false,
      onTeam: false
    }
  }
 
    async componentDidMount(){
+     const db = firebase.firestore();
+     db.settings({
+       timestampsInSnapshots: true
+     });
      await dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
 
      this.setState({ usertype: data.usertype, onTeam: (data.usertype === 'team')});
-     localStorage.setItem('user-type', data.usertype);
+     sessionStorage.setItem('user-type', data.usertype);
      console.log("user data updated: ", data);
      });
+
+     await db.collection("teams").get().then((data) => {
+       this.setState({ teams: data });
+       console.log("oh dear", data);
+     })
 
    }
    // if(props.location){
@@ -39,7 +48,7 @@ class AdminSeeTeams extends React.Component {
    // }
 
 render(){
-  if(!localStorage.getItem('uniqname')){
+  if(!sessionStorage.getItem('uniqname')){
     return <Redirect to='/' />
   }
 

@@ -18,11 +18,11 @@ class AdminEdit extends React.Component {
 
    this.state = {
 
-     uniqname: localStorage.getItem('uniqname'),
-     usertype: localStorage.getItem('user-type'),
+     uniqname: sessionStorage.getItem('uniqname'),
+     usertype: sessionStorage.getItem('user-type'),
      onTeam: false,
-     team: localStorage.getItem('teamSearch'),
-     assigned: localStorage.getItem('userOnTeam'),
+     team: sessionStorage.getItem('teamSearch'),
+     assigned: sessionStorage.getItem('userOnTeam'),
      teams: [],
      dataLoaded:false,
      show1:false,
@@ -99,7 +99,7 @@ handleHide2() {
 //   db.settings({
 //     timestampsInSnapshots: true
 //   });
-//   if (this.state.uniq1 !== localStorage.getItem('uniq1')) {
+//   if (this.state.uniq1 !== sessionStorage.getItem('uniq1')) {
 //     db.collection("users").doc(this.state.uniq1)
 //       .get()
 //       .then(querySnapshot => {
@@ -108,7 +108,7 @@ handleHide2() {
 //         }
 //       });
 //   }
-//   if (this.state.uniq2 !== localStorage.getItem('uniq2')) {
+//   if (this.state.uniq2 !== sessionStorage.getItem('uniq2')) {
 //     db.collection("users").doc(this.state.uniq2)
 //       .get()
 //       .then(querySnapshot => {
@@ -117,7 +117,7 @@ handleHide2() {
 //         }
 //       })
 //   }
-//   if (this.state.uniq3 !== localStorage.getItem('uniq3')) {
+//   if (this.state.uniq3 !== sessionStorage.getItem('uniq3')) {
 //     db.collection("users").doc(this.state.uniq3)
 //       .get()
 //       .then(querySnapshot => {
@@ -126,7 +126,7 @@ handleHide2() {
 //         }
 //       })
 //   }
-//   if (this.state.uniq4 !== localStorage.getItem('uniq4')) {
+//   if (this.state.uniq4 !== sessionStorage.getItem('uniq4')) {
 //     db.collection("users").doc(this.state.uniq4)
 //       .get()
 //       .then(querySnapshot => {
@@ -146,19 +146,19 @@ pushData(event) {
   db.settings({
     timestampsInSnapshots: true
   });
-  // if (this.state.teamName !== localStorage.getItem('teamSearch')) {
+  // if (this.state.teamName !== sessionStorage.getItem('teamSearch')) {
   //
   // }
-  // if (this.state.uniq1 !== localStorage.getItem('uniq1')) {
+  // if (this.state.uniq1 !== sessionStorage.getItem('uniq1')) {
   //
   // }
-  // if (this.state.uniq2 !== localStorage.getItem('uniq2')) {
+  // if (this.state.uniq2 !== sessionStorage.getItem('uniq2')) {
   //
   // }
-  // if (this.state.uniq3 !== localStorage.getItem('uniq3')) {
+  // if (this.state.uniq3 !== sessionStorage.getItem('uniq3')) {
   //
   // }
-  // if (this.state.uniq4 !== localStorage.getItem('uniq4')) {
+  // if (this.state.uniq4 !== sessionStorage.getItem('uniq4')) {
   //
   // }
   this.setState({ doneEditing: true});
@@ -178,16 +178,16 @@ deleteTeam(event) {
  render(){
 
    if (this.state.doneEditing === true) {
-     localStorage.removeItem("uniq1");
-     localStorage.removeItem("uniq2");
-     localStorage.removeItem("uniq3");
-     localStorage.removeItem("uniq4");
-     localStorage.removeItem('teamSearch');
-     localStorage.removeItem('userOnTeam');
+     sessionStorage.removeItem("uniq1");
+     sessionStorage.removeItem("uniq2");
+     sessionStorage.removeItem("uniq3");
+     sessionStorage.removeItem("uniq4");
+     sessionStorage.removeItem('teamSearch');
+     sessionStorage.removeItem('userOnTeam');
      return <Redirect to='/admin-home' />
 
    }
-   if(!localStorage.getItem('uniqname')){
+   if(!sessionStorage.getItem('uniqname')){
      return <Redirect to='/' />
    }
    if (this.state.dataLoaded === false) {
@@ -229,7 +229,7 @@ deleteTeam(event) {
               <Form.Control
                 type="text"
                 name="teamName"
-                placeholder={localStorage.getItem('teamSearch')}
+                placeholder={sessionStorage.getItem('teamSearch')}
                 onChange={this.updateInput}
                 value={this.state.teamName} />
             </Form.Group>
@@ -238,7 +238,7 @@ deleteTeam(event) {
               <Form.Control
                 type="text"
                 name="uniq1"
-                placeholder={localStorage.getItem('uniq1')}
+                placeholder={sessionStorage.getItem('uniq1')}
                 onChange={this.updateInput}
                 value={this.state.uniq1} />
             </Form.Group>
@@ -247,7 +247,7 @@ deleteTeam(event) {
               <Form.Control
                 type="text"
                 name="uniq2"
-                placeholder={localStorage.getItem('uniq2')}
+                placeholder={sessionStorage.getItem('uniq2')}
                 onChange={this.updateInput}
                 value={this.state.uniq2}/>
             </Form.Group>
@@ -256,7 +256,7 @@ deleteTeam(event) {
               <Form.Control
                 type="text"
                 name="uniq3"
-                placeholder={localStorage.getItem('uniq3')}
+                placeholder={sessionStorage.getItem('uniq3')}
                 onChange={this.updateInput}
                 value={this.state.uniq3} />
             </Form.Group>
@@ -265,7 +265,7 @@ deleteTeam(event) {
               <Form.Control
                 type="text"
                 name="uniq4"
-                placeholder={localStorage.getItem('uniq4')}
+                placeholder={sessionStorage.getItem('uniq4')}
                 onChange={this.updateInput}
                 value={this.state.uniq4} />
             </Form.Group>
