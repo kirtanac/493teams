@@ -30,7 +30,9 @@ class AdminHome extends React.Component {
      teams: [],
      teamsLoaded: false,
      users: [],
-     usersLoaded: false
+     usersLoaded: false,
+     unassigned: [],
+     unassignedLoaded: false
    };
    this.handleSearch = this.handleSearch.bind(this);
    this.updateInput = this.updateInput.bind(this);
@@ -65,6 +67,16 @@ class AdminHome extends React.Component {
      this.setState({ users: users_in, usersLoaded: true });
      console.log("users_in loaded: ", users_in);
    })
+
+   let unassigned_in = [];
+   await db.collection("users").where("onTeam", "==", false).get().then(querySnapshot => {
+      querySnapshot.docs.forEach(doc => {
+      unassigned_in.push(doc.data());
+    });
+     this.setState({ unassigned: unassigned_in, unassignedLoaded: true });
+     console.log("unassigned loaded: ", unassigned_in);
+   })
+
 
  }
 
@@ -129,12 +141,6 @@ class AdminHome extends React.Component {
      return <Redirect to='/create-team' />
    }
 
-   // if(this.state.searched === true) {
-   //    teamVal = this.state.teamName;
-   //   sessionStorage.setItem('teamSearch', this.state.teamName);
-   //   sessionStorage.setItem('userOnTeam', this.state.foundTeam);
-   //   return <Redirect to= "/admin-search" />
-   // }
    const teamsDownload = JSON.stringify(this.state.teams);
   return (
     <div className="Home">
@@ -200,9 +206,13 @@ target="_blank">
 Download users.csv
 </CSVLink>     }
 
-            <Button variant="outline-secondary" size="lg">
-              Download unassigned.csv
-            </Button>
+            {this.state.unassignedLoaded &&   <CSVLink
+data={this.state.unassigned}
+filename={"unassigned.csv"}
+className="download-buttons btn btn-outline-secondary btn-lg"
+target="_blank">
+Download unassigned.csv
+</CSVLink>     }
           </div>
         }
         </div>
