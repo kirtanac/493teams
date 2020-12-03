@@ -3,6 +3,7 @@ import '../App.css';
 import firebase from "../firebase";
 import dbFunctions from "../helpers"
 import CreateTeam from "./createTeam";
+import AdminSearch from "./adminSearch";
 import React from 'react';
 import ReactDOM from "react-dom";
 import {
@@ -40,7 +41,12 @@ class AdminHome extends React.Component {
  }
 
  handleSearch(event) {
+
+
    event.preventDefault();
+   if (this.state.searched === true) {
+     this.setState({ searched: false});
+   }
    console.log(this.state)
    const db = firebase.firestore();
    db.settings({
@@ -60,7 +66,8 @@ class AdminHome extends React.Component {
           this.setState({searched:true, foundTeam: false});
         }
         else {
-          this.setState({searched:true, foundTeam: true, teamName: querySnapshot.data().teamName});
+          this.setState({teamName: querySnapshot.data().teamName});
+          this.setState({searched:true, foundTeam: true});
         }
       });
   }
@@ -68,6 +75,7 @@ class AdminHome extends React.Component {
  }
 
  render(){
+   let teamVal;
    if(!localStorage.getItem('uniqname')){
      return <Redirect to='/' />
    }
@@ -78,11 +86,8 @@ class AdminHome extends React.Component {
    if (this.state.usertype === 'unassigned') {
      return <Redirect to='/create-team' />
    }
-
-   if(this.state.searched === true) {
-     localStorage.setItem('teamSearch', this.state.teamName);
-     localStorage.setItem('userOnTeam', this.state.foundTeam);
-     return <Redirect to= "/admin-search" />
+   if (this.state.searched === true) {
+     teamVal = this.state.teamName;
    }
   return (
     <div className="Home">
@@ -129,6 +134,8 @@ class AdminHome extends React.Component {
           <br />
           <br />
           <br />
+          {this.state.searched ? <AdminSearch team={this.state.teamName} onTeam={this.state.foundTeam} /> :
+
           <div className="w-100">
             <Button variant="outline-secondary" size="lg">
               Download teams.csv
@@ -140,6 +147,7 @@ class AdminHome extends React.Component {
               Download unssigned.csv
             </Button>
           </div>
+        }
         </div>
       </header>
 

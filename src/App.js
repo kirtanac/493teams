@@ -4,7 +4,6 @@ import firebase from "./firebase";
 import CreateTeam from "./pages/createTeam";
 import ViewTeam from "./pages/viewTeam";
 import AdminSearch from "./pages/adminSearch";
-import AdminEdit from "./pages/adminEdit";
 import TeamInvites from "./pages/teamInvitations";
 import AdminHome from "./pages/adminHome";
 import StudentSeeTeams from "./pages/studentSeeTeams";
