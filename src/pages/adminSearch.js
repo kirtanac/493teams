@@ -265,7 +265,7 @@ deleteTeam(event) {
        <React.Fragment>
        <Button variant="outline-danger" size="sm" onClick={this.deleteTeam}>Delete Team</Button>
        <br />
-       <Table borderless className="w-25">
+       <Table className="w-25">
        <thead>
        <tr>
          <th colSpan="2">{teams.teamName}</th>

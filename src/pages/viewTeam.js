@@ -8,6 +8,7 @@ import {
   Switch,
   Route, NavLink, Redirect
 } from "react-router-dom";
+import CustomNavbar from "../components/customNavbar.js";
 
 //VIEW THE CURRENT TEAM YOU ARE ON
 //currently hardcoded for my uniqname (clantonm)
@@ -91,27 +92,7 @@ editDesc(event) {
   console.log("loaded: ", isLoaded);
   return (
     <div className="viewteam">
-    <Navbar bg="light" expand="lg">
-    <Navbar.Brand href="/view-team">
-      <img
-        src="/EECS493_landscape.png"
-        height="30"
-        className="d-inline-block align-top"
-        alt="EECS 493 Teams logo"
-      />
-    </Navbar.Brand>
-    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-    <Navbar.Collapse id="basic-navbar-nav">
-      <Nav className="mr-auto">
-      <Nav.Link href="/view-team">My Team</Nav.Link>
-        <Nav.Link href="/see-teams">All Teams</Nav.Link>
-    </Nav>
-    <Nav>
-      <Nav.Link  className="mr-sm-2" href="/">Logout</Nav.Link>
-    </Nav>
-
-  </Navbar.Collapse>
-</Navbar>
+<CustomNavbar/>
 
       <header className="loggedInHeader">
 
@@ -147,7 +128,7 @@ editDesc(event) {
                 <td>{this.state.teams.uniqname3}</td>
                 <td>{this.state.teams.uniqname3Accepted ? 'accepted' : 'pending'}</td>
               </tr>
-              {this.state.teams.uniqname4 === "" ?  :
+              {this.state.teams.uniqname4 === "" ? <br/> :
               <React.Fragment>
                 <tr>
                 <td>{this.state.teams.uniqname4}</td>

@@ -13,8 +13,10 @@ class Login extends React.Component {
 
    this.state = {
      isLoggedIn: false,
-     accessToken: ''
+     accessToken: '',
+     navbar: props.navbar
    };
+
 
    this.login = this.login.bind(this);
    this.handleLoginFailure = this.handleLoginFailure.bind(this);
@@ -82,29 +84,34 @@ class Login extends React.Component {
 
 
  render() {
-   return (
-   <div>
-     { this.state.isLoggedIn ?
-       <GoogleLogout
-         clientId={ clientID }
-         buttonText='Logout'
-         onLogoutSuccess={ this.logout }
-         onFailure={ this.handleLogoutFailure }
-       />
-       :
-       <GoogleLogin
-         clientId={ clientID }
-         buttonText='Login'
-         onSuccess={ this.login }
-         onFailure={ this.handleLoginFailure }
-         cookiePolicy={ 'single_host_origin' }
-         responseType='code,token'
-       />
-     }
-     {/* { this.state.accessToken ? <h5>Your Access Token: <br/><br/> { this.state.accessToken }</h5> : null } */}
+   if(this.state.navbar || this.state.isLoggedIn){
+     return (
+     <div>
 
-   </div>
-   )
+         <GoogleLogout
+           clientId={ clientID }
+           buttonText='Logout'
+           onLogoutSuccess={ this.logout }
+           onFailure={ this.handleLogoutFailure }
+         />
+     </div>
+     )
+   }else{
+     return (
+     <div>
+     <GoogleLogin
+       clientId={ clientID }
+       buttonText='Login'
+       onSuccess={ this.login }
+       onFailure={ this.handleLoginFailure }
+       cookiePolicy={ 'single_host_origin' }
+       responseType='code,token'
+     />
+     </div>
+     )
+
+   }
+
  }
 }
 

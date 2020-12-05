@@ -4,6 +4,7 @@ import firebase from "../firebase";
 import dbFunctions from "../helpers"
 import CreateTeam from "./createTeam";
 import AdminSearch from "./adminSearch";
+import Download from "../components/download";
 import React from 'react';
 import ReactDOM from "react-dom";
 import {
@@ -11,9 +12,11 @@ import {
   Switch,
   Route, NavLink, Redirect
 } from "react-router-dom";
-import {  Link,  Button, Navbar, Nav, Form, FormControl } from 'react-bootstrap';
+import {  Alert, Link,  Button, Navbar, Nav, Form, FormControl, Row, Col, ButtonGroup, Dropdown, Card } from 'react-bootstrap';
 import { CsvDownload } from "react-json-to-csv"
 import { CSVLink } from "react-csv";
+import CustomNavbar from "../components/customNavbar.js";
+
 class AdminHome extends React.Component {
   constructor(props) {
    super(props);
@@ -29,10 +32,15 @@ class AdminHome extends React.Component {
      teamName:"",
      teams: [],
      teamsLoaded: false,
+     teamsLength: 0,
      users: [],
      usersLoaded: false,
+     usersLength: 0,
      unassigned: [],
-     unassignedLoaded: false
+     unassignedLoaded: false,
+     unassignedLength: 0,
+     displayErrorMessage: false,
+     errorMessage: ""
    };
    this.handleSearch = this.handleSearch.bind(this);
    this.updateInput = this.updateInput.bind(this);
@@ -55,8 +63,8 @@ class AdminHome extends React.Component {
       querySnapshot.docs.forEach(doc => {
       teams_in.push(doc.data());
     });
-     this.setState({ teams: teams_in, teamsLoaded: true });
-     console.log("teams loaded: ", teams_in);
+     this.setState({ teams: teams_in, teamsLoaded: true, teamsLength: teams_in.length });
+     console.log("teams loaded: ", teams_in, "size: ", teams_in.length );
    })
 
    let users_in = [];
@@ -64,7 +72,7 @@ class AdminHome extends React.Component {
       querySnapshot.docs.forEach(doc => {
       users_in.push(doc.data());
     });
-     this.setState({ users: users_in, usersLoaded: true });
+     this.setState({ users: users_in, usersLoaded: true, usersLength: users_in.length });
      console.log("users_in loaded: ", users_in);
    })
 
@@ -73,7 +81,7 @@ class AdminHome extends React.Component {
       querySnapshot.docs.forEach(doc => {
       unassigned_in.push(doc.data());
     });
-     this.setState({ unassigned: unassigned_in, unassignedLoaded: true });
+     this.setState({ unassigned: unassigned_in, unassignedLoaded: true,  unassignedLength: unassigned_in.length });
      console.log("unassigned loaded: ", unassigned_in);
    })
 
@@ -87,11 +95,15 @@ class AdminHome extends React.Component {
      [event.target.name]: event.target.value
    });
 
+   if(event.target.name === "searchVal" || event.target.name === "searchType" ){
+     this.setState({displayErrorMessage: false, errorMessage: "" });
+   }
+   console.log("value", event.target.value)
+   console.log("name", event.target.name)
+
  }
 
  handleSearch(event) {
-
-
    event.preventDefault();
    if (this.state.searched === true) {
      this.setState({ searched: false});
@@ -103,24 +115,58 @@ class AdminHome extends React.Component {
    });
    console.log(this.state.searchType)
    if (this.state.searchType === "Teamname") {
-     let tempName = this.state.searchVal.split(' ').join('');
-     this.setState({searched:true, foundTeam:true, teamName: tempName});
+     db.collection("teams").doc(this.state.searchVal)
+       .get()
+       .then(querySnapshot => {
+         console.log(querySnapshot.data())
+         if(!querySnapshot.data()) {  this.setState({
+             displayErrorMessage: true,
+             errorMessage: "This is not a current team name"
+           });
+         }
+         else{
+           let tempName = this.state.searchVal.split(' ').join('');
+           this.setState({searched:true, foundTeam:true, teamName: tempName});
+         }
+       }).catch(err => {
+         console.log(err);
+       });
+
+
+
    }
-  else {
+  else if (this.state.searchType === "Uniqname") {
+    console.log("users: ", this.state.users)
     db.collection("users").doc(this.state.searchVal)
       .get()
       .then(querySnapshot => {
         console.log(querySnapshot.data())
-        if(querySnapshot.data().onTeam === false) {
-          this.setState({searched:true, foundTeam: false});
+        if(!querySnapshot.data()) {  this.setState({
+            displayErrorMessage: true,
+            errorMessage: "This user is not on the roster"
+          });
         }
-        else {
-          this.setState({teamName: querySnapshot.data().teamName});
-          this.setState({searched:true, foundTeam: true});
+      else  if(querySnapshot.data().onTeam === false) {
+          this.setState({searched:true, foundTeam: false});
+          this.setState({
+            displayErrorMessage: true,
+            errorMessage: "This user is not yet on a team"
+          });
+        }
+
+        else if(querySnapshot.data().onTeam === true){
+          this.setState({teamName: querySnapshot.data().teamName, displayErrorMessage: false, errorMessage: "" });
+          this.setState({searched:true, foundTeam: true,});
         }
       }).catch(err => {
         console.log(err);
       });
+
+  } else {
+    this.setState({
+      displayErrorMessage: true,
+      errorMessage: "Must select a Uniqname or Teamname"
+    });
   }
 
  }
@@ -144,28 +190,29 @@ class AdminHome extends React.Component {
    const teamsDownload = JSON.stringify(this.state.teams);
   return (
     <div className="Home">
-      <Navbar bg="light" expand="lg">
-      <Navbar.Brand href="/admin-home">
-        <img
-          src="./EECS493-admin.png"
-          height="30"
-          className="d-inline-block align-top"
-          alt="EECS 493 Teams logo"
-        />
-      </Navbar.Brand>
-    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-    <Navbar.Collapse id="basic-navbar-nav">
-      <Nav className="mr-auto">
-      <Nav.Link href="/admin-home">Home</Nav.Link>
-      <Nav.Link href="/admin-view">Teams</Nav.Link>
-        </Nav>
-        <Nav>
-          <Nav.Link  className="mr-sm-2" href="/">Logout</Nav.Link>
-        </Nav>
-        </Navbar.Collapse>
-      </Navbar>
+      <CustomNavbar/>
       <header className="App-header">
         <div className="body">
+        {(this.state.usersLoaded &&this.state.unassignedLoaded && this.state.teamsLoaded) &&
+
+        <Card as="div" className=" justify-content-between align-items-between shadow-sm w-100 mb-3">
+        <Card.Body className="text-left">
+        <Row md={12} className="align-items-md-center">
+        <Col xl={9.5} lg={9}>
+        <Card.Title>Summary</Card.Title>
+          <a  className="text-secondary" href="/admin-view"><Card.Subtitle className="mb-1">{this.state.teamsLength} total teams registered</Card.Subtitle></a>
+        <Card.Subtitle>{this.state.unassignedLength} unassigned students out of {this.state.usersLength} total users</Card.Subtitle>
+</Col>
+
+
+        <Col  xl={2.5} lg={3} className="mr-0 ">
+        <Download className="pr-0"/>
+        </Col>
+        </Row>
+          </Card.Body>
+        </Card>
+
+        }
           <Form inline className="search-bar w-100" onSubmit={this.handleSearch}>
 
               <Form.Control as="select"
@@ -184,36 +231,19 @@ class AdminHome extends React.Component {
               className="mr-sm-2 w-75" />
             <Button variant="outline-success" type="submit">Search</Button>
           </Form>
+          {this.state.displayErrorMessage &&
+            <Alert variant="danger" onClose={() => this.setState({displayErrorMessage: false, errorMessage: ""})} dismissible>
+      {this.state.errorMessage}
+    </Alert>}
           <br />
           <br />
+
+
+
           <br />
           {this.state.searched ? <AdminSearch team={this.state.teamName} onTeam={this.state.foundTeam} /> :
 
-          <div className="w-100">
-          {this.state.teamsLoaded &&   <CSVLink
-      data={this.state.teams}
-      filename={"teams.csv"}
-      className="download-buttons btn btn-outline-secondary btn-lg"
-  target="_blank">
-    Download teams.csv
-    </CSVLink>     }
-
-    {this.state.usersLoaded &&   <CSVLink
-data={this.state.users}
-filename={"users.csv"}
-className="download-buttons btn btn-outline-secondary btn-lg"
-target="_blank">
-Download users.csv
-</CSVLink>     }
-
-            {this.state.unassignedLoaded &&   <CSVLink
-data={this.state.unassigned}
-filename={"unassigned.csv"}
-className="download-buttons btn btn-outline-secondary btn-lg"
-target="_blank">
-Download unassigned.csv
-</CSVLink>     }
-          </div>
+    <br />
         }
         </div>
       </header>

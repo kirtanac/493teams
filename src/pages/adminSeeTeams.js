@@ -9,6 +9,7 @@ import {
   Route, NavLink, Redirect
 } from "react-router-dom";
 import { CSVLink } from "react-csv";
+import CustomNavbar from "../components/customNavbar.js";
 
 //VIEW THE CURRENT TEAM YOU ARE ON
 //currently hardcoded for my uniqname (clantonm)
@@ -84,48 +85,14 @@ render(){
 
   return (
     <div className="admin-see-teams">
-    <Navbar bg="light" expand="lg">
-    <Navbar.Brand href="/admin-home">
-      <img
-        src="./EECS493-admin.png"
-        height="30"
-        className="d-inline-block align-top"
-        alt="EECS 493 Teams logo"
-      />
-    </Navbar.Brand>
-  <Navbar.Toggle aria-controls="basic-navbar-nav" />
-  <Navbar.Collapse id="basic-navbar-nav">
-    <Nav className="mr-auto">
-    <Nav.Link href="/admin-home">Home</Nav.Link>
-    <Nav.Link href="/admin-view">Teams</Nav.Link>
-    </Nav>
-  <Nav>
-    <Nav.Link  className="mr-sm-2" href="/">Logout</Nav.Link>
-  </Nav>
-
-  </Navbar.Collapse>
-</Navbar>
+  <CustomNavbar/>
 
 {this.state.teamsLoaded ?
   <header className="loggedInHeader">
   <div className="body">
   <Row>
   <h1 className="title">Registered Teams</h1>
-  <CSVLink
-  data={this.state.teams}
-  filename={"teams.csv"}
-  className="download-buttons btn btn-outline-secondary btn-lg"
-  target="_blank">
-  Download teams.csv
-  </CSVLink>
 
-  {this.state.usersLoaded &&   <CSVLink
-  data={this.state.users}
-  filename={"users.csv"}
-  className="download-buttons btn btn-outline-secondary btn-lg"
-  target="_blank">
-  Download users.csv
-  </CSVLink>     }
   </Row>
 
   <div className="body-content">

@@ -8,6 +8,7 @@ import {
   Switch,
   Route, NavLink, Redirect
 } from "react-router-dom";
+import CustomNavbar from "../components/customNavbar.js";
 
 //VIEW THE CURRENT TEAM YOU ARE ON
 
@@ -63,54 +64,7 @@ render(){
  const rows = this.state.teams.map(row => <tr><td>{row.teamName}</td><td>{row.uniqname1Accepted?row.uniqname1:""}{row.uniqname2Accepted?", " +row.uniqname2:""}{row.uniqname3Accepted?", " +row.uniqname3:""}{row.uniqname4Accepted?", " + row.uniqname4:""}</td><td>{row.description}</td></tr>)
   return (
     <div className="viewteam">
-  {onTeam?
-    <Navbar bg="light" expand="lg">
-    <Navbar.Brand href="/view-team">
-      <img
-        src="/EECS493_landscape.png"
-        height="30"
-        className="d-inline-block align-top"
-        alt="EECS 493 Teams logo"
-      />
-    </Navbar.Brand>
-    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-    <Navbar.Collapse id="basic-navbar-nav">
-      <Nav className="mr-auto">
-      <Nav.Link href="/view-team">My Team</Nav.Link>
-        <Nav.Link href="/see-teams">All Teams</Nav.Link>
-
-      </Nav>
-    <Nav>
-      <Nav.Link  className="mr-sm-2" href="/">Logout</Nav.Link>
-    </Nav>
-
-    </Navbar.Collapse>
-    </Navbar>
-  :
-  <Navbar bg="light" expand="lg">
-  <Navbar.Brand href="/create-team">
-    <img
-      src="/EECS493_landscape.png"
-      height="30"
-      className="d-inline-block align-top"
-      alt="EECS 493 Teams logo"
-    />
-  </Navbar.Brand>
-  <Navbar.Toggle aria-controls="basic-navbar-nav" />
-  <Navbar.Collapse id="basic-navbar-nav">
-    <Nav className="mr-auto">
-    <Nav.Link href="/create-team">Create Team</Nav.Link>
-    <Nav.Link href="/team-invites">Team Invitations</Nav.Link>
-      <Nav.Link href="/see-teams">Registered Teams</Nav.Link>
-  </Nav>
-  <Nav>
-    <Nav.Link  className="mr-sm-2" href="/">Logout</Nav.Link>
-  </Nav>
-
-  </Navbar.Collapse>
-  </Navbar>
-
-}
+<CustomNavbar/>
 
 
 {this.state.teamsLoaded ?

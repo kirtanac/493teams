@@ -32,8 +32,6 @@ class Home extends React.Component {
 
  handleLogin(log_data){
       this.setState({data: log_data})
-
-
       if ('user-type' in log_data){
         sessionStorage.setItem('uniqname', log_data['uniqname']);
         sessionStorage.setItem('user-type', log_data['user-type']);
@@ -59,7 +57,7 @@ class Home extends React.Component {
          <Image src="./EECS493_landscape.png" fluid />
          <Row  >
          <i className="mr-2">Sign in to view your team</i>
-         <Login className="loginButton ml-2" callback={this.handleLogin} />
+         <Login className="loginButton ml-2" navbar={false} callback={this.handleLogin} />
          </Row>
 
          <CardGroup className=" instructions justify-content-md-center mb-10 w-75">

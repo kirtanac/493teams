@@ -71,10 +71,11 @@ text-align: left;
 .search-bar {
   justify-content: center;
 }
-.download-buttons {
-  justify-content: center;
-  margin:55px;
+
+.download-dropdown{
+ background-color: #282c34;
 }
+
 .App-link {
   color: #61dafb;
 }
