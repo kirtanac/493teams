@@ -13,6 +13,31 @@
   }
 }
 
+@media (max-width: 699px) {
+  .team-admin-table {
+    width: 75vw !important;
+  }
+  .team-admin-table > td {
+    padding: 2px;
+  }
+
+  .disappear-on-mobile{
+    visibility: hidden;
+  }
+
+  .body {
+    border-radius: 0px !important;
+    margin-top: 0px !important;
+
+    min-width: 100%;
+    min-height: 100%;
+  }
+}
+
+
+
+
+
 .title {
   margin-bottom: 1em;
 
@@ -37,6 +62,10 @@ text-align: left;
   margin: 3em;
   padding: 3em;
   border-radius: 25px;
+}
+
+.adminsearch-holder {
+  width: 100%;
 }
 
 .body-content {
@@ -75,6 +104,12 @@ text-align: left;
 .download-dropdown{
  background-color: #282c34;
 }
+ .info-icon-caption{
+   font-size: calc(5 + 0.2vmin);
+   padding-top: 0;
+   margin-top: 0;
+ }
+
 
 .App-link {
   color: #61dafb;

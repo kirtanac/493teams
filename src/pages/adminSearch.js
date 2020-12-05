@@ -10,7 +10,7 @@ import {
   Switch,
   Route, NavLink, Redirect
 } from "react-router-dom";
-import {  Link,  Button, Navbar, Nav, Table } from 'react-bootstrap';
+import {  Link,  Button, Navbar, Nav, Table, Card } from 'react-bootstrap';
 
 class AdminSearch extends React.Component {
   constructor(props) {
@@ -262,44 +262,45 @@ deleteTeam(event) {
      console.log(this.state.teams)
      console.log("made it here")
      let teamList = (
-       <React.Fragment>
-       <Button variant="outline-danger" size="sm" onClick={this.deleteTeam}>Delete Team</Button>
-       <br />
-       <Table className="w-25">
+       <Card className="shadow-sm rounded-1 align-items-center">
+       <Button variant="danger mr-4 mt-3 align-self-end" size="sm" onClick={this.deleteTeam}>Delete Team</Button>
+
+       <Table className="m-4 text-left team-admin-table" xs="auto">
        <thead>
        <tr>
+       <td className="small">Team Name</td>
          <th colSpan="2">{teams.teamName}</th>
-         <th><Button id="teamName" variant="outline-danger" size="sm" onClick={this.editTeam}>Edit</Button></th>
-       </tr>
-       <tr>
-         <th></th>
-         <th></th>
-         <th></th>
+         <th className="disappear-on-mobile"><Button id="teamName" variant="outline-success" size="sm" onClick={this.editTeam}>Edit</Button></th>
        </tr>
        </thead>
        <tbody>
        <tr>
+       <td className="small">Member #1</td>
         <td colSpan="2">{teams.uniqname1}</td>
-        <td><Button id="uniqname1" variant="outline-danger" size="sm" onClick={this.editTeam}>Edit</Button></td>
+        <td className="disappear-on-mobile"><Button id="uniqname1" variant="outline-success" size="sm" onClick={this.editTeam}>Edit</Button></td>
        </tr>
        <tr>
+       <td className="small">Member #2</td>
         <td colSpan="2">{teams.uniqname2}</td>
-        <td><Button id="uniqname2 "variant="outline-danger" size="sm" onClick={this.editTeam}>Edit</Button></td>
+        <td className="disappear-on-mobile"><Button id="uniqname2 "variant="outline-success" size="sm" onClick={this.editTeam}>Edit</Button></td>
        </tr>
        <tr>
+       <td className="small">Member #3</td>
          <td colSpan="2">{teams.uniqname3}</td>
-         <td><Button id="uniqname3" variant="outline-danger" size="sm" onClick={this.editTeam}>Edit</Button></td>
+         <td className="disappear-on-mobile"><Button id="uniqname3" variant="outline-success" size="sm" onClick={this.editTeam}>Edit</Button></td>
        </tr>
        <tr>
+       <td className="small">Member #4</td>
         <td colSpan="2">{teams.uniqname4}</td>
-        <td><Button id="uniqname4" variant="outline-danger" size="sm" onClick={this.editTeam}>Edit</Button></td>
+        <td className="disappear-on-mobile"><Button id="uniqname4" variant="outline-success" size="sm" onClick={this.editTeam}>Edit</Button></td>
       </tr>
       <tr>
+      <td className="small">Description</td>
         <td colSpan="3">{teams.description}</td>
       </tr>
       </tbody>
       </Table>
-      </React.Fragment>
+      </Card>
      )
      return teamList
    }

@@ -2,7 +2,7 @@ import '../App.css';
 import firebase from "../firebase";
 import dbFunctions from "../helpers"
 import React from 'react';
-import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl, Table, Row } from 'react-bootstrap';
+import { CardColumns, Card, Col,Nav, Navbar, NavDropdown, Form, Button, FormControl, Table, Row } from 'react-bootstrap';
 import {
   BrowserRouter as Router,
   Switch,
@@ -91,8 +91,10 @@ render(){
   <header className="loggedInHeader">
   <div className="body">
   <Row>
-  <h1 className="title">Registered Teams</h1>
-
+  <Col className="text-left align-items-sm-start mb-3">
+  <h1 className="title mb-3">Registered Teams</h1>
+  <a  className="text-secondary " href="/admin-home"><Card.Subtitle className="mb-1">Find a specific team</Card.Subtitle></a>
+  </Col>
   </Row>
 
   <div className="body-content">

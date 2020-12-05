@@ -5,6 +5,7 @@ import dbFunctions from "../helpers"
 import CreateTeam from "./createTeam";
 import AdminSearch from "./adminSearch";
 import Download from "../components/download";
+import AdminSettings from "../components/adminSettings";
 import React from 'react';
 import ReactDOM from "react-dom";
 import {
@@ -12,7 +13,7 @@ import {
   Switch,
   Route, NavLink, Redirect
 } from "react-router-dom";
-import {  Alert, Link,  Button, Navbar, Nav, Form, FormControl, Row, Col, ButtonGroup, Dropdown, Card } from 'react-bootstrap';
+import {  Alert, Tooltip, OverlayTrigger, Figure, Link,  Button, Navbar, Nav, Image, Form, FormControl, Row, Col, ButtonGroup, Dropdown, Card, Modal } from 'react-bootstrap';
 import { CsvDownload } from "react-json-to-csv"
 import { CSVLink } from "react-csv";
 import CustomNavbar from "../components/customNavbar.js";
@@ -40,10 +41,13 @@ class AdminHome extends React.Component {
      unassignedLoaded: false,
      unassignedLength: 0,
      displayErrorMessage: false,
-     errorMessage: ""
+     errorMessage: "",
+     showModal: false
    };
    this.handleSearch = this.handleSearch.bind(this);
    this.updateInput = this.updateInput.bind(this);
+   this.handleModal = this.handleModal.bind(this);
+
 
  }
 
@@ -86,6 +90,14 @@ class AdminHome extends React.Component {
    })
 
 
+ }
+
+ handleModal(event){
+   let temp = !this.state.showModal;
+   this.setState({
+     showModal: temp
+   });
+   console.log("modal: ", this.state.showModal);
  }
 
 
@@ -193,6 +205,27 @@ class AdminHome extends React.Component {
       <CustomNavbar/>
       <header className="App-header">
         <div className="body">
+
+        <OverlayTrigger
+             key="right"
+             placement="right"
+             className="mb-1 float-right"
+             overlay={
+               <Tooltip id="tooltip-top">
+                 Learn how to use EECS 493 Teams.
+               </Tooltip>
+             }
+           >
+           <Figure onClick={this.handleModal} >
+     <Figure.Image
+       width={20}
+        src="./information.png" caption="sos" alt="information instructions" className="mt-0 pb-0 mb-0" fluid />
+     <p className="info-icon-caption mt-0 pl-2">
+     Admin Controls
+     </p>
+   </Figure>
+           </OverlayTrigger>
+
         {(this.state.usersLoaded &&this.state.unassignedLoaded && this.state.teamsLoaded) &&
 
         <Card as="div" className=" justify-content-between align-items-between shadow-sm w-100 mb-3">
@@ -229,22 +262,33 @@ class AdminHome extends React.Component {
               onChange={this.updateInput}
               placeholder="Search by teamname or uniqname of team member"
               className="mr-sm-2 w-75" />
-            <Button variant="outline-success" type="submit">Search</Button>
+            <Button variant="success" type="submit">Search</Button>
           </Form>
           {this.state.displayErrorMessage &&
             <Alert variant="danger" onClose={() => this.setState({displayErrorMessage: false, errorMessage: ""})} dismissible>
       {this.state.errorMessage}
     </Alert>}
           <br />
-          <br />
 
-
-
-          <br />
-          {this.state.searched ? <AdminSearch team={this.state.teamName} onTeam={this.state.foundTeam} /> :
+          {this.state.searched ? <div className="adminsearch-holder m-1"> <AdminSearch team={this.state.teamName} onTeam={this.state.foundTeam} /> </div>:
 
     <br />
         }
+
+        <Modal size="lg" centered show={this.state.showModal} onHide={this.handleModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <AdminSettings/>
+                <Modal.Footer>
+
+                  <Button variant="secondary" onClick={this.handleModal}>
+                    Okay
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+
+
         </div>
       </header>
 

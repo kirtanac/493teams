@@ -84,9 +84,9 @@ class Download extends React.Component {
    return (
 
    <Dropdown className="align-self-right" as={ButtonGroup}>
-     <Button variant="success" >Download Data</Button>
+     <Button variant="secondary" >Download Data</Button>
 
-     <Dropdown.Toggle split variant="success" id="dropdown-split-basic" />
+     <Dropdown.Toggle split variant="secondary" id="dropdown-split-basic" />
 
      <Dropdown.Menu>
 {this.state.teamsLoaded && <CSVLink
