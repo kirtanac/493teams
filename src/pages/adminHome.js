@@ -205,30 +205,11 @@ class AdminHome extends React.Component {
       <CustomNavbar/>
       <header className="App-header">
         <div className="body">
-
-        <OverlayTrigger
-             key="right"
-             placement="right"
-             className="mb-1 float-right"
-             overlay={
-               <Tooltip id="tooltip-top">
-                 Learn how to use EECS 493 Teams.
-               </Tooltip>
-             }
-           >
-           <Figure onClick={this.handleModal} >
-     <Figure.Image
-       width={20}
-        src="./information.png" caption="sos" alt="information instructions" className="mt-0 pb-0 mb-0" fluid />
-     <p className="info-icon-caption mt-0 pl-2">
-     Admin Controls
-     </p>
-   </Figure>
-           </OverlayTrigger>
+        <h1 className="title mb-3">Admin Dashboard</h1>
 
         {(this.state.usersLoaded &&this.state.unassignedLoaded && this.state.teamsLoaded) &&
 
-        <Card as="div" className=" justify-content-between align-items-between shadow-sm w-100 mb-3">
+        <Card as="div" className=" justify-content-between align-items-between shadow-sm w-100 mb-4">
         <Card.Body className="text-left">
         <Row md={12} className="align-items-md-center">
         <Col xl={9.5} lg={9}>
@@ -239,8 +220,27 @@ class AdminHome extends React.Component {
 
 
         <Col  xl={2.5} lg={3} className="mr-0 ">
-        <Download className="pr-0"/>
+        <ButtonGroup vertical>
+        <OverlayTrigger
+             key="right"
+             placement="right"
+             className="mb-1 float-right"
+             overlay={
+               <Tooltip className="text-left" id="tooltip-top">
+                 Upload rosters, reset the database, and learn how to use 493 teams.
+               </Tooltip>
+             }
+           >
+        <Button className="mb-2" onClick={this.handleModal} alt="information instructions" variant="success">Admin Settings</Button>
+        </OverlayTrigger>
+
+        <Download className="pr-0 mt-2"/>
+
+
+        </ButtonGroup>
         </Col>
+
+
         </Row>
           </Card.Body>
         </Card>

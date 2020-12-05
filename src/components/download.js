@@ -9,7 +9,7 @@ import {
   Switch,
   Route, NavLink, Redirect
 } from "react-router-dom";
-import {  Link,  Button, Navbar, Nav, Form, FormControl, Row, Col, ButtonGroup, Dropdown } from 'react-bootstrap';
+import {  Link,  Button, Navbar, Nav, Form, Tooltip, ButtonGroup, FormControl, Row, Col, OverlayTrigger, Dropdown } from 'react-bootstrap';
 import { CsvDownload } from "react-json-to-csv"
 import { CSVLink } from "react-csv";
 
@@ -82,11 +82,19 @@ class Download extends React.Component {
 
  render() {
    return (
-
+     <OverlayTrigger
+          key="right"
+          placement="right"
+          className="mb-1 float-right"
+          overlay={
+            <Tooltip className="text-left" id="tooltip-top">
+              Download CSVs of registered teams, all users, and users with no team
+            </Tooltip>
+          }
+        >
    <Dropdown className="align-self-right" as={ButtonGroup}>
-     <Button variant="secondary" >Download Data</Button>
-
-     <Dropdown.Toggle split variant="secondary" id="dropdown-split-basic" />
+     <Button variant="secondary" nohover className="btn-download-data" active>Download Data</Button>
+     <Dropdown.Toggle split variant="secondary" id="dropdown-split-basic" active/>
 
      <Dropdown.Menu>
 {this.state.teamsLoaded && <CSVLink
@@ -114,6 +122,7 @@ unassigned.csv
 </CSVLink>}
 </Dropdown.Menu>
 </Dropdown>
+</OverlayTrigger>
 
    )
  }
