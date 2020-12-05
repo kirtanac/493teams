@@ -9,7 +9,7 @@ import {
   Switch,
   Route, NavLink, Redirect
 } from "react-router-dom";
-import {  Link,  CardGroup, Card, Modal, Button } from 'react-bootstrap';
+import {  Link,  CardGroup, Card, Modal, Button, Form } from 'react-bootstrap';
 import { CsvDownload } from "react-json-to-csv"
 import { CSVLink } from "react-csv";
 import UploadUsers from "./uploadUsers";
@@ -19,15 +19,84 @@ class AdminSettings extends React.Component {
    super(props);
 
    this.state = {
+     show1:false,
+     word:""
 
    };
+   this.handleDelete = this.handleDelete.bind(this);
+   this.handleShow = this.handleShow.bind(this);
+   this.handleInput = this.handleInput.bind(this);
 
   }
+  handleInput(event){
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  }
+  handleShow() {
+    this.setState({ show1:true });
+  }
+  handleHide() {
 
+  }
+  async handleDelete() {
+    if (this.state.word === "reset") {
+      //get all documents from the database then delete each one.
+      const db = firebase.firestore();
+      db.settings({
+        timestampsInSnapshots: true
+      });
+      await db.collection("teams").get().then(documents => {
+        documents.forEach(document => {
+          document.ref.delete().then(() => {
+            console.log("successfully deleted team");
+          })
+        })
+
+      })
+      await db.collection("users").get().then(documents => {
+        documents.forEach(document => {
+          document.ref.delete().then(() => {
+            console.log("successfully deleted user");
+          })
+        })
+      })
+      console.log("finished deleting");
+      alert("Database successfully reset");
+      this.setState({ show1:false });
+    }
+    else {
+      alert("Word entered incorrectly. Database not reset");
+      this.setState({ show1:false });
+    }
+  }
  render() {
    return (
 
-
+     <React.Fragment>
+     <Modal show={this.state.show1}>
+       <Modal.Header closeButton>
+         <Modal.Title>Are you sure you want to reset the database?</Modal.Title>
+       </Modal.Header>
+       <Modal.Body>
+         <Form className="text-left">
+           <Form.Group controlId="fullname">
+           <Form.Label>Enter the word "reset" to clear the database</Form.Label>
+           <Form.Control required
+           type="text"
+             name="word"
+             placeholder=""
+             onChange={this.handleInput}
+             value={this.state.word} />
+           </Form.Group>
+         </Form>
+       </Modal.Body>
+       <Modal.Footer>
+         <Button variant="danger" onClick={this.handleDelete}>
+           Reset Database
+         </Button>
+       </Modal.Footer>
+     </Modal>
      <Modal.Body>
 
 
@@ -63,11 +132,11 @@ class AdminSettings extends React.Component {
  <i>The EECS 493 Teams recommends considering the addition of other useful features to this MVP, such as the ability to denote specific Zoom links, sign up for virtual presentation slots, and more.</i>
 </CardGroup>
 <UploadUsers/>
-<Button variant="danger">
+<Button variant="danger" onClick={this.handleShow}>
   Reset Database
 </Button>
 </Modal.Body>
-
+</React.Fragment>
    )
  }
 }
