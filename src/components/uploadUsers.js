@@ -21,7 +21,8 @@ class UploadUsers extends React.Component {
    this.state = {
      userData:[],
      displayErrorMessage:false,
-     errorMessage:""
+     errorMessage:"",
+     finishedUpload:false
    };
 
    this.handleOnDrop = this.handleOnDrop.bind(this);
@@ -48,15 +49,56 @@ class UploadUsers extends React.Component {
          });
         return;
      }
-     this.setState({ userData: data });
+     this.setState({ userData: data.slice(1) });
    }
 
    handleOnError(error){
      console.log("error: ", error);
    }
-   handleSubmit(event) {
+   async handleSubmit(event) {
+     const db = firebase.firestore();
+     db.settings({
+       timestampsInSnapshots: true
+     });
      event.preventDefault();
-
+     console.log(this.state.userData)
+     if (this.state.userData) {
+       //array of dictionaries
+       //need to use .data to access the data array
+       this.state.userData.forEach(user => {
+         if (user.data.[0] !== "") {
+           dbFunctions.getUserInfo(user.data[0]).then(thisUser => {
+             if (thisUser !== "error") {
+               let errorStr = user.data[0]+" is already in the database. Skipping..."
+               this.setState({
+                  displayErrorMessage: true,
+                  errorMessage: errorStr
+                });
+             }
+             else {
+               let data1 = {
+                 uniqname: user.data[0],
+                 invitations: [],
+                 isAdmin:user.data[1],
+                 numInvitations: 0,
+                 onTeam:false,
+                 teamName:""
+               }
+               db.collection("users").doc(user.data[0]).set(data1);
+             }
+           });
+         }
+         });
+         //end forEach
+         this.setState({ finishedUpload: true});
+    }
+     else {
+       this.setState({
+          displayErrorMessage: true,
+          errorMessage: "The file you uploaded is empty"
+        });
+        return;
+     }
      //upload all students to the user table
 
    }
@@ -69,6 +111,14 @@ class UploadUsers extends React.Component {
        <Col className="col-md-8 offset-md-2 w-100">
        <Alert style={{"font-size": 14}} variant="danger" className="w-100 small" onClose={() => this.setState({displayErrorMessage: false, errorMessage: ""})} dismissible>
        {this.state.errorMessage}</Alert>
+       </Col>
+       </Row>
+     }
+     {this.state.finishedUpload &&
+       <Row className="w-100 align-items-center m-2">
+       <Col className="col-md-8 offset-md-2 w-100">
+       <Alert style={{"font-size": 14}} variant="success" className="w-100 small" dismissible>
+       Roster successfully uploaded! You may exit out now</Alert>
        </Col>
        </Row>
      }
