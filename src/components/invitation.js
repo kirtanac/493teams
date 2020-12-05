@@ -128,15 +128,17 @@ async acceptedTeam() {
 
   };
   //go through each team in the users invite list and add their name to the rejected invites array
-  this.state.userInf.invitations.forEach(element => {
-    dbFunctions.getTeamInfo(element).then(teamData => {
-      console.log(teamData);
-      console.log("ready to push")
-      teamData.rejectedInvites.push(sessionStorage.getItem('uniqname'));
-      db.collection("teams").doc(element).update({
-        rejectedInvites:teamData.rejectedInvites
+  this.state.userInf.invitations.forEach((element, index) => {
+    if (index !== this.props.invNum) {
+      dbFunctions.getTeamInfo(element).then(teamData => {
+        console.log(teamData);
+        console.log("ready to push")
+        teamData.rejectedInvites.push(sessionStorage.getItem('uniqname'));
+        db.collection("teams").doc(element).update({
+          rejectedInvites:teamData.rejectedInvites
+        });
       });
-    });
+    }
   })
   db.collection("users").doc(sessionStorage.getItem('uniqname')).update({
     onTeam:true,
