@@ -98,14 +98,14 @@ editDesc(event) {
 
       <div className="body">
       <h1 className="title">Your Current Team</h1>
-        <div className="body-content">
+        <div className="body-content w-100">
         <p>
         {this.state.dataLoaded  ?
-          <React.Fragment>
-          <div className="container">
-          <div id="team_info" className="row">
-            <div id="info_table" className="col-xs-6">
-              <Table striped bordered className="w-25">
+
+          <div className="container w-100">
+          <div id="team_info" className="row w-100">
+            <div id="info_table" className="col-6 w-100">
+              <Table striped bordered className="w-50">
               <thead>
               <tr>
                 <th colSpan="2">{this.state.teams.teamName}</th>
@@ -140,13 +140,28 @@ editDesc(event) {
               </tbody>
               </Table>
             </div>
-            <div id="second_div" className="col-xs-6 w-75">
-              <span><h2 id="desc_name">Description </h2> <Button variant="outline-danger" size="sm" onClick={this.editDesc}>Edit</Button></span>
-              <p>{this.state.teams.description}</p>
+              <div className="col-x4 offset-xs-8 w-100">
+            <Table bordered>
+            <thead>
+            <tr>
+            <th colSpan="4" className="text-left">Description</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+
+
+             <td colSpan="2">{this.state.teams.description}</td>
+             <td><Button id="uniqname1" variant="outline-success" size="sm" onClick={this.editDesc}>Edit</Button></td>
+            </tr>
+            </tbody>
+            </Table>
             </div>
+
           </div>
           </div>
-          </React.Fragment> :
+         :
        <i>Loading...</i>}
 </p>
 

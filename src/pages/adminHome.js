@@ -246,6 +246,14 @@ class AdminHome extends React.Component {
         </Card>
 
         }
+
+        {this.state.displayErrorMessage &&
+          <Row className="w-100 align-items-center m-2">
+          <Col className="col-md-8 offset-md-2 w-100">
+          <Alert style={{"font-size": 14}} variant="danger" className="w-100 small" onClose={() => this.setState({displayErrorMessage: false, errorMessage: ""})} dismissible>
+    {this.state.errorMessage}</Alert>
+    </Col>
+    </Row>}
           <Form inline className="search-bar w-100" onSubmit={this.handleSearch}>
 
               <Form.Control as="select"
@@ -264,10 +272,7 @@ class AdminHome extends React.Component {
               className="mr-sm-2 w-75" />
             <Button variant="success" type="submit">Search</Button>
           </Form>
-          {this.state.displayErrorMessage &&
-            <Alert variant="danger" onClose={() => this.setState({displayErrorMessage: false, errorMessage: ""})} dismissible>
-      {this.state.errorMessage}
-    </Alert>}
+
           <br />
 
           {this.state.searched ? <div className="adminsearch-holder m-1"> <AdminSearch team={this.state.teamName} onTeam={this.state.foundTeam} /> </div>:
