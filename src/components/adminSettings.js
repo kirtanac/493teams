@@ -54,7 +54,7 @@ class AdminSettings extends React.Component {
         })
 
       })
-      await db.collection("users").get().then(documents => {
+      await db.collection("users").where("isAdmin","==", true).get().then(documents => {
         documents.forEach(document => {
           document.ref.delete().then(() => {
             console.log("successfully deleted user");
@@ -79,6 +79,7 @@ class AdminSettings extends React.Component {
          <Modal.Title>Are you sure you want to reset the database?</Modal.Title>
        </Modal.Header>
        <Modal.Body>
+         <b>NOTE: This will only clear the students and all teams from the database</b>
          <Form className="text-left">
            <Form.Group controlId="fullname">
            <Form.Label>Enter the word "reset" to clear the database</Form.Label>
