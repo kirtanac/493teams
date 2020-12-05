@@ -58,6 +58,10 @@ class CreateTeam extends React.Component {
       numHolder = this.state.uniq1;
       onTeam1 = true;
       teamName1 = tempName;
+      db.collection("users").doc(numHolder).update({
+        onTeam:onTeam1,
+        teamName:teamName1
+      });
      break;
      case 2:
       numHolder = this.state.uniq2;
@@ -69,38 +73,19 @@ class CreateTeam extends React.Component {
       numHolder = this.state.uniq4;
      break;
   }
-  const valRef = db.collection("users").doc(numHolder);
-  const docFound = await valRef.get().then(docFound => {
-    if (!docFound.exists) {
-      let data = {
-        uniqname: numHolder,
-        invitations: [tempName],
-        isAdmin:false,
-        numInvitations: 1,
-        onTeam:onTeam1,
-        teamName:teamName1
-      }
-      db.collection("users").doc(numHolder).set(data);
-    }
-    else {
-       dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
+  dbFunctions.getUserInfo(numHolder).then((data) => {
+    let tempArray = data.invitations;
+    let newVal = data.numInvitations;
 
-      this.setState({ usertype: data.usertype, onTeam: (data.usertype === 'team')});
-      sessionStorage.setItem('user-type', data.usertype);
-      console.log("user data updated: ", data);
-      });
-
-      let tempArray = docFound.data().invitations;
-      let newVal = docFound.data().numInvitations;
-
-      tempArray.push(tempName);
+    tempArray.push(tempName);
+    if (numHolder !== this.state.uniq1) {
       db.collection("users").doc(numHolder).update({
         invitations: tempArray,
         numInvitations: newVal + 1,
         onTeam:onTeam1
-      });
+    });
     }
-  });
+  })
  }
 
 
@@ -185,8 +170,17 @@ class CreateTeam extends React.Component {
               uniqname4Accepted:false,
               description:this.state.description,
               rejectedInvites:[]
+            }).then(() => {
+              dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
+
+                this.setState({ usertype: data.usertype, onTeam: (data.usertype === 'team')});
+                  sessionStorage.setItem('user-type', data.usertype);
+                  console.log("user data updated: ", data);
+
+              });
+              this.setState({ show2: true});
             });
-            this.setState({ show2: true});
+
           });
         }
         else {
@@ -205,8 +199,17 @@ class CreateTeam extends React.Component {
             uniqname4Accepted:false,
             description:this.state.description,
             rejectedInvites:[]
+          }).then(() => {
+            dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
+
+              this.setState({ usertype: data.usertype, onTeam: (data.usertype === 'team')});
+                sessionStorage.setItem('user-type', data.usertype);
+                console.log("user data updated: ", data);
+
+            });
+              this.setState({ show2: true});
           });
-          this.setState({ show2: true});
+
         }
 
       });
@@ -234,7 +237,7 @@ handleSecondHide() {
 
 
  render(){
-  if (this.state.redi === true || sessionStorage.getItem('user-type') === 'team'){
+  if (this.state.redi === true && sessionStorage.getItem('user-type') === 'team'){
     this.setState({
       onTeam: true
     })

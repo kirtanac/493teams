@@ -164,7 +164,7 @@ editDesc(event) {
             </thead>
             <tbody>
             <tr>
-              <td colSpan="4" className="text-left">{this.state.teams.rejectedInvites.length !== 0 ? this.state.teams.rejectedInvites.join(', ') : <i className="text-secondary">No rejected invitations</i>}</td>
+              <td colSpan="4" className="text-left">{(this.state.teams.rejectedInvites && this.state.teams.rejectedInvites.length !== 0) ? this.state.teams.rejectedInvites.join(', ') : <i className="text-secondary">No rejected invitations</i>}</td>
             </tr>
             </tbody>
             </Table>
