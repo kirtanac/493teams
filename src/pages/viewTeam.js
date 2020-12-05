@@ -147,10 +147,15 @@ editDesc(event) {
                 <td>{this.state.teams.uniqname3}</td>
                 <td>{this.state.teams.uniqname3Accepted ? 'accepted' : 'pending'}</td>
               </tr>
-              <tr>
-               <td>{this.state.teams.uniqname4}</td>
-               <td>{this.state.teams.uniqname4Accepted ? 'accepted' : 'pending'}</td>
-              </tr>
+              {this.state.teams.uniqname4 === "" ?  :
+              <React.Fragment>
+                <tr>
+                <td>{this.state.teams.uniqname4}</td>
+                <td>{this.state.teams.uniqname4Accepted ? 'accepted' : 'pending'}</td>
+                </tr>
+              </React.Fragment>
+              }
+
               </tbody>
               </Table>
             </div>

@@ -26,7 +26,6 @@ class CreateTeam extends React.Component {
    };
 
    this.updateInput = this.updateInput.bind(this);
-   this.handleSubmit = this.handleSubmit.bind(this);
    this.addTeam = this.addTeam.bind(this);
    this.sendData = this.sendData.bind(this);
    this.handleShow = this.handleShow.bind(this);
@@ -104,16 +103,13 @@ class CreateTeam extends React.Component {
  }
 
 
-
  updateInput(event){
    this.setState({
      [event.target.name]: event.target.value
-   });}
-
- handleSubmit(event) {
-   alert('A name was submitted: ' + this.state.value);
-   event.preventDefault();
+   });
  }
+
+
  addTeam(event){
   event.preventDefault();
   const db = firebase.firestore();
@@ -121,49 +117,104 @@ class CreateTeam extends React.Component {
     timestampsInSnapshots: true
   });
   let tempName = this.state.teamName.split(' ').join('');
-
-  //team of 3 information
+  let uniq4Holder;
   if (this.state.uniq4 === "") {
-    db.collection("teams").doc(tempName).set({
-      teamName:tempName,
-      uniqname1:this.state.uniq[0],
-      uniqname2:this.state.uniq[1],
-      uniqname3:this.state.uniq[2],
-      uniqname4:"",
-      uniqname1Accepted:false,
-      uniqname2Accepted:false,
-      uniqname3Accepted:false,
-      description:this.state.description
-    });
-        //TODO: check to see if uniqnames already have teams, are valid uniqnames, are in class
-    this.sendData(1, tempName);
-    this.sendData(2, tempName);
-    this.sendData(3, tempName);
-
+    uniq4Holder = "";
   }
-  //team of 4 information
   else {
-    db.collection("teams").doc(tempName).set({
-      teamName:tempName,
-      uniqname1:this.state.uniq1,
-      uniqname2:this.state.uniq2,
-      uniqname3:this.state.uniq3,
-      uniqname4:this.state.uniq4,
-      uniqname1Accepted:false,
-      uniqname2Accepted:false,
-      uniqname3Accepted:false,
-      uniqname4Accepted:false,
-      description:this.state.description
-    });
-    //TODO: check to see if uniqnames already have teams, are valid uniqnames, are in class
-    this.sendData(1, tempName);
-    this.sendData(2, tempName);
-    this.sendData(3, tempName);
-    this.sendData(4, tempName);
+    uniq4Holder = this.state.uniq4;
   }
-  //setting the state
-  this.setState({ show2: true});
+  dbFunctions.getUserInfo(this.state.uniq1).then(userInfo => {
+    if (userInfo.onTeam === true) {
+      alert(this.state.uniq1+" is already on a team. Please enter a different uniqname");
+      return;
+    }
+    else if (userInfo === "error") {
+      alert(this.state.uniq1+" is not a registered uniqname in the class. Please enter a different uniqname");
+      return;
+    }
+    else {
+
+    }
+    //uniqname2 checks
+    dbFunctions.getUserInfo(this.state.uniq2).then(userInfo1 => {
+      if (userInfo1.onTeam === true) {
+        alert(this.state.uniq2+" is already on a team. Please enter a different uniqname");
+        return;
+      }
+      else if (userInfo1 === "error") {
+        alert(this.state.uniq2+" is not a registered uniqname in the class. Please enter a different uniqname");
+        return;
+      }
+      //uniqname3 checks
+      dbFunctions.getUserInfo(this.state.uniq3).then(userInfo2 => {
+        if (userInfo2.onTeam === true) {
+          alert(this.state.uniq3+" is already on a team. Please enter a different uniqname");
+          return;
+        }
+        else if (userInfo2 === "error") {
+          alert(this.state.uniq3+" is not a registered uniqname in the class. Please enter a different uniqname");
+          return;
+        }
+        //uniqname4 checks
+        if (this.state.uniq4 !== "") {
+          dbFunctions.getUserInfo(this.state.uniq4).then(userInfo3 => {
+            if (userInfo3.onTeam === true) {
+              alert(this.state.uniq4+" is already on a team. Please enter a different uniqname");
+              return;
+            }
+            else if (userInfo3 === "error") {
+              alert(this.state.uniq4+" is not a registered uniqname in the class. Please enter a different uniqname");
+              return;
+            }
+
+            this.sendData(1, tempName);
+            this.sendData(2, tempName);
+            this.sendData(3, tempName);
+            this.sendData(4, tempName);
+            db.collection("teams").doc(tempName).set({
+              teamName:tempName,
+              uniqname1:this.state.uniq1,
+              uniqname2:this.state.uniq2,
+              uniqname3:this.state.uniq3,
+              uniqname4:uniq4Holder,
+              uniqname1Accepted:true,
+              uniqname2Accepted:false,
+              uniqname3Accepted:false,
+              uniqname4Accepted:false,
+              description:this.state.description,
+              rejectedInvites:[]
+            });
+            this.setState({ show2: true});
+          });
+        }
+        else {
+          this.sendData(1, tempName);
+          this.sendData(2, tempName);
+          this.sendData(3, tempName);
+          db.collection("teams").doc(tempName).set({
+            teamName:tempName,
+            uniqname1:this.state.uniq1,
+            uniqname2:this.state.uniq2,
+            uniqname3:this.state.uniq3,
+            uniqname4:uniq4Holder,
+            uniqname1Accepted:true,
+            uniqname2Accepted:false,
+            uniqname3Accepted:false,
+            uniqname4Accepted:false,
+            description:this.state.description,
+            rejectedInvites:[]
+          });
+          this.setState({ show2: true});
+        }
+
+      });
+
+    });
+
+  });
 }
+
 
 handleShow(event) {
   event.preventDefault();
