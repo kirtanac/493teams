@@ -61,7 +61,7 @@ render(){
   // <Navbar.Brand href="/view-team">EECS 493 Teams</Navbar.Brand>
   const onTeam = (this.state.usertype==='team');
 
- const rows = this.state.teams.map(row => <tr><td>{row.teamName}</td><td>{row.uniqname1Accepted?row.uniqname1:""}{row.uniqname2Accepted?", " +row.uniqname2:""}{row.uniqname3Accepted?", " +row.uniqname3:""}{row.uniqname4Accepted?", " + row.uniqname4:""}</td><td>{row.description}</td></tr>)
+ const rows = this.state.teams.map(row => <tr><td>{row.teamName}</td><td>{row.uniqname1Accepted?row.uniqname1:""}{row.uniqname2Accepted?", " +row.uniqname2:""}{row.uniqname3Accepted?", " +row.uniqname3:""}{row.uniqname4Accepted?", " + row.uniqname4:""}</td><td>{row.description === "" ? <i className="text-secondary">No description available</i>: row.description}</td></tr>)
   return (
     <div className="viewteam">
 <CustomNavbar/>
@@ -69,10 +69,10 @@ render(){
 
 {this.state.teamsLoaded ?
   <header className="loggedInHeader">
-  <div className="body">
+  <div className="body ">
   <h1 className="title">Registered Teams</h1>
-  <div className="body-content">
-  <Table className="seeTeams" responsive="sm" bordered hover striped>
+  <div className="body-content w-100">
+  <Table className="seeTeams w-100 ml-0 pl-0" responsive="sm" bordered hover striped>
   <thead>
 
   <tr>

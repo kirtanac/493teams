@@ -2,7 +2,7 @@ import '../App.css';
 import firebase from "../firebase";
 import dbFunctions from "../helpers"
 import React from 'react';
-import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl, Table } from 'react-bootstrap';
+import { Row, Col,CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl, Table } from 'react-bootstrap';
 import {
   BrowserRouter as Router,
   Switch,
@@ -97,22 +97,23 @@ editDesc(event) {
       <header className="loggedInHeader">
 
       <div className="body">
-      <h1 className="title">Your Current Team</h1>
-        <div className="body-content w-100">
+      <h1 className="title mb-3">Your Current Team:  {this.state.dataLoaded  &&   <i className="text-secondary"> {this.state.teams.teamName}</i>}</h1>
+
+        <div className=" w-100">
         <p>
         {this.state.dataLoaded  ?
 
           <div className="container w-100">
-          <div id="team_info" className="row w-100">
-            <div id="info_table" className="col-6 w-100">
-              <Table striped bordered className="w-50">
+
+          <Row id="team_info" className="row w-100">
+
+            <Col id="info_table" md={6} xs={12} className="col-6 w-100 ml-0 pl-0">
+              <Table striped bordered className="w-100 ml-0 text-left">
               <thead>
+
               <tr>
-                <th colSpan="2">{this.state.teams.teamName}</th>
-              </tr>
-              <tr>
-                <th>Uniqname</th>
-                <th>Status</th>
+                <th className="text-left">Uniqname</th>
+                <th className="text-left">Status</th>
               </tr>
               </thead>
               <tbody>
@@ -138,22 +139,24 @@ editDesc(event) {
               }
               </tbody>
               </Table>
-            </div>
-              <div className="col-x4 offset-xs-8 w-100">
-            <Table bordered>
+            </Col>
+
+              <Col md={6}  xs={12} className="col-x4 offset-xs-8 w-100 ml-0 pl-0">
+            <Table bordered striped>
             <thead>
             <tr>
-            <th colSpan="4" className="text-left">Description</th>
+            <th colSpan="4" className="text-left">Description </th>
             </tr>
             </thead>
             <tbody>
             <tr>
-             <td colSpan="2">{this.state.teams.description}</td>
-             <td><Button id="uniqname1" variant="outline-success" size="sm" onClick={this.editDesc}>Edit</Button></td>
+             <td colSpan="2" className="pb-1 text-left">{this.state.teams.description} <Button id="editDescription" variant="outline-success" className="float-right " size="sm" onClick={this.editDesc}>Edit</Button></td>
+
             </tr>
             </tbody>
             </Table>
-            <Table bordered>
+
+            <Table bordered striped>
             <thead>
             <tr>
               <th className="text-left" colSpan="4">Rejected Invitations</th>
@@ -161,13 +164,13 @@ editDesc(event) {
             </thead>
             <tbody>
             <tr>
-              <td colSpan="4" className="text-left">{this.state.teams.rejectedInvites.length !== 0 ? this.state.teams.rejectedInvites.join(', ') : <i>No rejected invitations</i>}</td>
+              <td colSpan="4" className="text-left">{this.state.teams.rejectedInvites.length !== 0 ? this.state.teams.rejectedInvites.join(', ') : <i className="text-secondary">No rejected invitations</i>}</td>
             </tr>
             </tbody>
             </Table>
-            </div>
+            </Col>
 
-          </div>
+          </Row>
           </div>
          :
        <i>Loading...</i>}
