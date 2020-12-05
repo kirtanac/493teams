@@ -18,7 +18,8 @@ class Invite extends React.Component {
      teamMems:[],
      dataLoaded:false,
      accepted:false,
-     show:false
+     show:false,
+     userInf:{}
    }
    this.viewInvitation = this.viewInvitation.bind(this);
    this.handleShow = this.handleShow.bind(this);
@@ -36,6 +37,7 @@ class Invite extends React.Component {
   let specInv = await userInfo.invitations[this.props.invNum];
   console.log("loading invitation at: ", userInfo);
   this.setState({ invitation: specInv});
+  this.setState({ userInf: userInfo});
   let teamInfo = await dbFunctions.getTeamInfo(this.state.invitation);
   let tempArray = [];
   let user1, user2, user3, user4;
@@ -87,8 +89,7 @@ handleHide() {
   this.setState({ show: false});
 }
 
-//FIX ME
-acceptedTeam() {
+async acceptedTeam() {
   const db = firebase.firestore();
   db.settings({
     timestampsInSnapshots: true
@@ -101,34 +102,47 @@ acceptedTeam() {
   if (this.state.teamMems.length === 4) {
     user4 = this.state.teamMems[3];
   }
-    let userString = sessionStorage.getItem('uniqname');
-    console.log(userString);
-    switch(userString) {
-      case user1:
-        db.collection("teams").doc(this.state.invitation).update({
-          uniqname1Accepted:true
-        });
-      break;
-      case user2:
-        db.collection("teams").doc(this.state.invitation).update({
-        uniqname2Accepted:true
-        })
-      break;
-      case user3:
-        db.collection("teams").doc(this.state.invitation).update({
-          uniqname3Accepted:true
-        })
-      break;
-      case user4:
-        db.collection("teams").doc(this.state.invitation).update({
-          uniqname4Accepted:true
-        })
-      break;
+  let userString = sessionStorage.getItem('uniqname');
+  console.log(userString);
+  switch(userString) {
+    case user1:
+      db.collection("teams").doc(this.state.invitation).update({
+        uniqname1Accepted:true
+      });
+    break;
+    case user2:
+      db.collection("teams").doc(this.state.invitation).update({
+      uniqname2Accepted:true
+      })
+    break;
+    case user3:
+      db.collection("teams").doc(this.state.invitation).update({
+        uniqname3Accepted:true
+      })
+    break;
+    case user4:
+      db.collection("teams").doc(this.state.invitation).update({
+        uniqname4Accepted:true
+      })
+    break;
 
-    };
+  };
+  //go through each team in the users invite list and add their name to the rejected invites array
+  this.state.userInf.invitations.forEach(element => {
+    dbFunctions.getTeamInfo(element).then(teamData => {
+      console.log(teamData);
+      console.log("ready to push")
+      teamData.rejectedInvites.push(sessionStorage.getItem('uniqname'));
+      db.collection("teams").doc(element).update({
+        rejectedInvites:teamData.rejectedInvites
+      });
+    });
+  })
   db.collection("users").doc(sessionStorage.getItem('uniqname')).update({
     onTeam:true,
-    teamName:this.state.invitation
+    teamName:this.state.invitation,
+    numInvitations:0,
+    invitations:[]
   }).then(() => {
     this.setState({ accepted: true});
   });

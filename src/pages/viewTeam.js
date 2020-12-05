@@ -136,7 +136,6 @@ editDesc(event) {
                 </tr>
               </React.Fragment>
               }
-
               </tbody>
               </Table>
             </div>
@@ -145,15 +144,24 @@ editDesc(event) {
             <thead>
             <tr>
             <th colSpan="4" className="text-left">Description</th>
-
             </tr>
             </thead>
             <tbody>
             <tr>
-
-
              <td colSpan="2">{this.state.teams.description}</td>
              <td><Button id="uniqname1" variant="outline-success" size="sm" onClick={this.editDesc}>Edit</Button></td>
+            </tr>
+            </tbody>
+            </Table>
+            <Table bordered>
+            <thead>
+            <tr>
+              <th className="text-left" colSpan="4">Rejected Invitations</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td colSpan="4" className="text-left">{this.state.teams.rejectedInvites.length !== 0 ? this.state.teams.rejectedInvites.join(', ') : <i>No rejected invitations</i>}</td>
             </tr>
             </tbody>
             </Table>
