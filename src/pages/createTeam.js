@@ -182,7 +182,8 @@ class CreateTeam extends React.Component {
               uniqname2Accepted:false,
               uniqname3Accepted:false,
               uniqname4Accepted:false,
-              description:this.state.description
+              description:this.state.description,
+              rejectedInvites:[]
             });
             this.setState({ show2: true});
           });
@@ -201,7 +202,8 @@ class CreateTeam extends React.Component {
             uniqname2Accepted:false,
             uniqname3Accepted:false,
             uniqname4Accepted:false,
-            description:this.state.description
+            description:this.state.description,
+            rejectedInvites:[]
           });
           this.setState({ show2: true});
         }
