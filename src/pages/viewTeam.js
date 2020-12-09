@@ -60,17 +60,20 @@ class ViewTeam extends React.Component {
 editDesc(event) {
   event.preventDefault();
   var newVal = prompt("What do you want to change your project description to?")
-  const db = firebase.firestore();
-  db.settings({
-    timestampsInSnapshots: true
-  });
-  db.collection("teams").doc(this.state.teams.teamName).update({
-    description:newVal
+  if (newVal !== "" || newVal !== " ") {
+    const db = firebase.firestore();
+    db.settings({
+      timestampsInSnapshots: true
+    });
+    db.collection("teams").doc(this.state.teams.teamName).update({
+      description:newVal
 
-  });
-  let tempHolder = this.state.teams;
-  tempHolder.description = newVal
-  this.setState({ teams: tempHolder});
+    });
+    let tempHolder = this.state.teams;
+    tempHolder.description = newVal
+    this.setState({ teams: tempHolder});
+  }
+
 }
 
  render(){
