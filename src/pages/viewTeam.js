@@ -60,7 +60,7 @@ class ViewTeam extends React.Component {
 editDesc(event) {
   event.preventDefault();
   var newVal = prompt("What do you want to change your project description to?")
-  if (newVal !== "" || newVal !== " ") {
+  if (newVal.length !== 0) {
     const db = firebase.firestore();
     db.settings({
       timestampsInSnapshots: true
