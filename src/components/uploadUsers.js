@@ -79,7 +79,7 @@ class UploadUsers extends React.Component {
                let data1 = {
                  uniqname: user.data[0],
                  invitations: [],
-                 isAdmin:user.data[1],
+                 isAdmin:Boolean(user.data[1]),
                  numInvitations: 0,
                  onTeam:false,
                  teamName:""

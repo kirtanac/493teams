@@ -54,7 +54,7 @@ class AdminSettings extends React.Component {
         })
 
       })
-      await db.collection("users").where("isAdmin","==", true).get().then(documents => {
+      await db.collection("users").where("isAdmin","==", false).get().then(documents => {
         documents.forEach(document => {
           document.ref.delete().then(() => {
             console.log("successfully deleted user");
