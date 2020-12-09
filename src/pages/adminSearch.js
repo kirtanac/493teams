@@ -75,18 +75,23 @@ editTeam(event){
           teamName:this.state.teams.teamName
         });
         let numHolder;
+        let tf;
         switch(event.target.id) {
           case "uniqname1":
            numHolder = this.state.teams.uniqname1;
+           tf = "uniqname1Accepted";
           break;
           case "uniqname2":
            numHolder = this.state.teams.uniqname2;
+           tf = "uniqname4Accepted";
           break;
           case "uniqname3":
            numHolder = this.state.teams.uniqname3;
+           tf = "uniqname4Accepted";
           break;
           case "uniqname4":
            numHolder = this.state.teams.uniqname4;
+           tf = "uniqname4Accepted";
           break;
        };
         db.collection("users").doc(numHolder).update({
@@ -94,17 +99,18 @@ editTeam(event){
           teamName:""
         });
         db.collection("teams").doc(this.state.teams.teamName).update({
-          [event.target.id]: newVal
+          [event.target.id]: newVal,
+          [tf]:true
+        });
+        dbFunctions.getTeamInfo(this.props.team).then(data => {
+          console.log(data)
+          this.setState({ teams: data});
+          this.setState({ dataLoaded:true });
         });
       }
     })
   }
-  //if not then push edit and push invite
-  dbFunctions.getTeamInfo(this.props.team).then(data => {
-    console.log(data)
-    this.setState({ teams: data});
-    this.setState({ dataLoaded:true });
-  });
+
 }
 deleteTeam(event) {
   event.preventDefault();
@@ -250,6 +256,7 @@ deleteTeam(event) {
   this.setState({ doneEditing: true});
 }
  render(){
+   //<th className="disappear-on-mobile"><Button id="teamName" variant="outline-success" size="sm" onClick={this.editTeam}>Edit</Button></th> //
 
    if(this.state.doneEditing === true){
      return <h2>Team Deleted Successfully</h2>
@@ -270,7 +277,6 @@ deleteTeam(event) {
        <tr>
        <td className="small">Team Name</td>
          <th colSpan="2">{teams.teamName}</th>
-         <th className="disappear-on-mobile"><Button id="teamName" variant="outline-success" size="sm" onClick={this.editTeam}>Edit</Button></th>
        </tr>
        </thead>
        <tbody>
