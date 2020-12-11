@@ -191,7 +191,7 @@ async editTeamName(event) {
 
       }
       //delete old team
-      db.collection("teams").doc(this.props.team).delete().then(function() {
+      db.collection("teams").doc(teamInfo.teamName).delete().then(function() {
         console.log("Document successfully deleted!");
       }).catch(function(error) {
         console.error("Error removing document: ", error);
