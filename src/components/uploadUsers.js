@@ -69,7 +69,7 @@ class UploadUsers extends React.Component {
          if (user.data.[0] !== "") {
            dbFunctions.getUserInfo(user.data[0]).then(thisUser => {
              if (thisUser !== "error") {
-               let errorStr = user.data[0]+" is already in the database. Skipping..."
+               let errorStr = "Some users are already in the database. Skipping..."
                this.setState({
                   displayErrorMessage: true,
                   errorMessage: errorStr

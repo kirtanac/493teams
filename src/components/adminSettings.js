@@ -61,6 +61,17 @@ class AdminSettings extends React.Component {
           })
         })
       })
+      await db.collection("users").where("isAdmin","==", true).get().then(documents => {
+        documents.forEach(document => {
+          document.ref.update({
+            onTeam:false,
+            numInvitations:0,
+            invitations:[]
+          }).then(() => {
+            console.log("successfully cleared admin's info");
+          })
+        })
+      })
       console.log("finished deleting");
       alert("Database successfully reset");
       this.setState({ show1:false });
