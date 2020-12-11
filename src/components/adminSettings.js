@@ -9,7 +9,7 @@ import {
   Switch,
   Route, NavLink, Redirect
 } from "react-router-dom";
-import {  Link,  CardGroup, Card, Modal, Button, Form } from 'react-bootstrap';
+import {  Link,  CardGroup, Card, Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import { CsvDownload } from "react-json-to-csv"
 import { CSVLink } from "react-csv";
 import UploadUsers from "./uploadUsers";
@@ -23,7 +23,7 @@ class AdminSettings extends React.Component {
      word:""
 
    };
-   this.handleDelete = this.handleDelete.bind(this);
+
    this.handleShow = this.handleShow.bind(this);
    this.handleInput = this.handleInput.bind(this);
 
@@ -39,74 +39,20 @@ class AdminSettings extends React.Component {
   handleHide() {
 
   }
-  async handleDelete() {
-    if (this.state.word === "reset") {
-      //get all documents from the database then delete each one.
-      const db = firebase.firestore();
-      db.settings({
-        timestampsInSnapshots: true
-      });
-      await db.collection("teams").get().then(documents => {
-        documents.forEach(document => {
-          document.ref.delete().then(() => {
-            console.log("successfully deleted team");
-          })
-        })
 
-      })
-      await db.collection("users").where("isAdmin","==", false).get().then(documents => {
-        documents.forEach(document => {
-          document.ref.delete().then(() => {
-            console.log("successfully deleted user");
-          })
-        })
-      })
-      console.log("finished deleting");
-      alert("Database successfully reset");
-      this.setState({ show1:false });
-    }
-    else {
-      alert("Word entered incorrectly. Database not reset");
-      this.setState({ show1:false });
-    }
-  }
  render() {
    return (
 
      <React.Fragment>
-     <Modal show={this.state.show1}>
-       <Modal.Header closeButton>
-         <Modal.Title>Are you sure you want to reset the database?</Modal.Title>
-       </Modal.Header>
-       <Modal.Body>
-         <b>NOTE: This will only clear the students and all teams from the database</b>
-         <Form className="text-left">
-           <Form.Group controlId="fullname">
-           <Form.Label>Enter the word "reset" to clear the database</Form.Label>
-           <Form.Control required
-           type="text"
-             name="word"
-             placeholder=""
-             onChange={this.handleInput}
-             value={this.state.word} />
-           </Form.Group>
-         </Form>
-       </Modal.Body>
-       <Modal.Footer>
-         <Button variant="danger" onClick={this.handleDelete}>
-           Reset Database
-         </Button>
-       </Modal.Footer>
-     </Modal>
-     <Modal.Body>
+     <Modal.Body as="div" className="mb-2">
 
 
-     <CardGroup className="justify-content-md-center mb-2">
+     <CardGroup className="justify-content-md-center mb-3">
  <Card bg="info" className="cardclass" >
    <Card.Body className="text-light">
-     <Card.Header>Step 1</Card.Header>
+     <Card.Title>Step 1</Card.Title>
      <Card.Text>
-       Create a roster of users by uploading a CSV with columns "email" and "isAdmin". <br/><br/>Mark "isAdmin" as "FALSE" for students and "TRUE" for staff. Only use UMich email addresses to enable students to log in.<br/><br/>Add users later via the firebase console.</Card.Text>
+       Create a roster of users by uploading a CSV. The columns should be "uniqname" (string UMich uniqnames) and "isAdmin" (boolean). Mark isAdmin as false for all students, and as true for all staff<br/><br/>Add users later via the firebase console.</Card.Text>
    </Card.Body>
  </Card>
 
@@ -130,14 +76,20 @@ class AdminSettings extends React.Component {
    </Card.Body>
 
  </Card>
- <i>The EECS 493 Teams recommends considering the addition of other useful features to this MVP, such as the ability to denote specific Zoom links, sign up for virtual presentation slots, and more.</i>
 </CardGroup>
+<Row className="h-90">
+<Col className="w-50">
 <UploadUsers/>
-<Button variant="danger" onClick={this.handleShow}>
-  Reset Database
-</Button>
+</Col>
+<br/>
+</Row>
+
 </Modal.Body>
+<Modal.Footer className="mt-6">
+ <i>The EECS 493 Teams recommends considering the addition of other useful features to this MVP, such as the ability to denote specific Zoom links, sign up for virtual presentation slots, and more.</i>
+</Modal.Footer>
 </React.Fragment>
+
    )
  }
 }

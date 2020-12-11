@@ -17,6 +17,8 @@ import {  Alert, Tooltip, OverlayTrigger, Figure, Link,  Button, Navbar, Nav, Im
 import { CsvDownload } from "react-json-to-csv"
 import { CSVLink } from "react-csv";
 import CustomNavbar from "../components/customNavbar.js";
+import ResetDatabase from "../components/resetDatabase.js";
+
 
 class AdminHome extends React.Component {
   constructor(props) {
@@ -183,6 +185,39 @@ class AdminHome extends React.Component {
 
  }
 
+ async handleDelete() {
+   if (this.state.word === "reset") {
+     //get all documents from the database then delete each one.
+     const db = firebase.firestore();
+     db.settings({
+       timestampsInSnapshots: true
+     });
+     await db.collection("teams").get().then(documents => {
+       documents.forEach(document => {
+         document.ref.delete().then(() => {
+           console.log("successfully deleted team");
+         })
+       })
+
+     })
+     await db.collection("users").where("isAdmin","==", false).get().then(documents => {
+       documents.forEach(document => {
+         document.ref.delete().then(() => {
+           console.log("successfully deleted user");
+         })
+       })
+     })
+     console.log("finished deleting");
+     alert("Database successfully reset");
+     this.setState({ show1:false });
+   }
+   else {
+     alert("Word entered incorrectly. Database not reset");
+     this.setState({ show1:false });
+   }
+ }
+
+
  render(){
    let teamVal;
    if(!sessionStorage.getItem('uniqname')){
@@ -282,14 +317,15 @@ class AdminHome extends React.Component {
 
         <Modal size="lg" centered show={this.state.showModal} onHide={this.handleModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Admin Settings</Modal.Title>
         </Modal.Header>
         <AdminSettings/>
-                <Modal.Footer>
-
-                  <Button variant="secondary" onClick={this.handleModal}>
+                <Modal.Footer as="div" className="w-100 d-flex justify-content-sm-between">
+                  <ResetDatabase/>
+                  <Button className="ml-2" variant="secondary" onClick={this.handleModal}>
                     Okay
                   </Button>
+
                 </Modal.Footer>
               </Modal>
 

@@ -22,12 +22,14 @@ class UploadUsers extends React.Component {
      userData:[],
      displayErrorMessage:false,
      errorMessage:"",
-     finishedUpload:false
+     finishedUpload:false,
+     showButton: false
    };
 
    this.handleOnDrop = this.handleOnDrop.bind(this);
    this.handleOnError = this.handleOnError.bind(this);
    this.handleSubmit = this.handleSubmit.bind(this);
+   this.handleOnRemoveFile = this.handleOnRemoveFile.bind(this);
   }
 
 
@@ -49,8 +51,17 @@ class UploadUsers extends React.Component {
          });
         return;
      }
-     this.setState({ userData: data.slice(1) });
+     this.setState({ userData: data.slice(1), showButton: true });
    }
+
+   handleOnRemoveFile(data) {
+      this.setState({
+        showButton: false,
+        displayErrorMessage: false,
+         errorMessage: ""
+      });
+    }
+
 
    handleOnError(error){
      console.log("error: ", error);
@@ -104,8 +115,9 @@ class UploadUsers extends React.Component {
    }
 
  render() {
+   let displayButton = this.state.showButton;
    return (
-     <React.Fragment>
+     <React.Fragment as="div" className="mb-2 mh-90">
      {this.state.displayErrorMessage &&
        <Row className="w-100 align-items-center m-2">
        <Col className="col-md-8 offset-md-2 w-100">
@@ -127,10 +139,12 @@ class UploadUsers extends React.Component {
           onError={this.handleOnError}
           addRemoveButton
           onRemoveFile={this.handleOnRemoveFile}
+          className="h-80"
         >
-          <span>Upload a CSV of users here with "email" and "isAdmin".</span>
+          <span>Upload a CSV of users</span>
         </CSVReader>
-        <Button variant="success" onClick={this.handleSubmit}>Upload</Button>
+        {displayButton && <Button className="w-100 mb-2" variant="success" onClick={this.handleSubmit}>Upload</Button>}
+
         </React.Fragment>
    )
  }
