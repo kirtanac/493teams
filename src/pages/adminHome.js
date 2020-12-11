@@ -39,9 +39,13 @@ class AdminHome extends React.Component {
      users: [],
      usersLoaded: false,
      usersLength: 0,
+     numStudents: 0,
      unassigned: [],
      unassignedLoaded: false,
      unassignedLength: 0,
+     admins: [],
+     adminsLoaded: false,
+     adminsLength: 0,
      displayErrorMessage: false,
      errorMessage: "",
      showModal: false
@@ -82,8 +86,16 @@ class AdminHome extends React.Component {
      console.log("users_in loaded: ", users_in);
    })
 
+   let students_in = []
+   await db.collection("users").where("isAdmin", "==", false).get().then(querySnapshot => {
+      querySnapshot.docs.forEach(doc => {
+      students_in.push(doc.data());
+    });
+     this.setState({ numStudents: students_in.length });
+   })
+
    let unassigned_in = [];
-   await db.collection("users").where("onTeam", "==", false).get().then(querySnapshot => {
+   await db.collection("users").where("onTeam", "==", false).where("isAdmin", "==", false).get().then(querySnapshot => {
       querySnapshot.docs.forEach(doc => {
       unassigned_in.push(doc.data());
     });
@@ -91,6 +103,14 @@ class AdminHome extends React.Component {
      console.log("unassigned loaded: ", unassigned_in);
    })
 
+   let admins_in = [];
+   await db.collection("users").where("isAdmin", "==", true).get().then(querySnapshot => {
+      querySnapshot.docs.forEach(doc => {
+      admins_in.push(doc.data());
+    });
+     this.setState({ admins: admins_in, adminsLoaded: true,  adminsLength: admins_in.length });
+     console.log("admins_in loaded: ", admins_in);
+   })
 
  }
 
@@ -242,7 +262,7 @@ class AdminHome extends React.Component {
         <div className="body">
         <h1 className="title mb-3">Admin Dashboard</h1>
 
-        {(this.state.usersLoaded &&this.state.unassignedLoaded && this.state.teamsLoaded) &&
+        {(this.state.usersLoaded &&this.state.unassignedLoaded && this.state.teamsLoaded && this.state.adminsLoaded) &&
 
         <Card as="div" className=" justify-content-between align-items-between shadow-sm w-100 mb-4">
         <Card.Body className="text-left">
@@ -250,7 +270,8 @@ class AdminHome extends React.Component {
         <Col xl={9.5} lg={9}>
         <Card.Title>Summary</Card.Title>
           <a  className="text-secondary" href="/admin-view"><Card.Subtitle className="mb-1">{this.state.teamsLength} total teams registered</Card.Subtitle></a>
-        <Card.Subtitle>{this.state.unassignedLength} unassigned students out of {this.state.usersLength} total users</Card.Subtitle>
+        <Card.Subtitle className="mb-1">{this.state.unassignedLength} unassigned students out of {this.state.numStudents} total students</Card.Subtitle>
+        <Card.Subtitle>{this.state.adminsLength} administrators out of {this.state.usersLength} total users</Card.Subtitle>
 </Col>
 
 

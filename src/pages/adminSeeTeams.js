@@ -100,7 +100,7 @@ render(){
   <div className="body-content">
 
 
-  <Table className="seeTeams" responsive="sm" bordered hover striped>
+  <Table className="seeTeams align-content-center" responsive="sm" bordered hover striped>
   <thead>
 
   <tr>
@@ -109,10 +109,13 @@ render(){
   <th className="seeTeams">Description</th>
 </tr>
 </thead>
+
             <tbody striped hover>
               {rows}
             </tbody>
+
           </Table>
+          {this.state.teams.length === 0 && <i className="text-muted">There are currently no teams registered</i>}
   </div>
     </div>
   </header>
