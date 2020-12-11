@@ -101,7 +101,9 @@ async editTeamName(event) {
         //need to update the invitations array wherever the old team name was
         dbFunctions.getUserInfo(teamInfo.uniqname1).then(userInfo => {
           let tempArray = userInfo.invitations;
-          let index = tempArray.indexOf(this.state.teams.teamName);
+          let index = tempArray.indexOf(teamInfo.teamName);
+          console.log(teamInfo.teamName)
+          console.log("PERSON 1 ARRAY"+tempArray)
           console.log("PERSON 1 INDEX"+index);
           if (index !== -1) {
             tempArray[index] = newVal;
@@ -124,7 +126,9 @@ async editTeamName(event) {
         //need to update the invitations array wherever the old team name was
         dbFunctions.getUserInfo(teamInfo.uniqname2).then(userInfo => {
           let tempArray = userInfo.invitations;
-          let index = tempArray.indexOf(this.state.teams.teamName);
+          let index = tempArray.indexOf(teamInfo.teamName);
+          console.log(teamInfo.teamName)
+          console.log("PERSON 2 ARRAY"+tempArray)
           console.log("PERSON 2 INDEX"+index);
           if (index !== -1) {
             tempArray[index] = newVal;
@@ -147,8 +151,8 @@ async editTeamName(event) {
         //need to update the invitations array wherever the old team name was
         dbFunctions.getUserInfo(teamInfo.uniqname3).then(userInfo => {
           let tempArray = userInfo.invitations;
-          let index = tempArray.indexOf(this.state.teams.teamName);
-          console.log(this.state.teams.teamName)
+          let index = tempArray.indexOf(teamInfo.teamName);
+          console.log(teamInfo.teamName)
           console.log("PERSON 3 ARRAY"+tempArray)
           console.log("PERSON 3 INDEX"+index);
           if (index !== -1) {
@@ -172,8 +176,8 @@ async editTeamName(event) {
         //need to update the invitations array wherever the old team name was
         dbFunctions.getUserInfo(teamInfo.uniqname4).then(userInfo => {
           let tempArray = userInfo.invitations;
-          let index = tempArray.indexOf(this.state.teams.teamName);
-          console.log(this.state.teams.teamName)
+          let index = tempArray.indexOf(teamInfo.teamName);
+          console.log(teamInfo.teamName)
           console.log("PERSON 4 ARRAY"+tempArray)
           console.log("PERSON 4 INDEX"+index);
           if (index !== -1) {
@@ -187,7 +191,7 @@ async editTeamName(event) {
 
       }
       //delete old team
-      db.collection("teams").doc(this.props.team).delete().then(function() {
+      db.collection("teams").doc(teamInfo.teamName).delete().then(function() {
         console.log("Document successfully deleted!");
       }).catch(function(error) {
         console.error("Error removing document: ", error);
