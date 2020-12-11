@@ -64,6 +64,7 @@ class ResetDatabase extends React.Component {
         documents.forEach(document => {
           document.ref.update({
             onTeam:false,
+            teamName:"",
             numInvitations:0,
             invitations:[]
           }).then(() => {
