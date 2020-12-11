@@ -60,6 +60,17 @@ class ResetDatabase extends React.Component {
           })
         })
       })
+      await db.collection("users").where("isAdmin","==", true).get().then(documents => {
+        documents.forEach(document => {
+          document.ref.update({
+            onTeam:false,
+            numInvitations:0,
+            invitations:[]
+          }).then(() => {
+            console.log("successfully cleared admin's info");
+          })
+        })
+      })
       console.log("finished deleting");
       alert("Database successfully reset");
       this.setState({ show1:false });
@@ -78,7 +89,7 @@ class ResetDatabase extends React.Component {
          <Modal.Title>Are you sure you want to reset the database?</Modal.Title>
        </Modal.Header>
        <Modal.Body>
-         <b>NOTE: This will only clear the students and all teams from the database</b>
+         <b>NOTE: This will only clear the students and all teams from the database, admins must be deleted manually in the Cloud Firestore interface</b>
          <Form className="text-left">
            <Form.Group controlId="fullname">
            <Form.Label>Enter the word "reset" to clear the database</Form.Label>

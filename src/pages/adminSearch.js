@@ -24,10 +24,12 @@ class AdminSearch extends React.Component {
      teams: {},
      data: props,
      dataLoaded:false,
-     doneEditing:false
+     doneEditing:false,
+     teamName:props.teamName
    };
    this.editTeam = this.editTeam.bind(this);
    this.deleteTeam = this.deleteTeam.bind(this);
+   this.editTeamName = this.editTeamName.bind(this);
 
  }
 
@@ -51,6 +53,156 @@ async componentDidMount() {
 
 }
 
+async editTeamName(event) {
+
+  event.preventDefault();
+  var newVal = prompt("What do you want to change "+event.target.id+" to?")
+  newVal = newVal.split(' ').join('');
+  console.log(newVal);
+  const db = firebase.firestore();
+  db.settings({
+    timestampsInSnapshots: true
+  });
+  //check if user is already on a team
+  if (newVal.length !== 0) {
+    //create new team w same info but different name
+
+    dbFunctions.getTeamInfo(this.state.teams.teamName).then(teamInfo => {
+      let description1;
+      if (teamInfo.description === "") {
+        description1 = "";
+      }
+      else {
+        description1 = teamInfo.description
+      }
+      db.collection("teams").doc(newVal).set({
+        teamName:newVal,
+        uniqname1:teamInfo.uniqname1,
+        uniqname2:teamInfo.uniqname2,
+        uniqname3:teamInfo.uniqname3,
+        uniqname4:teamInfo.uniqname4,
+        uniqname1Accepted:teamInfo.uniqname1Accepted,
+        uniqname2Accepted:teamInfo.uniqname2Accepted,
+        uniqname3Accepted:teamInfo.uniqname3Accepted,
+        uniqname4Accepted:teamInfo.uniqname4Accepted,
+        description:description1,
+        rejectedInvites:teamInfo.rejectedInvites
+      });
+      console.log("created New team")
+      //user1 update
+      console.log("updating user1");
+      if (teamInfo.uniqname1Accepted) {
+        db.collection("users").doc(teamInfo.uniqname1).update({
+          teamName:newVal
+        });
+        console.log("updated user1");
+      }
+      else {
+        //need to update the invitations array wherever the old team name was
+        dbFunctions.getUserInfo(teamInfo.uniqname1).then(userInfo => {
+          let tempArray = userInfo.invitations;
+          let index = tempArray.indexOf(this.state.teams.teamName);
+          console.log("PERSON 1 INDEX"+index);
+          if (index !== -1) {
+            tempArray[index] = newVal;
+          }
+          db.collection("users").doc(teamInfo.uniqname1).update({
+            invitations:tempArray
+          });
+          console.log("updated user1");
+        });
+      }
+      console.log("updating user2");
+      //user2 update
+      if (teamInfo.uniqname2Accepted === true) {
+        db.collection("users").doc(teamInfo.uniqname2).update({
+          teamName:newVal
+        });
+        console.log("updated userInfo2");
+      }
+      else {
+        //need to update the invitations array wherever the old team name was
+        dbFunctions.getUserInfo(teamInfo.uniqname2).then(userInfo => {
+          let tempArray = userInfo.invitations;
+          let index = tempArray.indexOf(this.state.teams.teamName);
+          console.log("PERSON 2 INDEX"+index);
+          if (index !== -1) {
+            tempArray[index] = newVal;
+          }
+          db.collection("users").doc(teamInfo.uniqname2).update({
+            invitations:tempArray
+          });
+          console.log("updated userInfo2");
+        });
+      }
+      //user3 update
+      console.log("updating user3");
+      if (teamInfo.uniqname2Accepted === true) {
+        db.collection("users").doc(teamInfo.uniqname3).update({
+          teamName:newVal
+        });
+        console.log("updated userInfo3");
+      }
+      else {
+        //need to update the invitations array wherever the old team name was
+        dbFunctions.getUserInfo(teamInfo.uniqname3).then(userInfo => {
+          let tempArray = userInfo.invitations;
+          let index = tempArray.indexOf(this.state.teams.teamName);
+          console.log(this.state.teams.teamName)
+          console.log("PERSON 3 ARRAY"+tempArray)
+          console.log("PERSON 3 INDEX"+index);
+          if (index !== -1) {
+            tempArray[index] = newVal;
+          }
+          db.collection("users").doc(teamInfo.uniqname3).update({
+            invitations:tempArray
+          });
+          console.log("updated user3");
+        });
+      }
+      //user4 update
+      console.log("updating user4");
+      if (teamInfo.uniqname4Accepted === true && teamInfo.uniqname4 !== "") {
+        db.collection("users").doc(teamInfo.uniqname4).update({
+          teamName:newVal
+        });
+        console.log("updated user4");
+      }
+      else if (teamInfo.uniqname4 !== "") {
+        //need to update the invitations array wherever the old team name was
+        dbFunctions.getUserInfo(teamInfo.uniqname4).then(userInfo => {
+          let tempArray = userInfo.invitations;
+          let index = tempArray.indexOf(this.state.teams.teamName);
+          console.log(this.state.teams.teamName)
+          console.log("PERSON 4 ARRAY"+tempArray)
+          console.log("PERSON 4 INDEX"+index);
+          if (index !== -1) {
+            tempArray[index] = newVal;
+          }
+          db.collection("users").doc(teamInfo.uniqname4).update({
+            invitations:tempArray
+          });
+          console.log("updated user4");
+        });
+
+      }
+      //delete old team
+      db.collection("teams").doc(this.props.team).delete().then(function() {
+        console.log("Document successfully deleted!");
+      }).catch(function(error) {
+        console.error("Error removing document: ", error);
+      });
+      //update the team info displayed in the search hehe
+      dbFunctions.getTeamInfo(newVal).then(data => {
+        console.log(data)
+        this.setState({ teams: data});
+        this.setState({ dataLoaded:true });
+      });
+    });
+
+  }
+
+}
 
 editTeam(event){
   event.preventDefault();
@@ -256,13 +408,10 @@ deleteTeam(event) {
   this.setState({ doneEditing: true});
 }
  render(){
-   //<th className="disappear-on-mobile"><Button id="teamName" variant="outline-success" size="sm" onClick={this.editTeam}>Edit</Button></th> //
+   // //
 
    if(this.state.doneEditing === true){
      return <h2>Team Deleted Successfully</h2>
-   }
-   if (this.props.onTeam === false) {
-     return <h2> This user is not on a team </h2>
    }
    if (this.state.dataLoaded === true) {
      const teams = this.state.teams;
@@ -277,6 +426,7 @@ deleteTeam(event) {
        <tr>
        <td className="small">Team Name</td>
          <th colSpan="2">{teams.teamName}</th>
+         <th className="disappear-on-mobile"><Button id="teamName" variant="outline-success" size="sm" onClick={this.editTeamName}>Edit</Button></th>
        </tr>
        </thead>
        <tbody>
