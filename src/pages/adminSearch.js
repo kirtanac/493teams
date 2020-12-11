@@ -25,7 +25,7 @@ class AdminSearch extends React.Component {
      data: props,
      dataLoaded:false,
      doneEditing:false,
-     teamName:props.teamName
+     teamName:props.team,
    };
    this.editTeam = this.editTeam.bind(this);
    this.deleteTeam = this.deleteTeam.bind(this);
@@ -42,7 +42,7 @@ async componentDidMount() {
   });
 
     if(this.props.onTeam){
-      dbFunctions.getTeamInfo(this.props.team).then(data => {
+      dbFunctions.getTeamInfo(this.state.teamName).then(data => {
         console.log("data from get team info: ", data);
         this.setState({
           teams: data,
@@ -56,6 +56,8 @@ async componentDidMount() {
 async editTeamName(event) {
 
   event.preventDefault();
+  console.log("MADE IT TO EDIT TEAM NAME")
+  console.log("TEAM NAME BEFORE EDITING"+this.state.teamName);
   var newVal = prompt("What do you want to change "+event.target.id+" to?")
   newVal = newVal.split(' ').join('');
   console.log(newVal);
@@ -67,7 +69,7 @@ async editTeamName(event) {
   if (newVal.length !== 0) {
     //create new team w same info but different name
 
-    dbFunctions.getTeamInfo(this.state.teams.teamName).then(teamInfo => {
+    dbFunctions.getTeamInfo(this.state.teamName).then(teamInfo => {
       let description1;
       if (teamInfo.description === "") {
         description1 = "";
@@ -90,6 +92,10 @@ async editTeamName(event) {
       });
       console.log("created New team")
       //user1 update
+      dbFunctions.getTeamInfo(newVal).then(data => {
+        console.log("CHECKING THAT DATA WAS CREATED");
+        console.log(data)
+      });
       console.log("updating user1");
       if (teamInfo.uniqname1Accepted) {
         db.collection("users").doc(teamInfo.uniqname1).update({
@@ -193,15 +199,19 @@ async editTeamName(event) {
       //delete old team
       db.collection("teams").doc(teamInfo.teamName).delete().then(function() {
         console.log("Document successfully deleted!");
+        //update the team info displayed in the search hehe
+
       }).catch(function(error) {
         console.error("Error removing document: ", error);
       });
-      //update the team info displayed in the search hehe
       dbFunctions.getTeamInfo(newVal).then(data => {
         console.log(data)
         this.setState({ teams: data});
+        this.setState({ teamName: newVal});
         this.setState({ dataLoaded:true });
       });
+      console.log("FINISHED UPDATING THE TEAM NAME");
+
     });
 
   }
@@ -210,7 +220,6 @@ async editTeamName(event) {
 
 editTeam(event){
   event.preventDefault();
-
   var newVal = prompt("What do you want to change "+event.target.id+" to?")
   console.log(newVal);
   const db = firebase.firestore();
