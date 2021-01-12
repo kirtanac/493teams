@@ -1,379 +1,322 @@
 import '../App.css';
-import firebase from "../firebase";
-import dbFunctions from "../helpers"
-import React from 'react';
-import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl, Modal } from 'react-bootstrap';
-import { Redirect, NavLink} from 'react-router-dom';
-import CustomNavbar from "../components/customNavbar.js";
+import firebase from '../firebase';
+import dbFunctions from '../helpers';
+import React, { useState, useEffect } from 'react';
+import { Form, Button, Modal } from 'react-bootstrap';
+import { Redirect } from 'react-router-dom';
+import CustomNavbar from '../components/customNavbar.js';
 
 //PAGE FOR CREATING A TEAM
 
-class CreateTeam extends React.Component {
-  constructor(props) {
-   super(props);
-   this.state = {
-     teamName:"",
-     redi:false,
-     uniq1:sessionStorage.getItem('uniqname'),
-     uniq2:"",
-     uniq3:"",
-     uniq4:"",
-     description:"",
-     show:false,
-     show2:false,
-     uniqname: sessionStorage.getItem('uniqname'),
-     usertype: sessionStorage.getItem('user-type'),
-     onTeam: false,
-   };
+const CreateTeam = (props) => {
+  const [teamName, setTeamName] = useState('');
+  const [redi, setRedi] = useState(false);
+  const [uniqname, setUniqname] = useState(sessionStorage.getItem('uniqname'));
+  const [usertype, setUsertype] = useState('user-type');
+  const [onTeam, setOnTeam] = useState(false);
+  const [uniq1, setUniq1] = useState(sessionStorage.getItem('uniqname'));
+  const [uniq2, setUniq2] = useState('');
+  const [uniq3, setUniq3] = useState('');
+  const [uniq4, setUniq4] = useState('');
+  const [description, setDescription] = useState('');
+  const [show1, setShow1] = useState(false);
+  const [show2, setShow2] = useState(false);
 
-   this.updateInput = this.updateInput.bind(this);
-   this.addTeam = this.addTeam.bind(this);
-   this.sendData = this.sendData.bind(this);
-   this.handleShow = this.handleShow.bind(this);
-   this.handleHide = this.handleHide.bind(this);
-   this.handleSecondHide = this.handleSecondHide.bind(this);
+  // gets current users initial info and sets appropriate state variables and sessionStorage items
+  useEffect(() => {
+    const getUserInfo = () => {
+      dbFunctions.getUserInfo(uniqname).then((data) => {
+        setUsertype(data.usertype);
+        setOnTeam(data.usertype === 'team');
 
- }
-
- async componentDidMount(){
-   await dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
-
-   this.setState({ usertype: data.usertype, onTeam: (data.usertype === 'team')});
-   sessionStorage.setItem('user-type', data.usertype);
-   console.log("user data updated: ", data);
-   });
-
- }
- //function to simplify sending the data so we don't have code repitition
- async sendData(number, tempName, totNum) {
-   const db = firebase.firestore();
-   db.settings({
-     timestampsInSnapshots: true
-   });
-   let numHolder;
-   let onTeam1 = false;
-   let teamName1 = ""
-   switch(number) {
-     case 1:
-      numHolder = this.state.uniq1;
-      onTeam1 = true;
-      teamName1 = tempName;
-      db.collection("users").doc(numHolder).update({
-        onTeam:onTeam1,
-        teamName:teamName1
+        sessionStorage.setItem('user-type', data.usertype);
+        console.log('user data updated: ', data);
       });
-     break;
-     case 2:
-      numHolder = this.state.uniq2;
-     break;
-     case 3:
-      numHolder = this.state.uniq3;
-     break;
-     case 4:
-      numHolder = this.state.uniq4;
-     break;
-  }
-  dbFunctions.getUserInfo(numHolder).then((data) => {
-    let tempArray = data.invitations;
-    let newVal = data.numInvitations;
+    };
 
-    tempArray.push(tempName);
-    if (numHolder !== this.state.uniq1) {
-      db.collection("users").doc(numHolder).update({
-        invitations: tempArray,
-        numInvitations: newVal + 1,
-        onTeam:onTeam1
+    getUserInfo();
+  }, [uniqname]);
+
+  //function to simplify sending the data so we don't have code repitition
+  const sendData = async (number, tempName, totNum) => {
+    const db = firebase.firestore();
+    db.settings({
+      timestampsInSnapshots: true,
     });
+    let numHolder;
+    let onTeam1 = false;
+    let teamName1 = '';
+    switch (number) {
+      case 1:
+        numHolder = uniq1;
+        onTeam1 = true;
+        teamName1 = tempName;
+        db.collection('users').doc(numHolder).update({
+          onTeam: onTeam1,
+          teamName: teamName1,
+        });
+        break;
+      case 2:
+        numHolder = uniq2;
+        break;
+      case 3:
+        numHolder = uniq3;
+        break;
+      case 4:
+        numHolder = uniq4;
+        break;
     }
-  })
- }
+    dbFunctions.getUserInfo(numHolder).then((data) => {
+      let tempArray = data.invitations;
+      let newVal = data.numInvitations;
 
+      tempArray.push(tempName);
+      if (numHolder !== uniq1) {
+        db.collection('users')
+          .doc(numHolder)
+          .update({
+            invitations: tempArray,
+            numInvitations: newVal + 1,
+            onTeam: onTeam1,
+          });
+      }
+    });
+  };
 
- updateInput(event){
-   this.setState({
-     [event.target.name]: event.target.value
-   });
- }
-
-
- addTeam(event){
-  event.preventDefault();
-  const db = firebase.firestore();
-  db.settings({
-    timestampsInSnapshots: true
-  });
-  let tempName = this.state.teamName.split(' ').join('');
-  let uniq4Holder;
-  if (this.state.uniq4 === "") {
-    uniq4Holder = "";
-  }
-  else {
-    uniq4Holder = this.state.uniq4;
-  }
-  dbFunctions.getUserInfo(this.state.uniq1).then(userInfo => {
+  // checks if user is already on a team or an error occurred
+  const isValidUser = (userInfo, uniq) => {
     if (userInfo.onTeam === true) {
-      alert(this.state.uniq1+" is already on a team. Please enter a different uniqname");
-      return;
+      alert(uniq + ' is already on a team. Please enter a different uniqname');
+      return false;
+    } else if (userInfo === 'error') {
+      alert(
+        uniq +
+          ' is not a registered uniqname in the class. Please enter a different uniqname'
+      );
+      return false;
     }
-    else if (userInfo === "error") {
-      alert(this.state.uniq1+" is not a registered uniqname in the class. Please enter a different uniqname");
-      return;
-    }
-    else {
+    return true;
+  };
 
-    }
-    //uniqname2 checks
-    dbFunctions.getUserInfo(this.state.uniq2).then(userInfo1 => {
-      if (userInfo1.onTeam === true) {
-        alert(this.state.uniq2+" is already on a team. Please enter a different uniqname");
-        return;
-      }
-      else if (userInfo1 === "error") {
-        alert(this.state.uniq2+" is not a registered uniqname in the class. Please enter a different uniqname");
-        return;
-      }
-      //uniqname3 checks
-      dbFunctions.getUserInfo(this.state.uniq3).then(userInfo2 => {
-        if (userInfo2.onTeam === true) {
-          alert(this.state.uniq3+" is already on a team. Please enter a different uniqname");
-          return;
-        }
-        else if (userInfo2 === "error") {
-          alert(this.state.uniq3+" is not a registered uniqname in the class. Please enter a different uniqname");
-          return;
-        }
-        //uniqname4 checks
-        if (this.state.uniq4 !== "") {
-          dbFunctions.getUserInfo(this.state.uniq4).then(userInfo3 => {
-            if (userInfo3.onTeam === true) {
-              alert(this.state.uniq4+" is already on a team. Please enter a different uniqname");
-              return;
-            }
-            else if (userInfo3 === "error") {
-              alert(this.state.uniq4+" is not a registered uniqname in the class. Please enter a different uniqname");
-              return;
-            }
-
-            this.sendData(1, tempName);
-            this.sendData(2, tempName);
-            this.sendData(3, tempName);
-            this.sendData(4, tempName);
-            db.collection("teams").doc(tempName).set({
-              teamName:tempName,
-              uniqname1:this.state.uniq1,
-              uniqname2:this.state.uniq2,
-              uniqname3:this.state.uniq3,
-              uniqname4:uniq4Holder,
-              uniqname1Accepted:true,
-              uniqname2Accepted:false,
-              uniqname3Accepted:false,
-              uniqname4Accepted:false,
-              description:this.state.description,
-              rejectedInvites:[]
-            }).then(() => {
-              dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
-
-                this.setState({ usertype: data.usertype, onTeam: (data.usertype === 'team')});
-                  sessionStorage.setItem('user-type', data.usertype);
-                  console.log("user data updated: ", data);
-
-              });
-              this.setState({ show2: true});
-            });
-
-          });
-        }
-        else {
-          this.sendData(1, tempName);
-          this.sendData(2, tempName);
-          this.sendData(3, tempName);
-          db.collection("teams").doc(tempName).set({
-            teamName:tempName,
-            uniqname1:this.state.uniq1,
-            uniqname2:this.state.uniq2,
-            uniqname3:this.state.uniq3,
-            uniqname4:uniq4Holder,
-            uniqname1Accepted:true,
-            uniqname2Accepted:false,
-            uniqname3Accepted:false,
-            uniqname4Accepted:false,
-            description:this.state.description,
-            rejectedInvites:[]
-          }).then(() => {
-            dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
-
-              this.setState({ usertype: data.usertype, onTeam: (data.usertype === 'team')});
-                sessionStorage.setItem('user-type', data.usertype);
-                console.log("user data updated: ", data);
-
-            });
-              this.setState({ show2: true});
-          });
-
-        }
-
-      });
-
+  const addTeam = async (event) => {
+    event.preventDefault();
+    const db = firebase.firestore();
+    db.settings({
+      timestampsInSnapshots: true,
     });
+    let tempName = teamName.split(' ').join('');
 
-  });
-}
+    const userInfo = await dbFunctions.getUserInfo(uniq1);
+    if (!isValidUser(userInfo, uniq1)) return;
 
+    //uniqname2 checks
+    const userInfo1 = await dbFunctions.getUserInfo(uniq2);
+    if (!isValidUser(userInfo1, uniq2)) return;
 
-handleShow(event) {
-  event.preventDefault();
-  console.log("made it here");
-  this.setState({ show: true});
-}
-handleHide() {
-  this.setState({ show: false});
-}
-handleSecondHide() {
-  this.setState({
-    redi:true,
-    show2: false
-  });
-}
+    //uniqname3 checks
+    const userInfo2 = await dbFunctions.getUserInfo(uniq3);
+    if (!isValidUser(userInfo2, uniq3)) return;
 
+    //uniqname4 checks if filled
+    if (uniq4 !== '') {
+      const userInfo3 = await dbFunctions.getUserInfo(uniq4);
+      if (!isValidUser(userInfo3, uniq4)) return;
+    }
 
- render(){
-  if (this.state.redi === true && sessionStorage.getItem('user-type') === 'team'){
-    this.setState({
-      onTeam: true
-    })
-    return <Redirect to='/view-team' />
-  }
-  if (this.state.usertype === 'admin') {
-    return <Redirect to='/admin-home' />
-  }
-  if(!sessionStorage.getItem('uniqname')){
-    return <Redirect to='/' />
-  }
-  console.log(this.state);
-  return (
-    <div className="createteam">
-  <CustomNavbar/>
-      <header className="loggedInHeader">
-      <div className="body">
-        <h1 className="title">
-        Register your team
+    // update all team members on db with invitations
+    sendData(1, tempName);
+    sendData(2, tempName);
+    sendData(3, tempName);
+    if (uniq4 !== '') sendData(4, tempName);
 
-        </h1>
-<div className="body-content">
-        <Form className="text-left" onSubmit={this.handleShow}>
+    // set new team in db
+    db.collection('teams')
+      .doc(tempName)
+      .set({
+        teamName: tempName,
+        uniqname1: uniq1,
+        uniqname2: uniq2,
+        uniqname3: uniq3,
+        uniqname4: uniq4,
+        uniqname1Accepted: true,
+        uniqname2Accepted: false,
+        uniqname3Accepted: false,
+        uniqname4Accepted: false,
+        description: description,
+        rejectedInvites: [],
+      })
+      .then(() => {
+        dbFunctions.getUserInfo(uniqname).then((data) => {
+          setUsertype(data.usertype);
+          setOnTeam(data.usertype === 'team');
 
-        <Form.Group controlId="fullname">
-        <Form.Label>Team name*</Form.Label>
-    <Form.Control required
-    type="text"
-      name="teamName"
-      placeholder=""
-      onChange={this.updateInput}
-      value={this.state.teamName} />
-          </Form.Group>
+          sessionStorage.setItem('user-type', data.usertype);
+          console.log('user data updated: ', data);
+        });
 
+        setShow2(true);
+      });
+  };
 
-          <Form.Group controlId="uniq1">
-          <Form.Label>Uniqname 1*</Form.Label>
-      <Form.Control disabled
-      type="text"
-      name="uniq1"
-      placeholder={this.state.uniqname}
-      defaultValue={this.state.uniqname}
-       />
-            </Form.Group>
+  const handleShow = (event) => {
+    event.preventDefault();
+    console.log('made it here');
+    setShow1(true);
+  };
 
-        <Form.Group controlId="uniq1">
-        <Form.Label>Uniqname 2*</Form.Label>
-    <Form.Control required
-    type="text"
-    name="uniq2"
-    placeholder=""
-    onChange={this.updateInput}
-    value={this.state.uniq2}/>
-          </Form.Group>
+  const handleHide = () => {
+    setShow1(false);
+  };
 
-        <Form.Group controlId="uniq1">
-        <Form.Label>Uniqname 3*</Form.Label>
-    <Form.Control required
-    type="text"
-      name="uniq3"
-      placeholder=""
-      onChange={this.updateInput}
-      value={this.state.uniq3} />
-          </Form.Group>
+  const handleSecondHide = () => {
+    setRedi(true);
+    setShow2(false);
+  };
 
-          <Form.Group controlId="uniq1" >
-          <Form.Label >Uniqname 4*</Form.Label>
-          <Form.Control
-          type="text"
-          name="uniq4"
-          placeholder=""
-          onChange={this.updateInput}
-          value={this.state.uniq4} />
-            </Form.Group>
+  if (redi === true && sessionStorage.getItem('user-type') === 'team') {
+    // did user make team and is on a team
+    setOnTeam(true);
+    return <Redirect to='/view-team' />;
+  } else if (usertype === 'admin') {
+    // is user admin
+    return <Redirect to='/admin-home' />;
+  } else if (!sessionStorage.getItem('uniqname')) {
+    // check if no uniqname then send to home to login
+    return <Redirect to='/' />;
+  } else {
+    return (
+      <div className='createteam'>
+        <CustomNavbar />
+        <header className='loggedInHeader'>
+          <div className='body'>
+            <h1 className='title'>Register your team</h1>
+            <div className='body-content'>
+              <Form className='text-left' onSubmit={handleShow}>
+                <Form.Group controlId='fullname'>
+                  <Form.Label>Team name*</Form.Label>
+                  <Form.Control
+                    required
+                    type='text'
+                    name='teamName'
+                    placeholder=''
+                    onChange={(event) => setTeamName(event.target.value)}
+                    value={teamName}
+                  />
+                </Form.Group>
 
-        <Form.Group controlId="uniq1" >
-        <Form.Label >Project Description</Form.Label>
-        <Form.Control
-        type="textarea"
-        size="lg"
-        name="description"
-        placeholder=""
-        onChange={this.updateInput}
-        value={this.state.description} />
-        <Form.Text id="passwordHelpBlock" muted>
-    You can do this later too!
-  </Form.Text>
-          </Form.Group>
+                <Form.Group controlId='uniq1'>
+                  <Form.Label>Uniqname 1*</Form.Label>
+                  <Form.Control
+                    disabled
+                    type='text'
+                    name='uniq1'
+                    placeholder={uniqname}
+                    defaultValue={uniqname}
+                  />
+                </Form.Group>
 
-        <br/>
-        <Button variant="primary" type="submit">Submit</Button>
-      </Form>
+                <Form.Group controlId='uniq1'>
+                  <Form.Label>Uniqname 2*</Form.Label>
+                  <Form.Control
+                    required
+                    type='text'
+                    name='uniq2'
+                    placeholder=''
+                    onChange={(event) => setUniq2(event.target.value)}
+                    value={uniq2}
+                  />
+                </Form.Group>
 
+                <Form.Group controlId='uniq1'>
+                  <Form.Label>Uniqname 3*</Form.Label>
+                  <Form.Control
+                    required
+                    type='text'
+                    name='uniq3'
+                    placeholder=''
+                    onChange={(event) => setUniq3(event.target.value)}
+                    value={uniq3}
+                  />
+                </Form.Group>
 
-      <Modal show={this.state.show} onHide={this.handleHide}>
-        <Modal.Header closeButton>
-          <Modal.Title>Do you want to create this team?</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <h2>{this.state.teamName}</h2>
-          <p>{this.state.uniq1}</p>
-          <p>{this.state.uniq2}</p>
-          <p>{this.state.uniq3}</p>
-          <p>{this.state.uniq4}</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={this.handleHide}>
-            Cancel
-          </Button>
-          <Button variant="success" onClick={this.addTeam}>
-            Create Team
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <Modal show={this.state.show2} onHide={this.handleHide}>
-        <Modal.Header closeButton>
-          <Modal.Title>Success!</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <h2>Please ask these team members to log into 493teams and accept this team invitation:</h2>
-          <p>{this.state.uniq1}</p>
-          <p>{this.state.uniq2}</p>
-          <p>{this.state.uniq3}</p>
-          <p>{this.state.uniq4}</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="success" onClick={this.handleSecondHide}>
-            Create Team
-          </Button>
-        </Modal.Footer>
-      </Modal>
+                <Form.Group controlId='uniq1'>
+                  <Form.Label>Uniqname 4*</Form.Label>
+                  <Form.Control
+                    type='text'
+                    name='uniq4'
+                    placeholder=''
+                    onChange={(event) => setUniq4(event.target.value)}
+                    value={uniq4}
+                  />
+                </Form.Group>
+
+                <Form.Group controlId='uniq1'>
+                  <Form.Label>Project Description</Form.Label>
+                  <Form.Control
+                    type='textarea'
+                    size='lg'
+                    name='description'
+                    placeholder=''
+                    onChange={(event) => setDescription(event.target.value)}
+                    value={description}
+                  />
+                  <Form.Text id='passwordHelpBlock' muted>
+                    You can do this later too!
+                  </Form.Text>
+                </Form.Group>
+
+                <br />
+                <Button variant='primary' type='submit'>
+                  Submit
+                </Button>
+              </Form>
+
+              <Modal show={show1} onHide={handleHide}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Do you want to create this team?</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <h2>{teamName}</h2>
+                  <p>{uniq1}</p>
+                  <p>{uniq2}</p>
+                  <p>{uniq3}</p>
+                  <p>{uniq4}</p>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button variant='secondary' onClick={handleHide}>
+                    Cancel
+                  </Button>
+                  <Button variant='success' onClick={addTeam}>
+                    Create Team
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+              <Modal show={show2} onHide={handleHide}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Success!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <h2>
+                    Please ask these team members to log into 493teams and
+                    accept this team invitation:
+                  </h2>
+                  <p>{uniq1}</p>
+                  <p>{uniq2}</p>
+                  <p>{uniq3}</p>
+                  <p>{uniq4}</p>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button variant='success' onClick={handleSecondHide}>
+                    Create Team
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            </div>
+          </div>
+        </header>
       </div>
-      </div>
-      </header>
-    </div>
-  ); }
-}
+    );
+  }
+};
 
 export default CreateTeam;
