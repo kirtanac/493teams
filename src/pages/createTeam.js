@@ -145,7 +145,7 @@ const CreateTeam = () => {
     setShow(false);
   };
   
-  const handleSecondHide () => {
+  const handleSecondHide = () => {
     setRedi(true);
     setShow2(false);
   };
