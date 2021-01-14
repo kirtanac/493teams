@@ -34,8 +34,6 @@ const CreateTeam = () => {
     };
     getInfo();
   }, [uniqname]);
-
-<<<<<<< HEAD
   // rewrote to reduce lines of code
   const sendData = async(uniq, number, tempName) => {
       const db = firebase.firestore();
@@ -113,165 +111,6 @@ const CreateTeam = () => {
       timestampsInSnapshots: true
     });
     let tempName = teamName.split(' ').join('');
-=======
-    tempArray.push(tempName);
-    if (numHolder !== this.state.uniq1) {
-      db.collection("users").doc(numHolder).update({
-        invitations: tempArray,
-        numInvitations: newVal + 1,
-        onTeam:onTeam1
-    });
-    }
-  })
- }
-
-
- updateInput(event){
-   this.setState({
-     [event.target.name]: event.target.value
-   });
- }
-
-
- addTeam(event){
-  event.preventDefault();
-  const db = firebase.firestore();
-  db.settings({
-    timestampsInSnapshots: true
-  });
-  let tempName = this.state.teamName.split(' ').join('');
-  let uniq4Holder;
-  if (this.state.uniq4 === "") {
-    uniq4Holder = "";
-  }
-  else {
-    uniq4Holder = this.state.uniq4;
-  }
-  dbFunctions.getUserInfo(this.state.uniq1).then(userInfo => {
-    if (userInfo.onTeam === true) {
-      alert(this.state.uniq1+" is already on a team. Please enter a different uniqname");
-      return;
-    }
-    else if (userInfo === "error") {
-      alert(this.state.uniq1+" is not a registered uniqname in the class. Please enter a different uniqname");
-      return;
-    }
-    else {
-
-    }
-    //uniqname2 checks
-    dbFunctions.getUserInfo(this.state.uniq2).then(userInfo1 => {
-      if (userInfo1.onTeam === true) {
-        alert(this.state.uniq2+" is already on a team. Please enter a different uniqname");
-        return;
-      }
-      else if (userInfo1 === "error") {
-        alert(this.state.uniq2+" is not a registered uniqname in the class. Please enter a different uniqname");
-        return;
-      }
-      //uniqname3 checks
-      dbFunctions.getUserInfo(this.state.uniq3).then(userInfo2 => {
-        if (userInfo2.onTeam === true) {
-          alert(this.state.uniq3+" is already on a team. Please enter a different uniqname");
-          return;
-        }
-        else if (userInfo2 === "error") {
-          alert(this.state.uniq3+" is not a registered uniqname in the class. Please enter a different uniqname");
-          return;
-        }
-        //uniqname4 checks
-        if (this.state.uniq4 !== "") {
-          dbFunctions.getUserInfo(this.state.uniq4).then(userInfo3 => {
-            if (userInfo3.onTeam === true) {
-              alert(this.state.uniq4+" is already on a team. Please enter a different uniqname");
-              return;
-            }
-            else if (userInfo3 === "error") {
-              alert(this.state.uniq4+" is not a registered uniqname in the class. Please enter a different uniqname");
-              return;
-            }
-
-            this.sendData(1, tempName);
-            this.sendData(2, tempName);
-            this.sendData(3, tempName);
-            this.sendData(4, tempName);
-            db.collection("teams").doc(tempName).set({
-              teamName:tempName,
-              uniqname1:this.state.uniq1,
-              uniqname2:this.state.uniq2,
-              uniqname3:this.state.uniq3,
-              uniqname4:uniq4Holder,
-              uniqname1Accepted:true,
-              uniqname2Accepted:false,
-              uniqname3Accepted:false,
-              uniqname4Accepted:false,
-              description:this.state.description,
-              rejectedInvites:[]
-            }).then(() => {
-              dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
-
-                this.setState({ usertype: data.usertype, onTeam: (data.usertype === 'team')});
-                  sessionStorage.setItem('user-type', data.usertype);
-                  console.log("user data updated: ", data);
-
-              });
-              this.setState({ show2: true});
-            });
-
-          });
-        }
-        else {
-          this.sendData(1, tempName);
-          this.sendData(2, tempName);
-          this.sendData(3, tempName);
-          db.collection("teams").doc(tempName).set({
-            teamName:tempName,
-            uniqname1:this.state.uniq1,
-            uniqname2:this.state.uniq2,
-            uniqname3:this.state.uniq3,
-            uniqname4:uniq4Holder,
-            uniqname1Accepted:true,
-            uniqname2Accepted:false,
-            uniqname3Accepted:false,
-            uniqname4Accepted:false,
-            description:this.state.description,
-            rejectedInvites:[]
-          }).then(() => {
-            dbFunctions.getUserInfo(this.state.uniqname).then((data) =>{
-
-              this.setState({ usertype: data.usertype, onTeam: (data.usertype === 'team')});
-                sessionStorage.setItem('user-type', data.usertype);
-                console.log("user data updated: ", data);
-
-            });
-              this.setState({ show2: true});
-          });
-
-        }
-
-      });
-
-    });
-
-  });
-}
-
-
-handleShow(event) {
-  event.preventDefault();
-  console.log("made it here");
-  this.setState({ show: true});
-}
-handleHide() {
-  this.setState({ show: false});
-}
-handleSecondHide() {
-  this.setState({
-    redi:true,
-    show2: false
-  });
-}
->>>>>>> parent of 273e580... fixed repetitive code
 
     // if only 3 members
     // used forEach to minimize repetitive code
@@ -326,7 +165,6 @@ handleSecondHide() {
   <CustomNavbar/>
       <header className="loggedInHeader">
       <div className="body">
-<<<<<<< HEAD
         <h1 className="title">Register your team</h1>
         <div className="body-content">
           <Form className="text-left" onSubmit={handleShow}>
@@ -348,34 +186,6 @@ handleSecondHide() {
                 placeholder={uniqname}
                 defaultValue={uniqname}
                 />
-=======
-        <h1 className="title">
-        Register your team
-
-        </h1>
-<div className="body-content">
-        <Form className="text-left" onSubmit={this.handleShow}>
-
-        <Form.Group controlId="fullname">
-        <Form.Label>Team name*</Form.Label>
-    <Form.Control required
-    type="text"
-      name="teamName"
-      placeholder=""
-      onChange={this.updateInput}
-      value={this.state.teamName} />
-          </Form.Group>
-
-
-          <Form.Group controlId="uniq1">
-          <Form.Label>Uniqname 1*</Form.Label>
-      <Form.Control disabled
-      type="text"
-      name="uniq1"
-      placeholder={this.state.uniqname}
-      defaultValue={this.state.uniqname}
-       />
->>>>>>> parent of 273e580... fixed repetitive code
             </Form.Group>
 
             <Form.Group controlId="uniq1">
@@ -388,7 +198,6 @@ handleSecondHide() {
               value={uniq2}/>
             </Form.Group>
 
-<<<<<<< HEAD
             <Form.Group controlId="uniq1">
               <Form.Label>Uniqname 3*</Form.Label>
               <Form.Control required
@@ -397,16 +206,6 @@ handleSecondHide() {
                 placeholder=""
                 onChange={e => setUniq3(e.target.value)}
                 value={uniq3} />
-=======
-          <Form.Group controlId="uniq1" >
-          <Form.Label >Uniqname 4*</Form.Label>
-          <Form.Control
-          type="text"
-          name="uniq4"
-          placeholder=""
-          onChange={this.updateInput}
-          value={this.state.uniq4} />
->>>>>>> parent of 273e580... fixed repetitive code
             </Form.Group>
 
             <Form.Group controlId="uniq1" >
