@@ -34,7 +34,8 @@ const CreateTeam = () => {
     };
     getInfo();
   }, [uniqname]);
-  // rewrote to reduce lines of code
+
+  // updates uniqname's info in firestore database
   const sendData = async(uniq, number, tempName) => {
       const db = firebase.firestore();
       db.settings({
@@ -64,6 +65,7 @@ const CreateTeam = () => {
       }
     })
   };
+
   // checks whether user is on a team or not registered 
   const userCheck = (uniq) => {
     dbFunctions.getUserInfo(uniq).then(userInfo => {
@@ -78,8 +80,7 @@ const CreateTeam = () => {
     })
   };
 
-  // updates team info to database 
-  // added this function to avoid repetition
+  // creates a team document and also update component data
   const updateTeam = () => {
     db.collection("teams").doc(tempName).set({
       teamName:tempName,
@@ -104,6 +105,7 @@ const CreateTeam = () => {
     });
   };
 
+  // add the uniqnames to a team
   const addTeam = (event) => {
     event.preventDefault();
     const db = firebase.firestore();
@@ -113,7 +115,6 @@ const CreateTeam = () => {
     let tempName = teamName.split(' ').join('');
 
     // if only 3 members
-    // used forEach to minimize repetitive code
     if (uniq4 == ""){
       var users = [uniq1, uniq2, uniq3];
       users.forEach(user=>{
@@ -256,7 +257,7 @@ const CreateTeam = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-      <Modal show={tshow2} onHide={handleHide}>
+      <Modal show={show2} onHide={handleHide}>
         <Modal.Header closeButton>
           <Modal.Title>Success!</Modal.Title>
         </Modal.Header>
