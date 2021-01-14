@@ -2,8 +2,8 @@ import '../App.css';
 import firebase from "../firebase";
 import dbFunctions from "../helpers"
 import React from 'react';
-import { CardColumns, Card, Nav, Navbar, NavDropdown, Form, Button, FormControl, Modal } from 'react-bootstrap';
-import { Redirect, NavLink} from 'react-router-dom';
+import { Form, Button, Modal } from 'react-bootstrap';
+import { Redirect } from 'react-router-dom';
 import CustomNavbar from "../components/customNavbar.js";
 
 //PAGE FOR CREATING A TEAM
